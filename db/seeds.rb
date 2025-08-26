@@ -41,10 +41,10 @@ categories = [
     active: true
   },
   {
-    name: "Privatni Prostori",
-    slug: "privatni-prostori",
-    description: "Privatne kuće i prostori za intimnije slavlje rođendana",
-    icon: "🏠",
+    name: "Ketering",
+    slug: "ketering",
+    description: "Ketering servisi specijalizovani za dečje rođendane sa zdravom hranom",
+    icon: "🍱",
     color: "bg-indigo-500",
     active: true
   }
