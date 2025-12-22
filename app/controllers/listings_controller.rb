@@ -11,7 +11,7 @@ class ListingsController < ApplicationController
     @businesses = @businesses.where(city: params[:city_id]) if params[:city_id].present?
     @businesses = @businesses.where(category: params[:category_id]) if params[:category_id].present?
 
-    # Price range filtering
+    # Price range filtering using cached min/max prices (includes discounts)
     price_min = params[:price_min].presence&.to_f
     price_max = params[:price_max].presence&.to_f
     if price_min || price_max

@@ -1,6 +1,6 @@
 <!-- Business Registration Modal -->
 <% registration_modal_visible = @show_registration_modal || (@user&.errors&.any?) %>
-<% modal_base_classes = "fixed inset-0 z-50 items-center justify-center px-4 py-8 sm:px-6" %>
+<% modal_base_classes = "fixed inset-0 z-50 items-center justify-center px-4 py-4 sm:px-6" %>
 <% modal_visibility_class = registration_modal_visible ? "flex" : "hidden" %>
 <div data-modal
      id="business-registration-modal"
@@ -10,7 +10,7 @@
      aria-modal="true"
      aria-labelledby="business-registration-title">
   <div data-modal-overlay class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity"></div>
-  <div class="relative w-full max-w-md">
+  <div class="relative w-full max-w-md max-h-[90vh] overflow-y-auto">
     <div class="overflow-hidden rounded-3xl bg-white shadow-2xl ring-1 ring-black/5">
       <div class="flex justify-end p-4">
         <button type="button"
