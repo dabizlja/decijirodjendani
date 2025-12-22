@@ -276,8 +276,8 @@ Devise.setup do |config|
   # up on your models and hooks.
   app_url = ENV.fetch("APP_URL", "http://localhost:3000")
   config.omniauth :google_oauth2,
-                  ENV.fetch("GOOGLE_CLIENT_ID", ""),
-                  ENV.fetch("GOOGLE_CLIENT_SECRET", ""),
+                  ENV.fetch("GOOGLE_CLIENT_ID", nil),
+                  ENV.fetch("GOOGLE_CLIENT_SECRET", nil),
                   scope: "email,profile",
                   prompt: "select_account",
                   access_type: "offline",
