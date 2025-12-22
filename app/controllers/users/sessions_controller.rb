@@ -51,6 +51,10 @@ class Users::SessionsController < Devise::SessionsController
     @user ||= User.new
     @categories ||= Category.where(active: true).order(:name)
     @cities ||= City.where(active: true).order(:name)
+    @price_bounds ||= Business.price_bounds
+    @selected_price_min ||= @price_bounds[:min].to_i
+    @selected_price_max ||= @price_bounds[:max].to_i
+    @featured_businesses ||= Business.includes(:category, :city, :tags, images_attachments: :blob).last(9)
   end
 
   def sign_in_params
