@@ -65,7 +65,7 @@
           <div class="flex-1 border-t border-gray-200"></div>
         </div>
 
-        <%= form_with model: @user, url: user_registration_path, class: "space-y-5" do |f| %>
+        <%= form_with model: @user || User.new, url: user_registration_path, class: "space-y-5" do |f| %>
           <!-- Full name -->
           <div>
             <%= f.label :full_name, "Ime i prezime", class: "block mb-2 text-sm font-semibold text-gray-800" %>
