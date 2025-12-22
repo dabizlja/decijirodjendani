@@ -274,12 +274,14 @@ Devise.setup do |config|
   # ==> OmniAuth
   # Add a new OmniAuth provider. Check the wiki for more information on setting
   # up on your models and hooks.
+  app_url = ENV.fetch("APP_URL", "http://localhost:3000")
   config.omniauth :google_oauth2,
-                  ENV.fetch("GOOGLE_CLIENT_ID", nil),
-                  ENV.fetch("GOOGLE_CLIENT_SECRET", nil),
+                  ENV.fetch("GOOGLE_CLIENT_ID", ""),
+                  ENV.fetch("GOOGLE_CLIENT_SECRET", ""),
                   scope: "email,profile",
                   prompt: "select_account",
-                  access_type: "offline"
+                  access_type: "offline",
+                  redirect_uri: "#{app_url}/users/auth/google_oauth2/callback"
   # config.omniauth :github, 'APP_ID', 'APP_SECRET', scope: 'user,public_repo'
 
   # ==> Warden configuration
