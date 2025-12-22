@@ -28,9 +28,15 @@ class Business < ApplicationRecord
   scope :by_city, ->(city) { where(city: city) }
 
   def self.price_bounds
-    default_min = 0
-    default_max = 2000
-    { min: default_min, max: default_max }
+    # Get all min and max prices from businesses
+    min_prices = where.not(min_price: nil).pluck(:min_price)
+    max_prices = where.not(max_price: nil).pluck(:max_price)
+
+    # Fallback to defaults if no prices exist
+    actual_min = min_prices.any? ? min_prices.min : 0
+    actual_max = max_prices.any? ? max_prices.max : 2000
+
+    { min: actual_min, max: actual_max }
   end
 
   def main_image
