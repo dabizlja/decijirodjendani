@@ -11,5 +11,156 @@
  * It is generally better to create a new file per style scope.
  *
  *= require_tree .
- *= require_self
- */
+*= require_self
+*/
+.minimal-price-range {
+  padding: 16px 0;
+}
+
+.price-labels {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 12px;
+  font-size: 14px;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.price-label-min,
+.price-label-max {
+  font-size: 14px;
+  color: #64748b;
+}
+
+.price-slider-wrapper {
+  position: relative;
+  height: 4px;
+  border-radius: 8px;
+  background: #e2e8f0;
+  margin: 16px 0;
+}
+
+.price-progress {
+  position: absolute;
+  height: 4px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
+  left: 0;
+  right: 0;
+}
+
+.range-inputs {
+  position: relative;
+  margin-top: -28px;
+  height: 20px;
+}
+
+.range-inputs input[type="range"] {
+  position: absolute;
+  width: 100%;
+  height: 20px;
+  background: none;
+  pointer-events: none;
+  -webkit-appearance: none;
+  outline: none;
+  top: 0;
+  left: 0;
+}
+
+.range-inputs input[type="range"]::-webkit-slider-track {
+  height: 4px;
+  background: transparent;
+  border: none;
+}
+
+.range-inputs input[type="range"]::-moz-range-track {
+  height: 4px;
+  background: transparent;
+  border: none;
+}
+
+.range-inputs input[type="range"]::-webkit-slider-thumb {
+  height: 16px;
+  width: 16px;
+  border-radius: 50%;
+  background: #fff;
+  border: 3px solid #a855f7;
+  box-shadow: 0 2px 6px rgba(168, 85, 247, 0.3);
+  pointer-events: auto;
+  -webkit-appearance: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  z-index: 1;
+}
+
+.range-inputs input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(168, 85, 247, 0.4);
+  z-index: 2;
+}
+
+.range-inputs input[type="range"]::-moz-range-thumb {
+  height: 16px;
+  width: 16px;
+  border-radius: 50%;
+  border: 3px solid #a855f7;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(168, 85, 247, 0.3);
+  pointer-events: auto;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  z-index: 1;
+}
+
+.range-inputs input[type="range"]::-moz-range-thumb:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(168, 85, 247, 0.4);
+  z-index: 2;
+}
+
+.range-inputs .range-min {
+  z-index: 1;
+}
+
+.range-inputs .range-max {
+  z-index: 2;
+}
+
+.featured-carousel-container {
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.featured-carousel-container::-webkit-scrollbar {
+  display: none;
+}
+
+.featured-carousel-slide {
+  scroll-snap-align: start;
+  flex: 0 0 100%;
+}
+
+@media (min-width: 640px) {
+  .featured-carousel-slide {
+    flex-basis: calc(50% - 0.75rem);
+  }
+}
+
+@media (min-width: 1024px) {
+  .featured-carousel-slide {
+    flex-basis: calc(33.333% - 1rem);
+  }
+}
+
+.featured-slider-nav {
+  transition: opacity 0.2s ease;
+}
+
+.featured-slider-nav[disabled] {
+  opacity: 0.4;
+  cursor: not-allowed;
+}

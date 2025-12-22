@@ -1,0 +1,84 @@
+<div data-modal
+     id="booking-modal"
+     class="fixed inset-0 hidden items-center justify-center bg-black/40 backdrop-blur-sm z-50">
+  <div data-modal-overlay class="absolute inset-0"></div>
+  <div class="relative z-10 w-full max-w-lg px-4">
+    <div class="bg-white rounded-3xl shadow-2xl p-6">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-lg font-semibold text-gray-900">➕ Dodaj novi termin</h3>
+        <button type="button"
+                data-modal-close="booking-modal"
+                class="text-gray-500 hover:text-gray-700 text-2xl leading-none">
+          ×
+        </button>
+      </div>
+
+      <% if businesses.any? %>
+        <%= form_with model: booking, url: dashboard_bookings_path, class: "space-y-4" do |form| %>
+          <%= hidden_field_tag :calendar_month, calendar_month %>
+          <%= hidden_field_tag :calendar_year, calendar_year %>
+          <%= hidden_field_tag :calendar_business_id, selected_calendar_business_id %>
+          <div>
+            <%= form.label :business_id, "Izaberite biznis", class: "block text-sm font-medium text-gray-700 mb-1" %>
+            <%= form.select :business_id,
+                options_from_collection_for_select(businesses, :id, :display_name),
+                {},
+                class: "w-full border border-gray-200 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-400",
+                required: true %>
+          </div>
+
+          <div>
+            <%= form.label :title, "Naziv termina", class: "block text-sm font-medium text-gray-700 mb-1" %>
+            <%= form.text_field :title,
+                placeholder: "Rođendan Ane - igraonica",
+                class: "w-full border border-gray-200 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-400",
+                required: true %>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <%= form.label :start_time, "Početak", class: "block text-sm font-medium text-gray-700 mb-1" %>
+              <%= form.datetime_local_field :start_time,
+                  class: "w-full border border-gray-200 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-400",
+                  required: true,
+                  data: { calendar_target: "startField" } %>
+            </div>
+            <div>
+              <%= form.label :end_time, "Kraj", class: "block text-sm font-medium text-gray-700 mb-1" %>
+              <%= form.datetime_local_field :end_time,
+                  class: "w-full border border-gray-200 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-400",
+                  required: true,
+                  data: { calendar_target: "endField" } %>
+            </div>
+          </div>
+
+          <div>
+            <%= form.label :notes, "Napomena (opciono)", class: "block text-sm font-medium text-gray-700 mb-1" %>
+            <%= form.text_area :notes,
+                rows: 3,
+                class: "w-full border border-gray-200 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-400" %>
+          </div>
+
+          <div class="flex justify-end gap-2">
+            <button type="button"
+                    data-modal-close="booking-modal"
+                    class="px-4 py-2 rounded-xl border border-gray-200 text-gray-600 hover:bg-gray-50">
+              Otkaži
+            </button>
+            <%= form.submit "Sačuvaj termin",
+                class: "px-5 py-2 rounded-xl bg-purple-600" %>
+          </div>
+        <% end %>
+      <% else %>
+        <p class="text-sm text-gray-500 mb-4">Prvo dodajte biznis kako biste mogli da kreirate termine.</p>
+        <div class="text-right">
+          <button type="button"
+                  data-modal-close="booking-modal"
+                  class="px-4 py-2 rounded-xl border border-gray-200 text-gray-600 hover:bg-gray-50">
+            Zatvori
+          </button>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

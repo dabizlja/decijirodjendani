@@ -1,0 +1,32 @@
+sr:
+  activerecord:
+    attributes:
+      business:
+        name: "Naziv biznisa"
+        category: "Kategorija"
+        city: "Grad"
+    errors:
+      models:
+        business:
+          attributes:
+            name:
+              too_short: "mora imati najmanje %{count} karaktera"
+  errors:
+    format: "%{attribute} %{message}"
+    messages:
+      blank: "ne može biti prazno"
+      required: "mora postojati"
+      too_short:
+        one: "je prekratak (minimum je %{count} karakter)"
+        few: "je prekratak (minimum su %{count} karaktera)"
+        other: "je prekratak (minimum je %{count} karaktera)"
+  date:
+    formats:
+      calendar_month: "%B %Y"
+    day_names: ["Nedelja", "Ponedeljak", "Utorak", "Sreda", "Četvrtak", "Petak", "Subota"]
+    abbr_day_names: ["Ned", "Pon", "Uto", "Sre", "Čet", "Pet", "Sub"]
+    month_names: [~, "Januar", "Februar", "Mart", "April", "Maj", "Jun", "Jul", "Avgust", "Septembar", "Oktobar", "Novembar", "Decembar"]
+    abbr_month_names: [~, "Jan", "Feb", "Mar", "Apr", "Maj", "Jun", "Jul", "Avg", "Sep", "Okt", "Nov", "Dec"]
+  time:
+    formats:
+      hour_minute: "%H:%M"

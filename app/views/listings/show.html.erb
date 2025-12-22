@@ -1,0 +1,702 @@
+<!-- Header -->
+<div class="bg-gradient-to-br from-purple-300 via-pink-300 to-red-300 text-white relative overflow-hidden" style="background: linear-gradient(135deg, rgba(147, 51, 234, 0.8) 0%, rgba(236, 72, 153, 0.8) 50%, rgba(239, 68, 68, 0.8) 100%);">
+  <!-- Logo on the left -->
+  <div class="pointer-events-none absolute left-0 top-0 z-40 pl-4 pt-4 sm:pl-8 sm:pt-6 md:pl-12 md:pt-8">
+    <div class="pointer-events-auto">
+      <%= link_to root_path, class: "flex items-center transition hover:opacity-90" do %>
+        <%= image_tag "logo.png", alt: "Rođendani Logo", class: "h-16 w-auto sm:h-24" %>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Floating Navigation -->
+  <div class="pointer-events-none absolute right-0 top-0 z-40 flex justify-end pr-4 pt-4 sm:pr-8 sm:pt-6 md:pr-12 md:pt-8">
+    <div class="pointer-events-auto flex items-center gap-3 rounded-full border border-white/30 bg-white/15 px-3 py-2 text-white shadow-xl backdrop-blur-lg sm:px-5 sm:py-2.5">
+
+      <% if user_signed_in? %>
+        <div class="relative" data-dropdown>
+          <button type="button"
+                  class="group flex items-center gap-2 rounded-full bg-white/20 px-2 py-1 text-sm font-medium text-white transition hover:bg-white/30 focus:outline-none focus:ring-2 focus:ring-white/60"
+                  data-dropdown-toggle>
+            <% avatar_url = current_user.avatar_url.presence %>
+            <% initials = current_user.full_name.to_s.strip.first&.upcase || "U" %>
+            <% if avatar_url.present? %>
+              <img src="<%= avatar_url %>"
+                   alt="<%= current_user.full_name %>"
+                   class="h-9 w-9 rounded-full object-cover ring-2 ring-white/60" />
+            <% else %>
+              <div class="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-purple-500 to-pink-500 text-sm font-semibold text-white ring-2 ring-white/60">
+                <%= initials %>
+              </div>
+            <% end %>
+            <span class="hidden text-sm font-semibold sm:inline"><%= current_user.full_name.split.first %></span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white/80 transition group-hover:text-white" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.939l3.71-3.71a.75.75 0 111.06 1.061l-4.24 4.24a.75.75 0 01-1.06 0L5.25 8.27a.75.75 0 01-.02-1.06z" clip-rule="evenodd" />
+            </svg>
+          </button>
+
+          <div class="absolute right-0 top-full z-50 mt-2 w-60 origin-top-right rounded-3xl bg-white/95 p-4 shadow-2xl ring-1 ring-black/5 backdrop-blur-lg hidden"
+               data-dropdown-menu>
+            <div class="mb-4 rounded-2xl bg-purple-50">
+              <p class="text-sm font-semibold text-purple-900"><%= current_user.full_name %></p>
+              <p class="text-xs text-purple-600 truncate"><%= current_user.email %></p>
+            </div>
+              <div class="space-y-3">
+                <%= link_to "🏠 Moja kontrolna tabla", dashboard_root_path, class: "flex items-center gap-2 rounded-2xl px-4 py-3 text-sm font-medium text-gray-700 transition hover:bg-gradient-to-r   hover:text-purple-800 border border-gray-100 hover:border-purple-200" %>
+                <%= link_to "💬 Poruke", dashboard_conversations_path, class: "flex items-center gap-2 rounded-2xl px-4 py-3 text-sm font-medium text-gray-700 transition hover:bg-gradient-to-r   hover:text-purple-800 border border-gray-100 hover:border-purple-200" %>
+                <%= button_to "🚪 Odjavi se",
+                              destroy_user_session_path,
+                              method: :delete,
+                            class: "w-full rounded-2xl bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold py-3 shadow hover:brightness-110 transition" %>
+            </div>
+          </div>
+        </div>
+      <% else %>
+        <div class="flex items-center gap-2">
+          <button type="button"
+                  data-modal-target="sign-in-modal"
+                  data-modal-toggle="sign-in-modal"
+                  class="hidden items-center gap-2 rounded-full border border-white/40 bg-white/10 px-3 py-1.5 text-xs font-medium text-white transition hover:bg-white/20 hover:shadow-lg sm:flex">
+            🔑 Prijavi se
+          </button>
+          <button type="button"
+                  data-modal-target="business-registration-modal"
+                  data-modal-toggle="business-registration-modal"
+                  class="flex items-center gap-2 rounded-full bg-white px-4 py-1.5 text-xs font-semibold text-purple-700 shadow-lg transition hover:scale-105 sm:text-sm">
+            🚀 Registruj se
+          </button>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Decorative elements - Hidden on small screens -->
+  <div class="hidden md:block absolute top-10 left-10 text-3xl">🎈</div>
+  <div class="hidden md:block absolute top-20 right-20 text-3xl">🎂</div>
+  <div class="hidden md:block absolute bottom-10 left-20 text-3xl">🎉</div>
+  <div class="hidden md:block absolute bottom-20 right-10 text-3xl">🎁</div>
+  <div class="hidden md:block absolute" style="top: 30%; left: 25%;">
+    <div class="text-2xl opacity-40 rotate-12">🎪</div>
+  </div>
+  <div class="hidden md:block absolute" style="top: 15%; right: 30%;">
+    <div class="text-2xl opacity-40 -rotate-12">🍰</div>
+  </div>
+
+  <div class="relative w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-16 md:pt-32 md:pb-20">
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+      <!-- Business Info -->
+      <div>
+        <!-- Category Badge -->
+        <div class="inline-flex items-center gap-2 px-4 py-2 bg-white/20 backdrop-blur rounded-full text-sm font-medium mb-6 border border-white/30">
+          <%= @business.category.icon %> <%= @business.category.name %>
+        </div>
+
+        <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 leading-tight">
+          <%= @business.display_name %>
+        </h1>
+
+        <div class="flex items-center gap-2 text-white/90 text-lg mb-6">
+          📍 <%= @business.city.name %>
+          <% if @business.address.present? %>
+            • <%= @business.address %>
+          <% end %>
+        </div>
+
+        <% if @business.description.present? %>
+          <p class="text-white/90 text-lg leading-relaxed mb-6">
+            <%= @business.description %>
+          </p>
+        <% end %>
+
+        <!-- View Stats -->
+        <div class="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur rounded-full text-sm text-white/80 border border-white/20">
+          👁️ Pogledano <%= @business.total_views %> <%= @business.total_views == 1 ? 'put' : 'puta' %>
+        </div>
+      </div>
+
+      <!-- Main Image -->
+      <div class="lg:text-right">
+        <div class="inline-block rounded-3xl overflow-hidden shadow-2xl bg-white/10 backdrop-blur border border-white/20">
+          <% if @business.main_image %>
+            <%= image_tag @business.main_image,
+                alt: @business.display_name,
+                class: "w-full h-64 sm:h-80 lg:h-96 object-cover" %>
+          <% else %>
+            <div class="w-full h-64 sm:h-80 lg:h-96 flex items-center justify-center text-8xl bg-gradient-to-br from-purple-100 to-pink-100 text-purple-600">
+              <%= @business.category.icon %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Main Content -->
+<div class="max-w-6xl mx-auto px-6 py-12">
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+    <!-- Left Column - Details -->
+    <div class="lg:col-span-2 space-y-8">
+      <!-- Tags Section -->
+      <% if @business.pricing_plans.active.any? %>
+        <div class="bg-white rounded-2xl shadow-lg p-8 border border-gray-100">
+          <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-4">
+            <h2 class="text-2xl font-bold text-gray-900 flex items-center gap-2">
+              💰 Paketi i cene
+            </h2>
+            <% if @business.has_active_discount? %>
+              <span class="inline-flex items-center gap-2 rounded-full bg-green-50 text-green-700 text-sm font-semibold px-4 py-2 border border-green-100">
+                🔥 Trenutne promocije
+              </span>
+            <% end %>
+          </div>
+          <div class="space-y-4">
+            <% @business.pricing_plans.active.each do |plan| %>
+              <% discount = plan.active_discount %>
+              <div class="border border-gray-100 rounded-2xl p-5 bg-gradient-to-br from-purple-50/40 to-pink-50/40">
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-3">
+                  <div>
+                    <p class="text-xs uppercase tracking-wide text-gray-500 mb-1"><%= pricing_plan_human_name(plan.plan_type) %></p>
+                    <h3 class="text-xl font-semibold text-gray-900"><%= plan.name.presence || "Ponuda" %></h3>
+                  </div>
+                  <div class="text-right">
+                    <% if plan.discounted? %>
+                      <p class="text-sm text-gray-500 line-through"><%= format_price_with_currency(plan.base_price, plan.currency) %></p>
+                      <p class="text-2xl font-bold text-purple-700">
+                        <%= format_price_with_currency(plan.effective_price, plan.currency) %>
+                      </p>
+                      <% if discount&.label.present? %>
+                        <p class="text-xs text-green-700 font-semibold mt-1"><%= discount.label %></p>
+                      <% end %>
+                    <% else %>
+                      <p class="text-2xl font-bold text-purple-700">
+                        <%= format_price_with_currency(plan.base_price, plan.currency) %>
+                      </p>
+                    <% end %>
+                  </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-gray-700">
+                  <% if plan.duration_minutes.present? %>
+                    <div class="flex items-center gap-2">
+                      ⏱️ <span><%= format_duration(plan.duration_minutes) %></span>
+                    </div>
+                  <% end %>
+                  <% if plan.capacity_kids.present? %>
+                    <div class="flex items-center gap-2">
+                      🧒 <span>Do <%= plan.capacity_kids %> dece</span>
+                    </div>
+                  <% end %>
+                  <% if plan.capacity_adults.present? %>
+                    <div class="flex items-center gap-2">
+                      👪 <span>Do <%= plan.capacity_adults %> odraslih</span>
+                    </div>
+                  <% end %>
+                </div>
+                <% if plan.description.present? %>
+                  <p class="text-sm text-gray-600 mt-3 leading-relaxed"><%= plan.description %></p>
+                <% end %>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+
+      <!-- Image Gallery -->
+      <% if @business.images.any? %>
+        <div class="bg-white rounded-2xl shadow-lg p-8 border border-gray-100">
+          <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+            📸 Galerija slika
+          </h2>
+          <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+            <% @business.images.each_with_index do |image, index| %>
+              <div class="aspect-square rounded-xl overflow-hidden bg-gray-100 hover:shadow-lg transition-shadow cursor-pointer"
+                   onclick="openLightbox(<%= index %>)">
+                <%= image_tag image,
+                    alt: @business.display_name,
+                    class: "w-full h-full object-cover hover:scale-105 transition-transform duration-300" %>
+              </div>
+            <% end %>
+          </div>
+        </div>
+
+        <!-- Image Popup Modal -->
+        <div id="lightbox" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden items-center justify-center p-4" onclick="closeLightbox()">
+          <div class="relative bg-white rounded-3xl shadow-2xl max-w-5xl max-h-[90vh] mx-4 overflow-hidden" onclick="event.stopPropagation()">
+            <!-- Close Button -->
+            <button onclick="closeLightbox()" class="absolute top-4 right-4 z-10 bg-black/50 hover:bg-black/70 text-white rounded-full w-10 h-10 flex items-center justify-center text-xl transition-colors">
+              ×
+            </button>
+
+            <!-- Image Container -->
+            <div class="relative">
+              <% @business.images.each_with_index do |image, index| %>
+                <%= image_tag image,
+                    alt: @business.display_name,
+                    class: "lightbox-image w-full h-auto max-h-[90vh] object-contain rounded-3xl #{'hidden' unless index == 0}",
+                    id: "lightbox-image-#{index}" %>
+              <% end %>
+
+              <!-- Navigation Buttons -->
+              <% if @business.images.count > 1 %>
+                <button onclick="previousImage(event)" class="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white rounded-full w-12 h-12 flex items-center justify-center text-2xl transition-colors">
+                  ‹
+                </button>
+                <button onclick="nextImage(event)" class="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white rounded-full w-12 h-12 flex items-center justify-center text-2xl transition-colors">
+                  ›
+                </button>
+
+                <!-- Image Counter -->
+                <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-black/50 backdrop-blur px-4 py-2 rounded-full">
+                  <span class="text-sm font-medium text-white">
+                    <span id="current-image">1</span> / <%= @business.images.count %>
+                  </span>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        </div>
+
+        <script>
+          let currentImageIndex = 0;
+          const totalImages = <%= @business.images.count %>;
+
+          function openLightbox(index) {
+            currentImageIndex = index;
+            document.getElementById('lightbox').classList.remove('hidden');
+            document.getElementById('lightbox').classList.add('flex');
+            showImage(currentImageIndex);
+          }
+
+          function closeLightbox() {
+            document.getElementById('lightbox').classList.add('hidden');
+            document.getElementById('lightbox').classList.remove('flex');
+          }
+
+          function showImage(index) {
+            // Hide all images
+            document.querySelectorAll('.lightbox-image').forEach(img => {
+              img.classList.add('hidden');
+            });
+
+            // Show current image
+            document.getElementById(`lightbox-image-${index}`).classList.remove('hidden');
+
+            // Update counter
+            document.getElementById('current-image').textContent = index + 1;
+          }
+
+          function nextImage(event) {
+            event.stopPropagation();
+            currentImageIndex = (currentImageIndex + 1) % totalImages;
+            showImage(currentImageIndex);
+          }
+
+          function previousImage(event) {
+            event.stopPropagation();
+            currentImageIndex = (currentImageIndex - 1 + totalImages) % totalImages;
+            showImage(currentImageIndex);
+          }
+
+          // Keyboard navigation
+          document.addEventListener('keydown', function(event) {
+            if (!document.getElementById('lightbox').classList.contains('hidden')) {
+              if (event.key === 'Escape') {
+                closeLightbox();
+              } else if (event.key === 'ArrowRight') {
+                nextImage(event);
+              } else if (event.key === 'ArrowLeft') {
+                previousImage(event);
+              }
+            }
+          });
+        </script>
+      <% end %>
+
+      <!-- Mobile Contact Section - Shows after gallery on mobile only -->
+      <div class="lg:hidden bg-white rounded-2xl shadow-lg p-8 border border-gray-100">
+        <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+          💬 Kontaktiraj
+        </h2>
+        <h3 class="text-lg font-semibold text-gray-800 mb-4">
+          Pošaljite poruku vlasniku
+        </h3>
+        <% if user_signed_in? %>
+          <% if current_user == @business.user %>
+            <p class="text-sm text-gray-600">
+              Ovo je vaš biznis. Poruke roditelja će se pojaviti u sekciji poruka na dashboardu.
+            </p>
+          <% else %>
+            <%= form_with model: @new_message,
+                          url: business_messages_path(@business),
+                          local: true,
+                          class: "space-y-4" do |form| %>
+              <%= form.text_area :body,
+                  rows: 4,
+                  class: "w-full rounded-2xl border-2 border-gray-200 px-4 py-3 focus:border-purple-500 focus:outline-none text-gray-800 resize-none",
+                  placeholder: "Pitajte za termin, cene ili dodatne informacije..." %>
+              <%= form.submit "📨 Pošalji poruku",
+                  class: "w-full px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl font-semibold shadow hover:brightness-110 transition" %>
+            <% end %>
+          <% end %>
+        <% else %>
+          <p class="text-sm text-gray-600 mb-4">
+            Prijavite se kako biste poslali poruku vlasniku i dobili odgovor direktno u svom nalogu.
+          </p>
+          <%= link_to "🔐 Prijavi se",
+              new_user_session_path,
+              class: "w-full inline-flex items-center justify-center gap-2 px-4 py-3 border-2 border-purple-200 text-purple-700 rounded-xl font-semibold hover:bg-purple-50 transition-colors" %>
+        <% end %>
+
+        <!-- Contact Info Display Only -->
+        <% if [@business.phone, @business.email, @business.website].any?(&:present?) %>
+          <div class="mt-8 pt-6 border-t border-gray-200">
+            <h4 class="text-sm font-semibold text-gray-700 mb-4">Dodatne informacije</h4>
+            <div class="space-y-3">
+              <% if @business.phone.present? %>
+                <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                  <span class="text-lg">📱</span>
+                  <div>
+                    <div class="text-xs text-gray-500">Telefon</div>
+                    <div class="text-sm font-medium text-gray-800"><%= @business.phone %></div>
+                  </div>
+                </div>
+              <% end %>
+
+              <% if @business.email.present? %>
+                <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                  <span class="text-lg">📧</span>
+                  <div>
+                    <div class="text-xs text-gray-500">Email</div>
+                    <div class="text-sm font-medium text-gray-800 break-all"><%= @business.email %></div>
+                  </div>
+                </div>
+              <% end %>
+
+              <% if @business.website.present? %>
+                <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                  <span class="text-lg">🌐</span>
+                  <div>
+                    <div class="text-xs text-gray-500">Website</div>
+                    <div class="text-sm font-medium text-gray-800 break-all">
+                      <%= link_to @business.website, @business.website,
+                          target: "_blank",
+                          class: "text-purple-600 hover:text-purple-700 underline" %>
+                    </div>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+
+      <!-- Additional Info -->
+      <div class="bg-white rounded-2xl shadow-lg p-8 border border-gray-100">
+        <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+          ℹ️ Dodatne informacije
+        </h2>
+        <div class="space-y-4 text-gray-700">
+          <div class="flex items-center justify-between py-3 border-b border-gray-200">
+            <span class="font-medium">Kategorija:</span>
+            <span class="flex items-center gap-2">
+              <%= @business.category.icon %> <%= @business.category.name %>
+            </span>
+          </div>
+          <div class="flex items-center justify-between py-3 border-b border-gray-200">
+            <span class="font-medium">Lokacija:</span>
+            <span>📍 <%= @business.city.name %></span>
+          </div>
+          <% if @business.address.present? %>
+            <div class="flex items-start justify-between py-3 border-b border-gray-200">
+              <span class="font-medium">Adresa:</span>
+              <span class="text-right"><%= @business.address %></span>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+      <% if @business.tags.any? %>
+        <div class="bg-white rounded-2xl shadow-lg p-8 border border-purple-100">
+          <h2 class="text-2xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+            🏷️ Usluge i pogodnosti
+          </h2>
+          <div class="flex flex-wrap gap-2">
+            <% @business.tags.each do |tag| %>
+              <span class="inline-flex items-center gap-2 rounded-full border border-purple-100 px-4 py-2 text-sm font-medium text-gray-700 bg-purple-50/60">
+                <span class="text-base"><%= tag.icon %></span>
+                <span><%= tag.name %></span>
+              </span>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+
+      <!-- Reviews -->
+      <div class="bg-white rounded-2xl shadow-lg p-8 border border-gray-100">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+          <div>
+            <h2 class="text-2xl font-bold text-gray-900 flex items-center gap-2">
+              ⭐ Recenzije
+            </h2>
+            <p class="text-sm text-gray-500">
+              <%= @business.reviews_count %> recenzija
+            </p>
+          </div>
+          <div class="text-right">
+            <div class="text-4xl font-bold text-yellow-500">
+              <%= number_with_precision(@business.average_rating, precision: 1) %>
+            </div>
+            <div class="flex items-center justify-end gap-1 text-yellow-400">
+              <% rounded_rating = @business.average_rating.round %>
+              <% 5.times do |i| %>
+                <span><%= i < rounded_rating ? "★" : "☆" %></span>
+              <% end %>
+            </div>
+            <p class="text-xs text-gray-500 mt-1">Prosečna ocena</p>
+          </div>
+        </div>
+
+        <% if @reviews.any? %>
+          <div class="space-y-4 mb-6">
+            <% @reviews.each do |review| %>
+              <div class="border border-gray-100 rounded-2xl p-4 bg-gray-50">
+                <div class="flex items-center justify-between mb-2">
+                  <div>
+                    <p class="font-semibold text-gray-900"><%= review.user.full_name %></p>
+                    <p class="text-xs text-gray-500"><%= l(review.created_at, format: "%d.%m.%Y.") %></p>
+                  </div>
+                  <div class="flex items-center gap-1 text-yellow-400 text-lg">
+                    <% review.rating.times do %>
+                      <span>★</span>
+                    <% end %>
+                    <% (5 - review.rating).times do %>
+                      <span class="text-gray-300">☆</span>
+                    <% end %>
+                  </div>
+                </div>
+                <div class="text-gray-700 leading-relaxed">
+                  <%= simple_format(review.comment) %>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        <% else %>
+          <div class="bg-gray-50 border border-dashed border-gray-200 rounded-2xl p-6 text-center mb-6">
+            <p class="text-gray-600">
+              Još nema recenzija za ovaj biznis. Budite prvi koji će podeliti iskustvo!
+            </p>
+          </div>
+        <% end %>
+
+        <% if user_signed_in? %>
+          <% if @business.user == current_user %>
+            <div class="border-t border-gray-200 pt-6">
+              <p class="text-sm text-gray-600">
+                Ne možete ostaviti recenziju za sopstveni biznis.
+              </p>
+            </div>
+          <% elsif @user_review.present? %>
+            <div class="border-t border-gray-200 pt-6">
+              <p class="text-sm text-gray-600">
+                Već ste ostavili recenziju za ovaj biznis. Hvala što delite svoje iskustvo!
+              </p>
+            </div>
+          <% else %>
+            <div class="border-t border-gray-200 pt-6">
+              <h3 class="text-lg font-semibold text-gray-900 mb-4">
+                Ostavite svoju recenziju
+              </h3>
+              <%= form_with model: [@business, @new_review],
+                            url: business_reviews_path(@business),
+                            local: true,
+                            class: "space-y-4" do |form| %>
+                <div>
+                  <%= form.label :rating, "Vaša ocena", class: "block text-sm font-medium text-gray-700 mb-2" %>
+                  <div class="flex flex-col gap-2" data-star-rating data-initial-rating="5">
+                    <%= form.hidden_field :rating, value: 5, data: { star_rating_target: "input" } %>
+                    <div class="flex items-center gap-2">
+                      <% (1..5).each do |value| %>
+                        <button type="button"
+                                class="text-3xl text-gray-300 transition transform hover:scale-110 focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 rounded-full p-1"
+                                data-star-rating-value="<%= value %>"
+                                aria-label="<%= value %> <%= value == 1 ? 'zvezdica' : 'zvezdice' %>">
+                          ★
+                        </button>
+                      <% end %>
+                    </div>
+                    <p class="text-xs text-gray-500">Kliknite na broj zvezdica koji najbolje opisuje vaše iskustvo.</p>
+                  </div>
+                </div>
+                <div>
+                  <%= form.label :comment, "Vaše iskustvo", class: "block text-sm font-medium text-gray-700 mb-2" %>
+                  <%= form.text_area :comment,
+                      rows: 4,
+                      class: "w-full rounded-xl border-2 border-gray-200 px-4 py-3 focus:border-purple-500 focus:outline-none text-gray-800 resize-none",
+                      placeholder: "Opišite šta vam se svidelo, šta bi moglo biti bolje, preporuke za roditelje..." %>
+                </div>
+                <%= form.submit "⭐ Pošalji recenziju",
+                    class: "w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold py-3 rounded-xl shadow hover:brightness-110 transition" %>
+              <% end %>
+            </div>
+          <% end %>
+        <% else %>
+          <div class="border-t border-gray-200 pt-6">
+            <p class="text-sm text-gray-600 mb-4">
+              Prijavite se da biste ostavili recenziju i pomogli drugim roditeljima da odaberu pravo mesto.
+            </p>
+            <%= link_to "🔐 Prijavi se",
+                new_user_session_path,
+                class: "inline-flex items-center gap-2 px-6 py-3 border-2 border-purple-200 text-purple-700 rounded-xl font-semibold hover:bg-purple-50 transition-colors" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- Right Column - Contact (Desktop only) -->
+    <div class="hidden lg:block space-y-6">
+      <!-- Message Owner - Now Primary -->
+      <div class="bg-white rounded-2xl shadow-lg p-8 border border-gray-100 sticky top-24">
+        <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+          💬 Kontaktiraj
+        </h2>
+        <h3 class="text-lg font-semibold text-gray-800 mb-4">
+          Pošaljite poruku vlasniku
+        </h3>
+        <% if user_signed_in? %>
+          <% if current_user == @business.user %>
+            <p class="text-sm text-gray-600">
+              Ovo je vaš biznis. Poruke roditelja će se pojaviti u sekciji poruka na dashboardu.
+            </p>
+          <% else %>
+            <%= form_with model: @new_message,
+                          url: business_messages_path(@business),
+                          local: true,
+                          class: "space-y-4" do |form| %>
+              <%= form.text_area :body,
+                  rows: 4,
+                  class: "w-full rounded-2xl border-2 border-gray-200 px-4 py-3 focus:border-purple-500 focus:outline-none text-gray-800 resize-none",
+                  placeholder: "Pitajte za termin, cene ili dodatne informacije..." %>
+              <%= form.submit "📨 Pošalji poruku",
+                  class: "w-full px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl font-semibold shadow hover:brightness-110 transition" %>
+            <% end %>
+          <% end %>
+        <% else %>
+          <p class="text-sm text-gray-600 mb-4">
+            Prijavite se kako biste poslali poruku vlasniku i dobili odgovor direktno u svom nalogu.
+          </p>
+          <%= link_to "🔐 Prijavi se",
+              new_user_session_path,
+              class: "w-full inline-flex items-center justify-center gap-2 px-4 py-3 border-2 border-purple-200 text-purple-700 rounded-xl font-semibold hover:bg-purple-50 transition-colors" %>
+        <% end %>
+
+        <!-- Contact Info Display Only -->
+        <% if [@business.phone, @business.email, @business.website].any?(&:present?) %>
+          <div class="mt-8 pt-6 border-t border-gray-200">
+            <h4 class="text-sm font-semibold text-gray-700 mb-4">Dodatne informacije</h4>
+            <div class="space-y-3">
+              <% if @business.phone.present? %>
+                <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                  <span class="text-lg">📱</span>
+                  <div>
+                    <div class="text-xs text-gray-500">Telefon</div>
+                    <div class="text-sm font-medium text-gray-800"><%= @business.phone %></div>
+                  </div>
+                </div>
+              <% end %>
+
+              <% if @business.email.present? %>
+                <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                  <span class="text-lg">📧</span>
+                  <div>
+                    <div class="text-xs text-gray-500">Email</div>
+                    <div class="text-sm font-medium text-gray-800 break-all"><%= @business.email %></div>
+                  </div>
+                </div>
+              <% end %>
+
+              <% if @business.website.present? %>
+                <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                  <span class="text-lg">🌐</span>
+                  <div>
+                    <div class="text-xs text-gray-500">Website</div>
+                    <div class="text-sm font-medium text-gray-800 break-all">
+                      <%= link_to @business.website, @business.website,
+                          target: "_blank",
+                          class: "text-purple-600 hover:text-purple-700 underline" %>
+                    </div>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+
+      <!-- Quick Info Card -->
+      <div class="bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl p-6 border border-purple-200">
+        <h3 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+          💡 Korisni saveti
+        </h3>
+        <ul class="space-y-2 text-sm text-gray-700">
+          <li class="flex items-start gap-2">
+            <span class="text-purple-600">•</span>
+            Pozovite unapred da rezervišete termin
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="text-purple-600">•</span>
+            Pitajte o dostupnim paketima i cenama
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="text-purple-600">•</span>
+            Proverite da li je potrebna depozit
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Similar Venues -->
+  <div class="mt-16 pt-16 border-t border-gray-200">
+    <h2 class="text-3xl font-bold text-gray-900 mb-8 text-center">
+      Slična mesta u kategoriji <%= @business.category.name %> u gradu <%= @business.city.name %>
+    </h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <% Business.active.where(category: @business.category, city: @business.city).where.not(id: @business.id).limit(3).each do |similar_business| %>
+        <div class="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100 hover:shadow-xl transition-shadow">
+          <div class="h-32 bg-gradient-to-br from-purple-100 to-pink-100">
+            <% if similar_business.main_image %>
+              <%= image_tag similar_business.main_image,
+                  alt: similar_business.display_name,
+                  class: "w-full h-full object-cover" %>
+            <% else %>
+              <div class="w-full h-full flex items-center justify-center text-4xl">
+                <%= similar_business.category.icon %>
+              </div>
+            <% end %>
+          </div>
+
+          <div class="p-4">
+            <h3 class="font-bold text-gray-900 mb-1">
+              <%= similar_business.display_name %>
+            </h3>
+            <p class="text-sm text-gray-600 mb-3">
+              📍 <%= similar_business.city.name %>
+            </p>
+            <%= link_to venue_path(similar_business),
+                class: "block w-full text-center px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg font-medium shadow hover:brightness-110 transition" do %>
+              👁️ Pogledaj
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<!-- Include authentication modals if user not signed in -->
+<% unless user_signed_in? %>
+  <%= render "shared/sign_in_modal" %>
+  <%= render "shared/registration_modal" %>
+<% end %>

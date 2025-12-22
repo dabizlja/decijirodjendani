@@ -1,0 +1,145 @@
+<div class="bg-white rounded-2xl shadow-lg border border-gray-100" data-controller="collapsible" data-collapsible-default-open-value="true">
+  <div class="p-6 border-b border-gray-100 space-y-4">
+    <div class="flex items-center justify-between">
+      <div class="flex flex-col gap-2">
+        <h2 class="text-xl font-semibold text-gray-900 flex items-center gap-2">
+          📅 Kalendar zauzeća
+        </h2>
+        <p class="text-sm text-gray-500">Pregled svih termina za vaše biznise</p>
+      </div>
+      <button type="button"
+              class="inline-flex items-center gap-2 px-3 py-2 text-gray-500 hover:text-gray-700 transition-colors"
+              data-action="collapsible#toggle"
+              data-collapsible-target="toggle">
+        <svg class="w-5 h-5 transition-transform" data-collapsible-target="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>
+        </svg>
+      </button>
+    </div>
+    <div>
+      <button type="button"
+              data-modal-target="booking-modal"
+              data-modal-toggle="booking-modal"
+              class="hidden"
+              id="calendar-booking-trigger">
+        Novi termin
+      </button>
+    </div>
+
+    <div class="flex flex-col lg:flex-row lg:items-center lg:gap-4 gap-4">
+      <% if businesses.any? %>
+        <%= form_with url: dashboard_root_path, method: :get,
+                      data: { turbo_frame: "dashboard-calendar", controller: "calendar-filter" },
+                      class: "flex items-center gap-3" do |form| %>
+          <div class="flex items-center gap-2 text-sm text-gray-600">
+            <span>Prikaži:</span>
+            <%= select_tag :calendar_business_id,
+                options_for_select([["Svi biznisi", ""]] + businesses.map { |b| [b.display_name, b.id] }, selected_calendar_business_id),
+                class: "border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-400 bg-white text-sm",
+                data: { action: "change->calendar-filter#submit" } %>
+            <% if businesses.one? %>
+              <span class="text-xs text-gray-400 italic">Prikazuje se: <%= businesses.first.display_name %></span>
+            <% end %>
+          </div>
+          <%= hidden_field_tag :calendar_month, calendar_date.month %>
+          <%= hidden_field_tag :calendar_year, calendar_date.year %>
+        <% end %>
+      <% end %>
+
+      <div class="flex items-center gap-3">
+        <div class="flex items-center gap-2">
+          <% shared_params = {} %>
+          <% shared_params[:calendar_business_id] = selected_calendar_business_id if selected_calendar_business_id.present? %>
+          <%= link_to dashboard_root_path(shared_params.merge(calendar_month: calendar_prev_date.month, calendar_year: calendar_prev_date.year)),
+              data: { turbo_frame: "dashboard-calendar" },
+              class: "inline-flex h-10 w-10 items-center justify-center rounded-full border border-gray-200 text-gray-600 hover:bg-gray-50" do %>
+            ‹
+          <% end %>
+          <div class="text-center">
+            <div class="text-lg font-semibold text-gray-800"><%= I18n.l(calendar_date, format: :calendar_month) %></div>
+            <div class="text-xs text-gray-500">Promenite mesec</div>
+          </div>
+          <%= link_to dashboard_root_path(shared_params.merge(calendar_month: calendar_next_date.month, calendar_year: calendar_next_date.year)),
+              data: { turbo_frame: "dashboard-calendar" },
+              class: "inline-flex h-10 w-10 items-center justify-center rounded-full border border-gray-200 text-gray-600 hover:bg-gray-50" do %>
+            ›
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div data-collapsible-target="content" class="p-6">
+    <% if businesses.any? %>
+      <div class="grid grid-cols-7 gap-2 text-xs font-semibold uppercase text-gray-500 tracking-wide">
+        <% %w[Pon Uto Sre Čet Pet Sub Ned].each do |day_name| %>
+          <div class="text-center py-2"><%= day_name %></div>
+        <% end %>
+      </div>
+      <div class="grid grid-cols-7 gap-2 mt-2">
+        <% calendar_weeks.each do |week| %>
+          <% week.each do |date| %>
+            <% bookings = bookings_by_day[date] || [] %>
+            <% in_month = date.month == calendar_date.month %>
+            <div class="min-h-[140px] border rounded-xl p-2 flex flex-col gap-2 cursor-pointer <%= in_month ? 'bg-white border-gray-200' : 'bg-gray-50 border-gray-100 text-gray-400' %>"
+                 data-action="dblclick->calendar#openModalForDate"
+                 data-date="<%= date.iso8601 %>">
+              <div class="flex items-center justify-between text-xs font-semibold <%= in_month ? 'text-gray-700' : 'text-gray-400' %>">
+                <span><%= date.day %></span>
+                <% if bookings.any? %>
+                  <span class="text-[10px] px-2 py-0.5 rounded-full bg-purple-100 text-purple-700 font-semibold"><%= bookings.count %> zakazano</span>
+                <% end %>
+              </div>
+              <div class="space-y-2">
+                <% bookings.each do |booking| %>
+                  <div class="bg-purple-50 border border-purple-100 rounded-lg p-2 text-xs text-purple-900"
+                      data-controller="booking-tooltip"
+                      data-action="mouseover->booking-tooltip#show mouseout->booking-tooltip#hide mousemove->booking-tooltip#move"
+                       data-booking-tooltip-business-value="<%= booking.business.display_name %>"
+                       data-booking-tooltip-time-value="<%= "#{I18n.l(booking.start_time, format: :hour_minute)} - #{I18n.l(booking.end_time, format: :hour_minute)}" %>"
+                       data-booking-tooltip-title-value="<%= booking.title %>"
+                       data-booking-tooltip-notes-value="<%= booking.notes.to_s %>">
+                    <div class="font-semibold truncate"><%= booking.business.display_name %></div>
+                    <div class="flex items-center justify-between gap-1 text-[11px]">
+                      <span><%= I18n.l(booking.start_time, format: :hour_minute) %> - <%= I18n.l(booking.end_time, format: :hour_minute) %></span>
+                      <div class="flex items-center gap-1">
+                        <button type="button"
+                                data-modal-target="edit-booking-modal"
+                                data-modal-toggle="edit-booking-modal"
+                                data-booking-id="<%= booking.id %>"
+                                data-action="click->calendar#openEditModal"
+                                class="text-blue-600 hover:text-blue-800 text-sm font-bold leading-none"
+                                title="Uredi termin">
+                          ✏️
+                        </button>
+                        <%= button_to "×",
+                            dashboard_booking_path(booking),
+                            method: :delete,
+                            params: {
+                              calendar_month: calendar_date.month,
+                              calendar_year: calendar_date.year,
+                              calendar_business_id: selected_calendar_business_id
+                            },
+                            form: { class: "inline", data: { turbo_confirm: "Obrisati ovaj termin?", turbo_frame: "dashboard-calendar" } },
+                            class: "text-red-600 hover:text-red-800 text-sm font-bold leading-none",
+                            title: "Obriši termin" %>
+                      </div>
+                    </div>
+                    <div class="mt-1 text-[11px] text-purple-700 truncate"><%= booking.title %></div>
+                  </div>
+                <% end %>
+                <% if bookings.empty? %>
+                  <p class="text-[11px] text-gray-400 text-center mt-4">Nema termina</p>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="text-center py-12 text-gray-500">
+        Dodajte svoj prvi biznis kako biste mogli da pratite zauzeće u kalendaru.
+      </div>
+    <% end %>
+  </div>
+</div>

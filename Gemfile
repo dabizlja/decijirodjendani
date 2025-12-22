@@ -37,6 +37,10 @@ gem "bootsnap", require: false
 # Use Tailwind CSS [https://github.com/rails/tailwindcss-rails]
 gem "tailwindcss-rails"
 gem "tailwindcss-ruby"
+gem "devise"
+gem "omniauth-google-oauth2"
+gem "omniauth-rails_csrf_protection"
+gem "kaminari"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
@@ -56,4 +60,3 @@ group :development do
   # Highlight the fine-grained location where an error occurred [https://github.com/ruby/error_highlight]
   gem "error_highlight", ">= 0.4.0", platforms: [ :ruby ]
 end
-

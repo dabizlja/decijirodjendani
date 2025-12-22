@@ -1,0 +1,194 @@
+<!-- Header -->
+<div class="bg-gradient-to-br from-purple-300 via-pink-300 to-red-300 text-white relative overflow-hidden" style="background: linear-gradient(135deg, rgba(147, 51, 234, 0.8) 0%, rgba(236, 72, 153, 0.8) 50%, rgba(239, 68, 68, 0.8) 100%);">
+  <!-- Logo on the left -->
+  <div class="pointer-events-none absolute left-0 top-0 z-40 pl-4 pt-4 sm:pl-8 sm:pt-6 md:pl-12 md:pt-8">
+    <div class="pointer-events-auto">
+      <%= link_to root_path, class: "flex items-center transition hover:opacity-90" do %>
+        <%= image_tag "logo.png", alt: "Rođendani Logo", class: "h-16 w-auto sm:h-24" %>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Floating Navigation -->
+  <div class="pointer-events-none absolute right-0 top-0 z-40 flex justify-end pr-4 pt-4 sm:pr-8 sm:pt-6 md:pr-12 md:pt-8">
+    <div class="pointer-events-auto flex items-center gap-3 rounded-full border border-white/30 bg-white/15 px-3 py-2 text-white shadow-xl backdrop-blur-lg sm:px-5 sm:py-2.5">
+      <% if user_signed_in? %>
+        <div class="relative" data-dropdown>
+          <button type="button"
+                  class="group flex items-center gap-2 rounded-full bg-white/20 px-2 py-1 text-sm font-medium text-white transition hover:bg-white/30 focus:outline-none focus:ring-2 focus:ring-white/60"
+                  data-dropdown-toggle>
+            <% avatar_url = current_user.avatar_url.presence %>
+            <% initials = current_user.full_name.to_s.strip.first&.upcase || "U" %>
+            <% if avatar_url.present? %>
+              <img src="<%= avatar_url %>"
+                   alt="<%= current_user.full_name %>"
+                   class="h-9 w-9 rounded-full object-cover ring-2 ring-white/60" />
+            <% else %>
+              <div class="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-purple-500 to-pink-500 text-sm font-semibold text-white ring-2 ring-white/60">
+                <%= initials %>
+              </div>
+            <% end %>
+            <span class="hidden text-sm font-semibold sm:inline"><%= current_user.full_name.split.first %></span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white/80 transition group-hover:text-white" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.939l3.71-3.71a.75.75 0 111.06 1.061l-4.24 4.24a.75.75 0 01-1.06 0L5.25 8.27a.75.75 0 01-.02-1.06z" clip-rule="evenodd" />
+            </svg>
+          </button>
+
+          <div class="absolute right-0 top-full z-50 mt-2 w-60 origin-top-right rounded-3xl bg-white/95 p-4 shadow-2xl ring-1 ring-black/5 backdrop-blur-lg hidden"
+               data-dropdown-menu>
+            <div class="mb-4 rounded-2xl bg-purple-50">
+              <p class="text-sm font-semibold text-purple-900"><%= current_user.full_name %></p>
+              <p class="text-xs text-purple-600 truncate"><%= current_user.email %></p>
+            </div>
+            <div class="space-y-3">
+              <%= link_to "🏠 Moja kontrolna tabla", dashboard_root_path, class: "flex items-center gap-2 rounded-2xl px-4 py-3 text-sm font-medium text-gray-700 transition hover:bg-gradient-to-r   hover:text-purple-800 border border-gray-100 hover:border-purple-200" %>
+              <%= link_to "💬 Poruke", dashboard_conversations_path, class: "flex items-center gap-2 rounded-2xl px-4 py-3 text-sm font-medium text-gray-700 transition hover:bg-gradient-to-r   hover:text-purple-800 border border-gray-100 hover:border-purple-200" %>
+              <%= button_to "🚪 Odjavi se",
+                            destroy_user_session_path,
+                            method: :delete,
+                            class: "w-full rounded-2xl bg-purple-600" %>
+            </div>
+          </div>
+        </div>
+      <% else %>
+        <div class="flex items-center gap-2">
+          <button type="button"
+                  data-modal-target="sign-in-modal"
+                  data-modal-toggle="sign-in-modal"
+                  class="hidden items-center gap-2 rounded-full border border-white/40 bg-white/10 px-3 py-1.5 text-xs font-medium text-white transition hover:bg-white/20 hover:shadow-lg sm:flex">
+            🔑 Prijavi se
+          </button>
+          <button type="button"
+                  data-modal-target="business-registration-modal"
+                  data-modal-toggle="business-registration-modal"
+                  class="flex items-center gap-2 rounded-full bg-white px-4 py-1.5 text-xs font-semibold text-purple-700 shadow-lg transition hover:scale-105 sm:text-sm">
+            🚀 Registruj se
+          </button>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Decorative elements - Hidden on small screens -->
+  <div class="hidden md:block absolute top-10 left-10 text-3xl">🎈</div>
+  <div class="hidden md:block absolute top-20 right-20 text-3xl">🎂</div>
+  <div class="hidden md:block absolute bottom-10 left-20 text-3xl">🎉</div>
+  <div class="hidden md:block absolute bottom-20 right-10 text-3xl">🎁</div>
+  <div class="hidden md:block absolute" style="top: 30%; left: 25%;">
+    <div class="text-2xl opacity-40 rotate-12">🎪</div>
+  </div>
+  <div class="hidden md:block absolute" style="top: 15%; right: 30%;">
+    <div class="text-2xl opacity-40 -rotate-12">🍰</div>
+  </div>
+
+  <div class="relative w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-16 md:py-24">
+    <div class="text-center">
+      <!-- Fun badge -->
+      <div class="inline-block bg-white bg-opacity-90 backdrop-blur-sm rounded-full px-4 py-2 mb-6 border border-white border-opacity-50 shadow-lg">
+        <span class="text-purple-800 font-medium text-sm">🎯 <%= @businesses.total_count %> <%= @businesses.total_count == 1 ? 'mesto' : 'mesta' %> za nezaboravne dečje rođendane 🎯</span>
+      </div>
+
+      <h1 class="text-2xl sm:text-3xl md:text-4xl font-semibold mb-6 text-white">
+        Pronađi Savršeno Mesto za
+        <span class="block text-yellow-200">Rođendan!</span>
+      </h1>
+
+      <!-- Search Bar -->
+      <div class="max-w-4xl mx-auto mb-8 px-4">
+        <div class="bg-white bg-opacity-95 backdrop-blur-sm rounded-2xl p-4 sm:p-6 shadow-2xl">
+          <%= form_with url: venues_path, method: :get, class: "flex flex-col gap-4" do |form| %>
+            <div class="flex flex-col sm:flex-row gap-3 sm:gap-4">
+              <div class="flex-1 relative">
+              <div class="absolute left-3 top-1/2 transform -translate-y-1/2 text-lg">📍</div>
+              <%= form.select :city_id,
+                  options_from_collection_for_select(@cities, :id, :name, params[:city_id]),
+                  { prompt: "Svi gradovi" },
+                  { class: "w-full pl-12 pr-4 py-3 rounded-xl text-gray-800 text-sm font-normal border-2 border-purple-400 focus:border-purple-500 focus:outline-none transition-colors appearance-none bg-white" } %>
+              <!-- Custom dropdown arrow -->
+              <div class="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
+                <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+              </div>
+              </div>
+              <div class="flex-1 relative">
+              <div class="absolute left-3 top-1/2 transform -translate-y-1/2 text-lg">🔍</div>
+              <%= form.select :category_id,
+                  options_from_collection_for_select(@categories, :id, :name, params[:category_id]),
+                  { prompt: "Sve kategorije" },
+                  { class: "w-full pl-12 pr-4 py-3 rounded-xl text-gray-800 text-sm font-normal border-2 border-purple-400 focus:border-purple-500 focus:outline-none transition-colors appearance-none bg-white" } %>
+              <!-- Custom dropdown arrow -->
+              <div class="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
+                <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+              </div>
+              </div>
+              <%= form.submit "🎯 Pretraži",
+                  class: "bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-3 rounded-xl font-medium text-sm shadow-lg hover:brightness-110 transition" %>
+            </div>
+            <%= render "shared/price_range_filter",
+                form: form,
+                bounds: @price_bounds,
+                selected_min: @selected_price_min,
+                selected_max: @selected_price_max,
+                wrapper_classes: "w-full price-range-slider" %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Main Content -->
+<div class="max-w-6xl mx-auto px-6 py-8">
+  <% if @businesses.any? %>
+    <!-- Infinite Scroll Container -->
+    <div data-controller="infinite-scroll"
+         data-infinite-scroll-has-more-value="<%= @businesses.next_page.present? %>"
+         data-infinite-scroll-next-page-value="<%= @businesses.next_page || 2 %>">
+
+      <!-- Results Header -->
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-xl font-semibold text-gray-800">
+          Pronađeno <%= @businesses.total_count %> <%= @businesses.total_count == 1 ? 'rezultat' : 'rezultata' %>
+        </h2>
+      </div>
+
+      <!-- Business Grid -->
+      <div id="business-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" data-infinite-scroll-target="container">
+        <% @businesses.each do |business| %>
+          <%= render "business_card", business: business %>
+        <% end %>
+      </div>
+
+      <!-- Loading Indicator -->
+      <div id="loading-indicator"
+           class="<%= 'hidden' unless @businesses.next_page %> text-center py-8"
+           data-infinite-scroll-target="loading">
+        <div class="inline-flex items-center gap-3 px-6 py-3 bg-white rounded-full shadow-lg border border-gray-200">
+          <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-purple-600"></div>
+          <span class="text-gray-600 font-medium">Učitavam više rezultata...</span>
+        </div>
+      </div>
+    </div>
+  <% else %>
+    <!-- Empty State -->
+    <div class="text-center py-16">
+      <div class="text-6xl mb-4">🔍</div>
+      <h2 class="text-2xl font-bold text-gray-800 mb-4">Nema rezultata</h2>
+      <p class="text-gray-600 mb-6">
+        Pokušajte sa drugim filterima ili proširite pretragu.
+      </p>
+      <%= link_to "Vrati se na početnu", root_path,
+          class: "inline-block px-6 py-3 bg-purple-600 text-white rounded-xl font-medium hover:bg-purple-700 transition-colors" %>
+    </div>
+  <% end %>
+</div>
+
+<!-- Include authentication modals if user not signed in -->
+<% unless user_signed_in? %>
+  <%= render "shared/sign_in_modal" %>
+  <%= render "shared/registration_modal" %>
+<% end %>

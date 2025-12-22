@@ -1,4 +1,42 @@
 Rails.application.routes.draw do
+  # Public listings for customers
+  get "venues", to: "listings#index", as: :venues
+  get "venues/:id", to: "listings#show", as: :venue
+  devise_for :users, controllers: {
+    registrations: "users/registrations",
+    sessions: "users/sessions",
+    omniauth_callbacks: "users/omniauth_callbacks"
+  }
+
+  # Dashboard namespace for authenticated users (Moja kontrola tabla)
+  namespace :dashboard do
+    root "dashboard#show"
+
+    resources :businesses, except: [:show, :index] do
+      member do
+        get :analytics
+        delete :remove_image
+      end
+    end
+
+    resources :conversations, only: [:index] do
+      post :read, on: :member
+      resources :messages, only: [:create]
+    end
+
+    resources :bookings, only: [:create, :edit, :update, :destroy]
+  end
+
+  # Public reviews on venue pages (stays outside namespace)
+  resources :businesses, only: [] do
+    resources :reviews, only: [:create]
+  end
+
+  # Customer messaging to businesses from venue pages (stays outside namespace)
+  post "businesses/:business_id/messages", to: "messages#create_for_business", as: :business_messages
+
+  resources :newsletter_subscriptions, only: [:create]
+
   get "pages/home"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

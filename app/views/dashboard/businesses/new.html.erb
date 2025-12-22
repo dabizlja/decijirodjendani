@@ -1,0 +1,50 @@
+<%= render "dashboard/dashboard/header",
+           title: "Dodajte Svoj Biznis 🏪",
+           subtitle: "Registrujte svoj biznis i počnite da privlačite nove klijente za dečje rođendane",
+           content_width: "max-w-4xl" %>
+
+<!-- Main Content -->
+<div class="max-w-4xl mx-auto px-6 py-4">
+  <!-- Form -->
+  <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-8">
+    <%= render 'form', business: @business %>
+  </div>
+
+  <!-- Tips Section -->
+  <div class="mt-8 bg-gradient-to-br from-yellow-50 to-orange-50 rounded-2xl p-6 border border-yellow-200">
+    <h3 class="font-semibold text-gray-800 flex items-center gap-2 mb-4">
+      <span class="text-xl">💡</span>
+      Saveti za uspešan profil
+    </h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+      <div class="space-y-2">
+        <div class="flex items-start gap-2">
+          <span class="text-green-500 mt-0.5">✓</span>
+          <span class="text-gray-700">Koristite jasan i prepoznatljiv naziv</span>
+        </div>
+        <div class="flex items-start gap-2">
+          <span class="text-green-500 mt-0.5">✓</span>
+          <span class="text-gray-700">Dodajte detaljnu adresu i kontakt</span>
+        </div>
+        <div class="flex items-start gap-2">
+          <span class="text-green-500 mt-0.5">✓</span>
+          <span class="text-gray-700">Opišite sve usluge koje pružate</span>
+        </div>
+      </div>
+      <div class="space-y-2">
+        <div class="flex items-start gap-2">
+          <span class="text-green-500 mt-0.5">✓</span>
+          <span class="text-gray-700">Dodajte kvalitetne slike prostora</span>
+        </div>
+        <div class="flex items-start gap-2">
+          <span class="text-green-500 mt-0.5">✓</span>
+          <span class="text-gray-700">Navedite uzrast dece koja mogu</span>
+        </div>
+        <div class="flex items-start gap-2">
+          <span class="text-green-500 mt-0.5">✓</span>
+          <span class="text-gray-700">Postavite aktuelne cene i pakete</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

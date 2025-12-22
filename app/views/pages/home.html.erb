@@ -1,5 +1,74 @@
 <!-- Hero Section -->
 <div class="bg-gradient-to-br from-purple-300 via-pink-300 to-red-300 text-white relative overflow-hidden" style="background: linear-gradient(135deg, rgba(147, 51, 234, 0.8) 0%, rgba(236, 72, 153, 0.8) 50%, rgba(239, 68, 68, 0.8) 100%);">
+  <!-- Logo on the left -->
+  <div class="pointer-events-none absolute left-0 top-0 z-40 pl-4 pt-4 sm:pl-8 sm:pt-6 md:pl-12 md:pt-8">
+    <div class="pointer-events-auto">
+      <%= link_to root_path, class: "flex items-center transition hover:opacity-90" do %>
+        <%= image_tag "logo.png", alt: "Rođendani Logo", class: "h-16 w-auto sm:h-24" %>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Floating Navigation -->
+  <div class="pointer-events-none absolute right-0 top-0 z-40 flex justify-end pr-4 pt-4 sm:pr-8 sm:pt-6 md:pr-12 md:pt-8">
+    <div class="pointer-events-auto flex items-center gap-3 rounded-full border border-white/30 bg-white/15 px-3 py-2 text-white shadow-xl backdrop-blur-lg sm:px-5 sm:py-2.5">
+      <% if user_signed_in? %>
+        <div class="relative" data-dropdown>
+          <button type="button"
+                  class="group flex items-center gap-2 rounded-full bg-white/20 px-2 py-1 text-sm font-medium text-white transition hover:bg-white/30 focus:outline-none focus:ring-2 focus:ring-white/60"
+                  data-dropdown-toggle>
+            <% avatar_url = current_user.avatar_url.presence %>
+            <% initials = current_user.full_name.to_s.strip.first&.upcase || "U" %>
+            <% if avatar_url.present? %>
+              <img src="<%= avatar_url %>"
+                   alt="<%= current_user.full_name %>"
+                   class="h-9 w-9 rounded-full object-cover ring-2 ring-white/60" />
+            <% else %>
+              <div class="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-purple-500 to-pink-500 text-sm font-semibold text-white ring-2 ring-white/60">
+                <%= initials %>
+              </div>
+            <% end %>
+            <span class="hidden text-sm font-semibold sm:inline"><%= current_user.full_name.split.first %></span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white/80 transition group-hover:text-white" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.939l3.71-3.71a.75.75 0 111.06 1.061l-4.24 4.24a.75.75 0 01-1.06 0L5.25 8.27a.75.75 0 01-.02-1.06z" clip-rule="evenodd" />
+            </svg>
+          </button>
+
+          <div class="absolute right-0 top-full z-50 mt-2 w-60 origin-top-right rounded-3xl bg-white/95 p-4 shadow-2xl ring-1 ring-black/5 backdrop-blur-lg hidden"
+               data-dropdown-menu>
+            <div class="mb-4 rounded-2xl bg-gradient-to-r from-purple-50 to-pink-50 p-4 border border-purple-100">
+              <p class="text-sm font-semibold text-purple-900"><%= current_user.full_name %></p>
+              <p class="text-xs text-purple-600 truncate"><%= current_user.email %></p>
+            </div>
+            <div class="space-y-3">
+              <%= link_to "🏠 Moja kontrolna tabla", dashboard_root_path, class: "flex items-center gap-2 rounded-2xl px-4 py-3 text-sm font-medium text-gray-700 transition hover:bg-gradient-to-r hover:from-purple-50 hover:to-pink-50 hover:text-purple-800 border border-gray-100 hover:border-purple-200" %>
+              <%= link_to "💬 Poruke", dashboard_conversations_path, class: "flex items-center gap-2 rounded-2xl px-4 py-3 text-sm font-medium text-gray-700 transition hover:bg-gradient-to-r hover:from-purple-50 hover:to-pink-50 hover:text-purple-800 border border-gray-100 hover:border-purple-200" %>
+              <%= button_to "🚪 Odjavi se",
+                            destroy_user_session_path,
+                            method: :delete,
+                            class: "w-full rounded-2xl bg-gradient-to-r from-purple-600 to-pink-600 px-4 py-3 text-center text-sm font-semibold text-white shadow-lg transition hover:from-purple-700 hover:to-pink-700 hover:shadow-xl" %>
+            </div>
+          </div>
+        </div>
+      <% else %>
+        <div class="flex items-center gap-2">
+          <button type="button"
+                  data-modal-target="sign-in-modal"
+                  data-modal-toggle="sign-in-modal"
+                  class="hidden items-center gap-2 rounded-full border border-white/40 bg-white/10 px-3 py-1.5 text-xs font-medium text-white transition hover:bg-white/20 hover:shadow-lg sm:flex">
+            🔑 Prijavi se
+          </button>
+          <button type="button"
+                  data-modal-target="business-registration-modal"
+                  data-modal-toggle="business-registration-modal"
+                  class="flex items-center gap-2 rounded-full bg-white px-4 py-1.5 text-xs font-semibold text-purple-700 shadow-lg transition hover:scale-105 sm:text-sm">
+            🚀 Registruj se
+          </button>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
   <!-- Decorative elements - Hidden on small screens -->
   <div class="hidden md:block absolute top-10 left-10 text-3xl">🎈</div>
   <div class="hidden md:block absolute top-20 right-20 text-3xl">🎂</div>
@@ -9,25 +78,25 @@
     <div class="text-2xl opacity-40 rotate-12">🎪</div>
   </div>
   <div class="hidden md:block absolute" style="top: 15%; right: 30%;">
-    <div class="text-2xl opacity-40 -rotate-12">🍰</div>
+    <div class="text-2xl -rotate-12">🍰</div>
   </div>
   <div class="hidden md:block absolute" style="bottom: 30%; right: 25%;">
-    <div class="text-2xl opacity-40 rotate-45">🎭</div>
+    <div class="text-2xl rotate-45">🎭</div>
   </div>
   <div class="hidden md:block absolute" style="bottom: 15%; left: 30%;">
-    <div class="text-2xl opacity-40 -rotate-45">🎵</div>
+    <div class="text-2xl -rotate-45">🎵</div>
   </div>
   <div class="hidden lg:block absolute" style="top: 40%; right: 10%;">
-    <div class="text-xl opacity-30">🎈</div>
+    <div class="text-xl">🎈</div>
   </div>
   <div class="hidden lg:block absolute" style="bottom: 40%; left: 10%;">
-    <div class="text-xl opacity-30">🎂</div>
+    <div class="text-xl">🎂</div>
   </div>
   <div class="hidden lg:block absolute" style="top: 50%; left: 5%;">
-    <div class="text-xl opacity-30 rotate-90">🎊</div>
+    <div class="text-xl rotate-90">🎊</div>
   </div>
   <div class="hidden lg:block absolute" style="top: 50%; right: 5%;">
-    <div class="text-xl opacity-30 -rotate-90">🧁</div>
+    <div class="text-xl opacity-40 -rotate-90">🧁</div>
   </div>
   <div class="hidden xl:block absolute" style="top: 25%; left: 50%;">
     <div class="text-lg opacity-25">🎀</div>
@@ -36,7 +105,7 @@
     <div class="text-lg opacity-25">🍭</div>
   </div>
   
-  <div class="relative w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
+  <div class="relative w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-16 md:py-24">
     <div class="text-center">
       <!-- Fun badge -->
       <div class="inline-block bg-white bg-opacity-90 backdrop-blur-sm rounded-full px-4 py-2 mb-6 border border-white border-opacity-50 shadow-lg">
@@ -56,48 +125,45 @@
       <!-- Search Bar -->
       <div class="max-w-4xl mx-auto mb-8 px-4">
         <div class="bg-white bg-opacity-95 backdrop-blur-sm rounded-2xl p-4 sm:p-6 shadow-2xl">
-          <form class="flex flex-col sm:flex-row gap-3 sm:gap-4">
-            <div class="flex-1 relative">
+          <%= form_with url: venues_path, method: :get, class: "flex flex-col gap-4" do |form| %>
+            <div class="flex flex-col sm:flex-row gap-3 sm:gap-4">
+              <div class="flex-1 relative">
               <div class="absolute left-3 top-1/2 transform -translate-y-1/2 text-lg">📍</div>
-              <select 
-                class="w-full pl-12 pr-4 py-3 rounded-xl text-gray-800 text-sm font-normal border-2 border-purple-400 focus:border-purple-500 focus:outline-none transition-colors appearance-none bg-white"
-              >
-                <option value="">Svi gradovi</option>
-                <% @cities.each do |city| %>
-                  <option value="<%= city.slug %>"><%= city.name %></option>
-                <% end %>
-              </select>
+              <%= form.select :city_id,
+                  options_from_collection_for_select(@cities, :id, :name),
+                  { prompt: "Svi gradovi" },
+                  { class: "w-full pl-12 pr-4 py-3 rounded-xl text-gray-800 text-sm font-normal border-2 border-purple-400 focus:border-purple-500 focus:outline-none transition-colors appearance-none bg-white" } %>
               <!-- Custom dropdown arrow -->
               <div class="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
                 <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                 </svg>
               </div>
-            </div>
-            <div class="flex-1 relative">
+              </div>
+              <div class="flex-1 relative">
               <div class="absolute left-3 top-1/2 transform -translate-y-1/2 text-lg">🔍</div>
-              <select 
-                class="w-full pl-12 pr-4 py-3 rounded-xl text-gray-800 text-sm font-normal border-2 border-purple-400 focus:border-purple-500 focus:outline-none transition-colors appearance-none bg-white"
-              >
-                <option value="">Sve kategorije</option>
-                <% @categories.each do |category| %>
-                  <option value="<%= category.slug %>"><%= category.name %></option>
-                <% end %>
-              </select>
+              <%= form.select :category_id,
+                  options_from_collection_for_select(@categories, :id, :name),
+                  { prompt: "Sve kategorije" },
+                  { class: "w-full pl-12 pr-4 py-3 rounded-xl text-gray-800 text-sm font-normal border-2 border-purple-400 focus:border-purple-500 focus:outline-none transition-colors appearance-none bg-white" } %>
               <!-- Custom dropdown arrow -->
               <div class="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
                 <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                 </svg>
               </div>
+              </div>
+              <%= form.submit "🎯 Pretraži",
+                  class: "bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-3 rounded-xl font-medium text-sm shadow-lg hover:brightness-110 transition" %>
             </div>
-            <button 
-              type="submit" 
-              class="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-3 rounded-xl font-medium text-sm hover:from-purple-700 hover:to-pink-700 transition-colors"
-            >
-              🎯 Pretraži
-            </button>
-          </form>
+
+            <%= render "shared/price_range_filter",
+                form: form,
+                bounds: @price_bounds,
+                selected_min: @selected_price_min,
+                selected_max: @selected_price_max,
+                wrapper_classes: "w-full price-range-slider" %>
+          <% end %>
         </div>
       </div>
     </div>
@@ -119,90 +185,85 @@
       <p class="text-sm sm:text-base text-gray-600 max-w-3xl mx-auto px-4">
         Pogledajte naše najpreporučenija mesta za nezaboravne dečje rođendanske proslave
       </p>
+      <%= link_to venues_path,
+          class: "inline-block mt-4 px-6 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg font-medium text-sm shadow hover:brightness-110 transition" do %>
+        👁️ Pogledaj sve
+      <% end %>
     </div>
     
-    <!-- Venues Grid -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-      
-      <!-- Venue 1 -->
-      <div class="group bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 shadow-lg hover:shadow-2xl transform hover:-translate-y-1 sm:hover:-translate-y-2 transition-all duration-300 border-2 sm:border-4 border-transparent hover:border-blue-300">
-        <div class="text-center">
-          <div class="w-full h-40 sm:h-48 bg-purple-500 rounded-xl sm:rounded-2xl mb-4 sm:mb-6 mx-auto overflow-hidden">
-            <img 
-              src="https://images.unsplash.com/photo-1587620962725-abab7fe55159?w=400&h=200&fit=crop" 
-              alt="Igraonica Sretno Detinjstvo"
-              class="w-full h-full object-cover"
-            />
-          </div>
-          <div class="flex flex-wrap gap-1 justify-center mb-3">
-            <span class="bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded-full">3-12 god</span>
-            <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">Igraonica</span>
-            <span class="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full">Animacija</span>
-          </div>
-          <h3 class="font-semibold text-base sm:text-lg mb-2 text-gray-800">Igraonica Sretno Detinjstvo</h3>
-          <p class="text-gray-600 mb-3 text-sm">Beograd, Novi Beograd • Modern igraonica sa najnovijim spravama i profesionalnim animatorima</p>
-          <div class="bg-purple-100 rounded-xl p-2 mb-3">
-            <div class="text-xs text-purple-800 font-medium">4.8 ⭐ (156 ocena)</div>
-          </div>
-          <button class="w-full bg-gradient-to-r from-purple-500 to-purple-600 text-white py-2.5 px-4 rounded-lg font-medium text-sm hover:from-purple-600 hover:to-purple-700 transition-colors">
-            Pogledaj Detalje
-          </button>
-        </div>
-      </div>
+    <!-- Venues Carousel -->
+    <% if @featured_businesses.any? %>
+      <div class="relative" data-controller="featured-slider">
+        <button type="button"
+                class="featured-slider-nav absolute left-0 top-1/2 hidden sm:flex -translate-y-1/2 z-10 h-12 w-12 items-center justify-center rounded-full bg-white text-purple-600 shadow-lg border border-purple-100 hover:bg-purple-50 transition"
+                aria-label="Prethodna izdvojena mesta"
+                data-featured-slider-target="prevButton"
+                data-action="click->featured-slider#scrollPrev">
+          ‹
+        </button>
 
-      <!-- Venue 2 -->
-      <div class="group bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 shadow-lg hover:shadow-2xl transform hover:-translate-y-1 sm:hover:-translate-y-2 transition-all duration-300 border-2 sm:border-4 border-transparent hover:border-blue-300">
-        <div class="text-center">
-          <div class="w-full h-40 sm:h-48 bg-pink-500 rounded-xl sm:rounded-2xl mb-4 sm:mb-6 mx-auto overflow-hidden">
-            <img 
-              src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=400&h=200&fit=crop" 
-              alt="Zabavni Park Duga"
-              class="w-full h-full object-cover"
-            />
+        <div class="overflow-hidden px-1 sm:px-2">
+          <div class="featured-carousel-container flex gap-6 overflow-x-auto scroll-smooth pb-4"
+               data-featured-slider-target="container">
+            <% @featured_businesses.each do |business| %>
+              <% tags = business.tags.first(3) %>
+              <% location = [business.city&.name, business.address].compact.join(", ") %>
+              <% description = business.description.presence || "Još uvek nema opisa za ovaj biznis." %>
+              <% rating_value = business.average_rating %>
+              <% reviews_count = business.reviews_count %>
+              <% rating_text = if reviews_count.positive?
+                                  "#{format('%.1f', rating_value)} ⭐ (#{reviews_count} ocena)"
+                                else
+                                  "Još nema ocena"
+                                end %>
+              <div class="featured-carousel-slide group bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 shadow-lg hover:shadow-2xl transform hover:-translate-y-1 sm:hover:-translate-y-2 transition-all duration-300 border-2 sm:border-4 border-transparent hover:border-blue-300">
+                <div class="text-center">
+                  <div class="w-full h-40 sm:h-48 rounded-xl sm:rounded-2xl mb-4 sm:mb-6 mx-auto overflow-hidden bg-gray-100 flex items-center justify-center">
+                    <% if business.main_image.present? %>
+                      <%= image_tag(business.main_image.variant(resize_to_fill: [600, 320]), class: "w-full h-full object-cover") %>
+                    <% else %>
+                      <span class="text-gray-500 text-sm">Još uvek nije dodata slika</span>
+                    <% end %>
+                  </div>
+                  <div class="flex flex-wrap gap-1 justify-center mb-3">
+                    <% if tags.any? %>
+                      <% tags.each do |tag| %>
+                        <span class="bg-purple-50 text-purple-800 text-xs px-2 py-1 rounded-full"><%= tag.name %></span>
+                      <% end %>
+                    <% else %>
+                      <% [business.category&.name, business.city&.name].compact.first(2).each do |label| %>
+                        <span class="bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded-full"><%= label %></span>
+                      <% end %>
+                    <% end %>
+                  </div>
+                  <h3 class="font-semibold text-base sm:text-lg mb-2 text-gray-800"><%= business.display_name %></h3>
+                  <p class="text-gray-600 mb-3 text-sm"><%= location.presence || business.city&.name || "Lokacija u pripremi" %> • <%= description %></p>
+                  <div class="bg-purple-100 text-purple-800 rounded-xl p-2 mb-3">
+                    <div class="text-xs font-medium"><%= rating_text %></div>
+                  </div>
+                  <%= link_to venue_path(business),
+                      class: "block w-full text-center bg-gradient-to-r from-purple-500 to-purple-600 text-white py-2.5 px-4 rounded-lg font-medium text-sm hover:from-purple-600 hover:to-purple-700 transition-colors" do %>
+                    Pogledaj Detalje
+                  <% end %>
+                </div>
+              </div>
+            <% end %>
           </div>
-          <div class="flex flex-wrap gap-1 justify-center mb-3">
-            <span class="bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded-full">2-15 god</span>
-            <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">Zabavni Park</span>
-            <span class="bg-orange-100 text-orange-800 text-xs px-2 py-1 rounded-full">Spoljašnji</span>
-          </div>
-          <h3 class="font-semibold text-base sm:text-lg mb-2 text-gray-800">Zabavni Park Duga</h3>
-          <p class="text-gray-600 mb-3 text-sm">Novi Sad, Centar • Veliki spoljašnji prostor sa tobogganima, trampolinama i prostorom za piknik</p>
-          <div class="bg-pink-100 rounded-xl p-2 mb-3">
-            <div class="text-xs text-pink-800 font-medium">4.6 ⭐ (89 ocena)</div>
-          </div>
-          <button class="w-full bg-gradient-to-r from-pink-500 to-pink-600 text-white py-2.5 px-4 rounded-lg font-medium text-sm hover:from-pink-600 hover:to-pink-700 transition-colors">
-            Pogledaj Detalje
-          </button>
         </div>
-      </div>
 
-      <!-- Venue 3 -->
-      <div class="group bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 shadow-lg hover:shadow-2xl transform hover:-translate-y-1 sm:hover:-translate-y-2 transition-all duration-300 border-2 sm:border-4 border-transparent hover:border-blue-300">
-        <div class="text-center">
-          <div class="w-full h-40 sm:h-48 bg-blue-500 rounded-xl sm:rounded-2xl mb-4 sm:mb-6 mx-auto overflow-hidden">
-            <img 
-              src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=200&fit=crop" 
-              alt="Dečji Restoran Čarolija"
-              class="w-full h-full object-cover"
-            />
-          </div>
-          <div class="flex flex-wrap gap-1 justify-center mb-3">
-            <span class="bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded-full">1-10 god</span>
-            <span class="bg-red-100 text-red-800 text-xs px-2 py-1 rounded-full">Restoran</span>
-            <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">Dečji Meni</span>
-          </div>
-          <h3 class="font-semibold text-base sm:text-lg mb-2 text-gray-800">Dečji Restoran Čarolija</h3>
-          <p class="text-gray-600 mb-3 text-sm">Niš, Centar • Specijalizovan restoran za decu sa posebnim menijem i igračkama</p>
-          <div class="bg-blue-100 rounded-xl p-2 mb-3">
-            <div class="text-xs text-blue-800 font-medium">4.9 ⭐ (203 ocena)</div>
-          </div>
-          <button class="w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white py-2.5 px-4 rounded-lg font-medium text-sm hover:from-blue-600 hover:to-blue-700 transition-colors">
-            Pogledaj Detalje
-          </button>
-        </div>
+        <button type="button"
+                class="featured-slider-nav absolute right-0 top-1/2 hidden sm:flex -translate-y-1/2 z-10 h-12 w-12 items-center justify-center rounded-full bg-white text-purple-600 shadow-lg border border-purple-100 hover:bg-purple-50 transition"
+                aria-label="Sledeća izdvojena mesta"
+                data-featured-slider-target="nextButton"
+                data-action="click->featured-slider#scrollNext">
+          ›
+        </button>
       </div>
-      
-    </div>
+    <% else %>
+      <div class="text-center py-12 text-gray-500">
+        Trenutno nema istaknutih mesta. Dodajte novi biznis da biste ga prikazali ovde.
+      </div>
+    <% end %>
   </div>
 </div>
 
@@ -225,18 +286,20 @@
     <!-- Categories Grid -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
       <% @categories.each do |category| %>
-        <div class="group bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 shadow-lg hover:shadow-2xl transform hover:-translate-y-1 sm:hover:-translate-y-2 transition-all duration-300 border-2 sm:border-4 border-transparent hover:border-yellow-300">
+        <%= link_to venues_path(category_id: category.id),
+            class: "group block bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 shadow-lg hover:shadow-2xl transform hover:-translate-y-1 sm:hover:-translate-y-2 transition-all duration-300 border-2 sm:border-4 border-transparent hover:border-yellow-300 focus:outline-none focus:ring-4 focus:ring-purple-200" do %>
           <div class="text-center">
             <div class="w-16 h-16 sm:w-20 sm:h-20 <%= category.color %> rounded-xl sm:rounded-2xl flex items-center justify-center text-3xl sm:text-4xl mb-4 sm:mb-6 mx-auto transform group-hover:rotate-12 transition-transform duration-300">
               <%= category.icon %>
             </div>
             <h3 class="font-semibold text-base sm:text-lg mb-2 text-gray-800"><%= category.name %></h3>
-            <p class="text-gray-600 mb-3 text-sm"><%= category.description %></p>
-            <button class="w-full <%= category.color.gsub('bg-', 'bg-gradient-to-r from-').gsub('-500', '-500 to-' + category.color.gsub('bg-', '').gsub('-500', '-600')) %> text-white py-2.5 px-4 rounded-lg font-medium text-sm hover:from-<%= category.color.gsub('bg-', '').gsub('-500', '-600') %> hover:to-<%= category.color.gsub('bg-', '').gsub('-500', '-700') %> transition-colors">
-              Pogledaj <%= category.name %>
-            </button>
+            <p class="text-gray-600 mb-4 text-sm"><%= category.description %></p>
+            <div class="mt-4 text-purple-700 font-semibold flex items-center justify-center gap-2 text-sm">
+              <span>Istraži</span>
+              <span class="text-lg leading-none">→</span>
+            </div>
           </div>
-        </div>
+        <% end %>
       <% end %>
     </div>
   </div>
@@ -288,9 +351,15 @@
     
     <!-- CTA Buttons -->
     <div class="flex flex-col gap-3 sm:gap-4 justify-center items-center max-w-md mx-auto">
-      <button data-modal-target="business-registration-modal" data-modal-toggle="business-registration-modal" class="w-full bg-yellow-400 text-purple-900 px-6 sm:px-8 lg:px-10 py-3 sm:py-4 rounded-xl sm:rounded-2xl font-bold text-base sm:text-lg lg:text-xl hover:bg-yellow-300 transform hover:scale-105 transition-all duration-200 shadow-2xl" style="font-family: 'Poppins', sans-serif;">
-        🚀 Registruj Svoj Biznis
-      </button>
+      <% if user_signed_in? %>
+        <div class="w-full bg-white bg-opacity-90 text-purple-900 px-6 sm:px-8 lg:px-10 py-3 sm:py-4 rounded-xl sm:rounded-2xl font-semibold text-base sm:text-lg lg:text-xl text-center shadow-2xl" style="font-family: 'Poppins', sans-serif;">
+          ✅ Već ste prijavljeni kao <%= current_user.full_name %>
+        </div>
+      <% else %>
+        <button type="button" data-modal-target="business-registration-modal" data-modal-toggle="business-registration-modal" class="w-full bg-yellow-400 text-purple-900 px-6 sm:px-8 lg:px-10 py-3 sm:py-4 rounded-xl sm:rounded-2xl font-bold text-base sm:text-lg lg:text-xl hover:bg-yellow-300 transform hover:scale-105 transition-all duration-200 shadow-2xl" style="font-family: 'Poppins', sans-serif;">
+          🚀 Registruj Svoj Biznis
+        </button>
+      <% end %>
       <button class="w-full border-2 sm:border-3 border-white text-white px-6 sm:px-8 lg:px-10 py-3 sm:py-4 rounded-xl sm:rounded-2xl font-semibold text-base sm:text-lg lg:text-xl hover:bg-white hover:text-purple-900 transition-all duration-200" style="font-family: 'Poppins', sans-serif;">
         📞 Kontaktiraj Nas
       </button>
@@ -311,92 +380,21 @@
       Prijavite se za newsletter i dobijajte najnovije informacije o novim mestima i posebnim ponudama
     </p>
     
-    <div class="flex flex-col gap-2 sm:gap-3 max-w-lg mx-auto">
-      <input 
-        type="email" 
-        placeholder="Unesite vaš email..." 
-        class="w-full px-4 py-3 rounded-lg sm:rounded-xl text-gray-800 font-medium focus:outline-none focus:ring-2 focus:ring-purple-400"
-        style="font-family: 'Inter', sans-serif;"
-      />
-      <button class="w-full sm:w-auto bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-3 rounded-lg sm:rounded-xl font-semibold hover:from-purple-700 hover:to-pink-700 transition-colors" style="font-family: 'Poppins', sans-serif;">
+    <%= form_with url: newsletter_subscriptions_path,
+                  scope: :newsletter_subscription,
+                  class: "flex flex-col gap-2 sm:gap-3 max-w-lg mx-auto" do |form| %>
+      <%= form.email_field :email,
+            placeholder: "Unesite vaš email...",
+            required: true,
+            class: "w-full px-5 py-3 rounded-2xl border-2 border-purple-400/70 bg-white/10 text-white placeholder-gray-300 font-medium focus:outline-none focus:ring-2 focus:ring-purple-300 focus:bg-white/20 transition",
+            style: "font-family: 'Inter', sans-serif; backdrop-filter: blur(6px);" %>
+      <%= form.button class: "w-full sm:w-auto bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 text-white px-6 py-3 rounded-2xl font-semibold hover:from-purple-600 hover:via-pink-600 hover:to-red-500 transition-all", style: "font-family: 'Poppins', sans-serif;" do %>
         📧 Prijavi Me
-      </button>
-    </div>
+      <% end %>
+    <% end %>
   </div>
 </div>
 
-<!-- Business Registration Modal -->
-<div id="business-registration-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-    <div class="relative p-4 w-full max-w-md max-h-full">
-        <!-- Modal content -->
-        <div class="relative bg-white rounded-lg shadow">
-            <!-- Modal header -->
-            <div class="flex items-center justify-between p-6 border-b">
-                <h3 class="text-2xl font-bold text-gray-900">
-                    🚀 Registruj se
-                </h3>
-                <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center" data-modal-hide="business-registration-modal">
-                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
-                    </svg>
-                    <span class="sr-only">Close modal</span>
-                </button>
-            </div>
-            <!-- Modal body -->
-            <div class="p-6">
-                <p class="text-gray-600 mb-6 text-center">Kreiraj nalog i dodaj svoj biznis na najveću platformu za dečje rođendane u Srbiji</p>
-                
-                <form class="space-y-5" action="#" method="POST">
-                    <!-- Google Sign Up Button -->
-                    <div class="mb-6">
-                        <button type="button" class="w-full text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 focus:ring-2 focus:ring-gray-200 font-medium rounded-lg text-sm px-4 py-2.5 flex items-center justify-center gap-2 transition-all duration-200">
-                            <svg class="w-4 h-4" viewBox="0 0 24 24">
-                                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-                                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-                            </svg>
-                            Registruj se sa Google
-                        </button>
-                    </div>
-                    
-                    <!-- Divider -->
-                    <div class="flex items-center my-6">
-                        <div class="flex-1 border-t border-gray-200"></div>
-                        <div class="mx-4 text-gray-400 text-sm font-medium">ili</div>
-                        <div class="flex-1 border-t border-gray-200"></div>
-                    </div>
-                    
-                    <!-- Email -->
-                    <div>
-                        <label for="email" class="block mb-2 text-sm font-semibold text-gray-800">Email adresa</label>
-                        <input type="email" name="email" id="email" class="w-full px-4 py-3 text-gray-900 bg-white border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 placeholder-gray-400" placeholder="tvoj@email.com" required>
-                    </div>
-                    
-                    <!-- Password -->
-                    <div>
-                        <label for="password" class="block mb-2 text-sm font-semibold text-gray-800">Lozinka</label>
-                        <input type="password" name="password" id="password" class="w-full px-4 py-3 text-gray-900 bg-white border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 placeholder-gray-400" placeholder="Minimum 8 karaktera" required>
-                    </div>
-                    
-                    <!-- Confirm Password -->
-                    <div>
-                        <label for="confirm_password" class="block mb-2 text-sm font-semibold text-gray-800">Potvrdi lozinku</label>
-                        <input type="password" name="confirm_password" id="confirm_password" class="w-full px-4 py-3 text-gray-900 bg-white border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 placeholder-gray-400" placeholder="Ponovi lozinku" required>
-                    </div>
-                    
-                    <!-- Terms checkbox -->
-                    <div class="flex items-center" style="margin-top: 1rem;">
-                        <input id="terms" type="checkbox" value="" class="w-4 h-4 border-2 border-gray-300 rounded bg-white focus:ring-2 focus:ring-purple-500 text-purple-600" required>
-                        <label for="terms" class="ml-2 text-xs text-gray-600">Slažem se sa <a href="#" class="text-purple-600 hover:text-purple-700 font-medium">uslovima korišćenja</a> i <a href="#" class="text-purple-600 hover:text-purple-700 font-medium">politikom privatnosti</a></label>
-                    </div>
-                    
-                    <!-- Submit button -->
-                    <button type="submit" class="w-full text-white bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-lg text-sm px-4 py-2.5 text-center transition-all duration-200 mt-6">
-                        🚀 Kreiraj Nalog
-                    </button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
+<!-- Authentication Modals -->
+<%= render "shared/sign_in_modal" %>
+<%= render "shared/registration_modal" %>

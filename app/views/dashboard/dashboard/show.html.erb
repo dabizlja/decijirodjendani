@@ -1,0 +1,435 @@
+<%= render "dashboard/dashboard/header" %>
+
+<!-- Main Dashboard Content -->
+<div class="max-w-6xl mx-auto px-6 py-8 space-y-8">
+
+ <!-- Quick Stats -->
+ <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+   <!-- Stat 1 -->
+   <div class="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
+     <div class="flex items-center justify-between">
+       <div>
+         <p class="text-sm font-medium text-gray-600">Moji biznisi</p>
+         <p class="text-3xl font-bold text-gray-900"><%= current_user.businesses.count %></p>
+        <p class="text-sm text-gray-500"><%= current_user.businesses.count > 0 ? "Ukupno biznisa" : "Dodajte prvi biznis" %></p>
+       </div>
+       <div class="h-12 w-12 bg-purple-100 rounded-xl flex items-center justify-center">
+         <span class="text-xl">🏪</span>
+       </div>
+     </div>
+   </div>
+
+   <!-- Stat 2 -->
+   <div class="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
+     <div class="flex items-center justify-between">
+       <div>
+         <p class="text-sm font-medium text-gray-600">Ukupni pregledi</p>
+         <p class="text-3xl font-bold text-gray-900"><%= @businesses.sum(&:views_this_month) %></p>
+         <p class="text-sm text-gray-500">U ovom mesecu</p>
+       </div>
+       <div class="h-12 w-12 bg-pink-100 rounded-xl flex items-center justify-center">
+         <span class="text-xl">👀</span>
+       </div>
+     </div>
+   </div>
+
+   <!-- Stat 3 -->
+   <div class="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
+     <div class="flex items-center justify-between">
+       <div>
+         <p class="text-sm font-medium text-gray-600">Nove poruke</p>
+         <p class="text-3xl font-bold text-gray-900"><%= @recent_conversations.count %></p>
+         <p class="text-sm text-gray-500">Aktivne konverzacije</p>
+       </div>
+       <div class="h-12 w-12 bg-blue-100 rounded-xl flex items-center justify-center">
+         <span class="text-xl">💬</span>
+       </div>
+     </div>
+   </div>
+ </div>
+
+ <!-- Messages Overview -->
+ <div class="bg-white rounded-2xl p-6 shadow-lg border border-gray-100" data-controller="collapsible">
+   <div class="flex items-center justify-between mb-4">
+     <div>
+       <h2 class="text-xl font-bold text-gray-900 flex items-center gap-2">
+         💬 Poruke
+       </h2>
+       <p class="text-sm text-gray-500">Komunikacija sa roditeljima za sve vaše biznise</p>
+     </div>
+     <div class="flex items-center gap-2">
+       <%= link_to "Otvori chat", dashboard_conversations_path,
+           class: "inline-flex items-center gap-2 px-4 py-2 border border-purple-200 text-purple-700 rounded-xl text-sm font-medium hover:bg-purple-50 transition-colors" %>
+       <button type="button"
+               class="inline-flex items-center gap-2 px-3 py-2 text-gray-500 hover:text-gray-700 transition-colors"
+               data-action="collapsible#toggle"
+               data-collapsible-target="toggle">
+         <svg class="w-5 h-5 transition-transform" data-collapsible-target="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>
+         </svg>
+       </button>
+     </div>
+   </div>
+
+   <div data-collapsible-target="content" class="hidden">
+     <% if @recent_conversations.any? %>
+       <div class="space-y-4">
+       <% @recent_conversations.each do |conversation| %>
+         <% last_message = conversation.messages.max_by(&:created_at) %>
+         <div class="border border-gray-100 rounded-2xl p-4 flex flex-col md:flex-row md:items-center md:jus
+         tify-between gap-4">
+           <div class="flex-1">
+             <p class="text-sm text-gray-500 mb-1 flex items-center gap-2">
+               <span class="font-semibold text-gray-900"><%= conversation.business.display_name %></span>
+               <span>•</span>
+               <span class="text-gray-600"><%= conversation.customer.full_name %></span>
+             </p>
+             <% if last_message %>
+               <p class="text-sm text-gray-700 line-clamp-2"><%= truncate(last_message.body, length: 120) %>
+         </p>
+               <p class="text-xs text-gray-500 mt-1">pre <%= time_ago_in_words(last_message.created_at) %></
+         p>
+             <% else %>
+               <p class="text-sm text-gray-500">Nema poruka u ovoj konverzaciji.</p>
+             <% end %>
+           </div>
+           <div class="flex flex-col items-start md:items-end gap-2">
+             <% unread_count = conversation.unread_messages_for(current_user).count %>
+             <% if unread_count.positive? %>
+               <span class="px-3 py-1 bg-red-50 text-red-700 rounded-full text-xs font-semibold">
+                 <%= unread_count %> novih poruka
+               </span>
+             <% end %>
+             <%= link_to "📨 Odgovori",
+                 dashboard_conversations_path(conversation_id: conversation.id),
+                 class: "inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-6
+         00 text-white rounded-xl text-sm font-medium hover:from-blue-700 hover:to-purple-700 transition-colors" %>
+           </div>
+         </div>
+       <% end %>
+     </div>
+   <% else %>
+       <div class="text-center py-6 text-gray-600">
+         Još uvek nemate poruke. Kada roditelji pošalju poruku, videćete je ovde.
+       </div>
+     <% end %>
+   </div>
+ </div>
+
+ <!-- Reviews Section -->
+ <div class="bg-white rounded-2xl p-6 shadow-lg border border-gray-100" data-controller="collapsible">
+   <div class="flex items-center justify-between mb-4">
+     <div class="flex-1">
+       <h2 class="text-xl font-bold text-gray-900 flex items-center gap-2">
+         🔔 <%= @reviews_type == :received ? 'Najnovije recenzije' : 'Moje recenzije' %>
+       </h2>
+       <p class="text-sm text-gray-500">
+         <%= @reviews_type == :received ? 'Pregledajte šta roditelji pišu o vašim mestima' : 'Recenzije koje ste ostavili' %>
+       </p>
+     </div>
+     <div class="flex items-center gap-2">
+       <% if @recent_reviews.any? %>
+         <span class="px-3 py-1 bg-purple-50 text-purple-700 rounded-full text-sm font-medium">
+           <%= @recent_reviews.size %> <%= @reviews_type == :received ? 'novih' : 'ukupno' %>
+         </span>
+       <% end %>
+       <button type="button"
+               class="inline-flex items-center gap-2 px-3 py-2 text-gray-500 hover:text-gray-700 transition-colors"
+               data-action="collapsible#toggle"
+               data-collapsible-target="toggle">
+         <svg class="w-5 h-5 transition-transform" data-collapsible-target="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>
+         </svg>
+       </button>
+     </div>
+   </div>
+
+   <div data-collapsible-target="content" class="hidden">
+     <% if @recent_reviews.any? %>
+       <div class="space-y-4">
+       <% @recent_reviews.each do |review| %>
+         <div class="border border-gray-100 rounded-2xl p-4 flex flex-col md:flex-row md:items-center md:jus
+         tify-between gap-4">
+           <div class="flex-1">
+             <% if @reviews_type == :received %>
+               <div class="flex items-center gap-2 text-sm text-gray-500 mb-1">
+                 <span class="font-semibold text-gray-800"><%= review.user.full_name %></span>
+                 <span>•</span>
+                 <span>pre <%= time_ago_in_words(review.created_at) %></span>
+               </div>
+               <p class="font-semibold text-gray-900 mb-1">
+                 <%= review.business.display_name %>
+               </p>
+             <% else %>
+               <div class="flex items-center gap-2 text-sm text-gray-500 mb-1">
+                 <span>Vaša recenzija</span>
+                 <span>•</span>
+                 <span>pre <%= time_ago_in_words(review.created_at) %></span>
+               </div>
+               <p class="font-semibold text-gray-900 mb-1">
+                 <%= review.business.display_name %>
+               </p>
+             <% end %>
+            <p class="text-gray-700 text-sm line-clamp-2"><%= truncate(strip_tags(simple_format(review.comment)), length: 120) %></p>
+           </div>
+           <div class="flex flex-col items-start md:items-end gap-2">
+             <div class="flex items-center gap-1 text-yellow-400 text-lg">
+               <% review.rating.times do %>
+                 <span>★</span>
+               <% end %>
+               <% (5 - review.rating).times do %>
+                 <span class="text-gray-300">☆</span>
+               <% end %>
+             </div>
+             <%= link_to "👀 Pogledaj #{@reviews_type == :received ? 'recenziju' : 'mesto'}",
+                 venue_path(review.business),
+                 class: "inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl text-sm font-medium hover:from-purple-700 hover:to-pink-700 transition-colors" %>
+           </div>
+         </div>
+       <% end %>
+     </div>
+     <% else %>
+       <div class="text-center py-6 text-gray-600">
+         <% if @reviews_type == :received %>
+           Trenutno nema novih recenzija. Ohrabrite klijente da podele utiske o vašem mestu!
+         <% else %>
+           Još niste ostavili nijednu recenziju. Posetite neka mesta i podelite svoja iskustva!
+         <% end %>
+       </div>
+     <% end %>
+   </div>
+ </div>
+
+ <% if @businesses.none? %>
+   <!-- Getting Started Section -->
+   <div class="bg-gradient-to-br from-yellow-50 to-orange-50 rounded-2xl p-8 border border-yellow-200">
+     <div class="flex items-start gap-4">
+       <div class="h-12 w-12 bg-yellow-500 rounded-xl flex items-center justify-center text-xl flex-shrink-0
+         ">
+         🚀
+       </div>
+       <div class="flex-1">
+         <h3 class="text-xl font-bold text-gray-900 mb-3">Početni koraci</h3>
+         <div class="space-y-3">
+           <div class="flex items-center gap-3">
+             <div class="h-6 w-6 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
+               <span class="text-white text-xs font-bold">✓</span>
+             </div>
+             <span class="text-gray-700">Registrovali ste se uspešno</span>
+           </div>
+           <div class="flex items-center gap-3">
+             <div class="h-6 w-6 bg-gray-300 rounded-full flex items-center justify-center flex-shrink-0">
+               <span class="text-gray-600 text-xs font-bold">2</span>
+             </div>
+             <span class="text-gray-700">Dodajte svoj prvi biznis</span>
+           </div>
+           <div class="flex items-center gap-3">
+             <div class="h-6 w-6 bg-gray-300 rounded-full flex items-center justify-center flex-shrink-0">
+               <span class="text-gray-600 text-xs font-bold">3</span>
+             </div>
+             <span class="text-gray-700">Postavite slike i opise</span>
+           </div>
+           <div class="flex items-center gap-3">
+             <div class="h-6 w-6 bg-gray-300 rounded-full flex items-center justify-center flex-shrink-0">
+               <span class="text-gray-600 text-xs font-bold">4</span>
+             </div>
+             <span class="text-gray-700">Počnite da primajte upite od roditelja</span>
+           </div>
+         </div>
+       </div>
+     </div>
+   </div>
+ <% end %>
+
+ <!-- My Businesses Section -->
+ <div class="bg-white rounded-2xl shadow-lg border border-gray-100" data-controller="collapsible" data-collapsible-default-open-value="true">
+   <div class="p-6 border-b border-gray-100">
+     <div class="flex items-center justify-between">
+       <h2 class="text-xl font-bold text-gray-800 flex items-center gap-2">
+         🏪 Moji biznisi
+         <% if @businesses.any? %>
+           <span class="text-sm font-normal text-gray-500">(<%= @businesses.count %>)</span>
+         <% end %>
+       </h2>
+       <div class="flex items-center gap-2">
+         <% if @businesses.any? %>
+           <%= link_to new_dashboard_business_path,
+               class: "inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg font-medium hover:from-purple-700 hover:to-pink-700 transition-colors" do %>
+             ➕ Dodaj novi
+           <% end %>
+         <% end %>
+         <button type="button"
+                 class="inline-flex items-center gap-2 px-3 py-2 text-gray-500 hover:text-gray-700 transition-colors"
+                 data-action="collapsible#toggle"
+                 data-collapsible-target="toggle">
+           <svg class="w-5 h-5 transition-transform" data-collapsible-target="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>
+           </svg>
+         </button>
+       </div>
+     </div>
+   </div>
+
+   <div data-collapsible-target="content" class="p-6">
+     <% if @businesses.any? %>
+       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+         <% @businesses.each do |business| %>
+           <div class="group bg-gradient-to-br from-gray-50 to-white rounded-2xl p-6 border border-gray-100
+         hover:border-purple-200 hover:shadow-md transition-all duration-200">
+             <!-- Business Header -->
+             <div class="flex items-start gap-4 mb-4">
+               <% if business.main_image %>
+                 <div class="w-16 h-16 rounded-xl overflow-hidden flex-shrink-0 bg-gray-100">
+                   <%= image_tag business.main_image,
+                       alt: business.display_name,
+                       class: "w-full h-full object-cover" %>
+                 </div>
+               <% else %>
+                 <div class="w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-c
+         enter justify-center text-2xl flex-shrink-0">
+                   <%= business.category.icon %>
+                 </div>
+               <% end %>
+
+               <div class="flex-1 min-w-0">
+                 <div class="flex items-center gap-2 mb-1">
+                   <h3 class="text-lg font-semibold text-gray-800 truncate">
+                     <%= business.display_name %>
+                   </h3>
+                   <% if business.active? %>
+                     <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium">✅
+         Aktivan</span>
+                   <% else %>
+                     <span class="px-2 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-medium">⏸️ N
+         eaktivan</span>
+                   <% end %>
+                 </div>
+                 <div class="flex items-center gap-4 text-sm text-gray-600 mb-2">
+                   <span class="flex items-center gap-1">
+                     <%= business.category.icon %> <%= business.category.name %>
+                   </span>
+                   <span class="flex items-center gap-1">
+                     📍 <%= business.city.name %>
+                   </span>
+                 </div>
+
+                 <!-- Tags -->
+                 <% if business.tags.any? %>
+                   <div class="flex flex-wrap gap-1 mb-2">
+                     <% business.tags.limit(3).each do |tag| %>
+                       <span class="inline-flex items-center gap-1 px-2 py-1 bg-gray-100 text-gray-700 round
+         ed-full text-xs">
+                         <%= tag.icon %> <%= tag.name %>
+                       </span>
+                     <% end %>
+                     <% if business.tags.count > 3 %>
+                       <span class="px-2 py-1 bg-gray-100 text-gray-500 rounded-full text-xs">
+                         +<%= business.tags.count - 3 %> još
+                       </span>
+                     <% end %>
+                   </div>
+                 <% end %>
+                 <% if business.description.present? %>
+                   <p class="text-sm text-gray-600 line-clamp-2 leading-relaxed">
+                     <%= truncate(business.description, length: 120) %>
+                   </p>
+                 <% end %>
+               </div>
+             </div>
+
+             <!-- Business Stats -->
+             <div class="grid grid-cols-3 gap-4 mb-4 p-4 bg-white rounded-xl border border-gray-100">
+               <div class="text-center">
+                 <div class="text-lg font-bold text-purple-600">
+                   <%= business.images.attached? ? business.images.count : 0 %>
+                 </div>
+                 <div class="text-xs text-gray-500">Slike</div>
+               </div>
+               <div class="text-center">
+                 <div class="text-lg font-bold text-pink-600"><%= business.views_this_month %></div>
+                 <div class="text-xs text-gray-500">Pregledi</div>
+               </div>
+               <div class="text-center">
+                 <div class="text-lg font-bold text-blue-600"><%= business.conversations.count %></div>
+                 <div class="text-xs text-gray-500">Poruke</div>
+               </div>
+             </div>
+
+             <!-- Action Buttons -->
+             <div class="flex gap-2">
+               <%= link_to venue_path(business),
+                   class: "flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-gray-100 text-gray-700
+          rounded-lg font-medium hover:bg-gray-200 transition-colors" do %>
+                 👁️ Pogledaj javni profil
+               <% end %>
+               <%= link_to edit_dashboard_business_path(business),
+                   class: "flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-gradient-to-r from-blu
+         e-600 to-purple-600 text-white rounded-lg font-medium hover:from-blue-700 hover:to-purple-700 transition-colo
+         rs" do %>
+                 ✏️ Uredi
+               <% end %>
+             </div>
+           </div>
+         <% end %>
+       </div>
+     <% else %>
+       <!-- Empty State -->
+       <div class="text-center py-12">
+         <div class="text-6xl mb-4">🏪</div>
+         <h3 class="text-xl font-semibold text-gray-800 mb-2">Nemate nijedan biznis</h3>
+         <p class="text-gray-600 mb-6 max-w-md mx-auto">
+           Dodajte svoj prvi biznis da počnete da privlačite klijente za dečje rođendane
+         </p>
+         <%= link_to new_dashboard_business_path,
+             class: "inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 t
+         ext-white rounded-2xl font-semibold hover:from-purple-700 hover:to-pink-700 transition-colors" do %>
+           🚀 Dodaj prvi biznis
+         <% end %>
+       </div>
+     <% end %>
+ </div>
+</div>
+
+<!-- Bookings Calendar -->
+<div data-controller="calendar">
+  <turbo-frame id="dashboard-calendar">
+    <%= render "dashboard/dashboard/calendar_frame",
+        businesses: @businesses,
+        selected_calendar_business_id: @selected_calendar_business_id,
+        calendar_prev_date: @calendar_prev_date,
+        calendar_next_date: @calendar_next_date,
+        calendar_date: @calendar_date,
+        calendar_weeks: @calendar_weeks,
+        bookings_by_day: @bookings_by_day,
+        booking: @booking %>
+  </turbo-frame>
+  <%= render "dashboard/bookings/modal",
+      booking: @booking,
+      businesses: @businesses,
+      calendar_month: @calendar_date.month,
+      calendar_year: @calendar_date.year,
+      selected_calendar_business_id: @selected_calendar_business_id %>
+  <%= render "dashboard/bookings/edit_modal" %>
+</div>
+
+<!-- Support Section -->
+ <div class="bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
+   <div class="text-center">
+     <h3 class="text-xl font-bold text-gray-900 mb-4">Potrebna vam je pomoć?</h3>
+     <p class="text-gray-600 mb-6">
+       Naš tim je tu da vam pomogne da maksimalno iskoristite platformu
+     </p>
+     <div class="flex flex-col sm:flex-row gap-4 justify-center">
+       <%= link_to "📞 Kontaktirajte nas",
+           "mailto:kontakt@kidspot.rs",
+           class: "px-6 py-3 border-2 border-purple-600 text-purple-600 rounded-xl font-semibold hover:bg-purple-600 hover:text-white transition-colors" %>
+       <button class="px-6 py-3 bg-gray-100 text-gray-700 rounded-xl font-semibold hover:bg-gray-200 transit
+         ion-colors">
+         📖 Pogledajte vodič
+       </button>
+     </div>
+     <p class="mt-4 text-sm text-gray-500">Ili nam pišite direktno na <a href="mailto:kontakt@kidspot.rs" class="text-purple-600 font-semibold">kontakt@kidspot.rs</a></p>
+   </div>
+ </div>
+
+</div>

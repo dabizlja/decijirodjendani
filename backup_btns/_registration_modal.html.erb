@@ -1,0 +1,141 @@
+<!-- Business Registration Modal -->
+<% registration_modal_visible = @show_registration_modal || (@user&.errors&.any?) %>
+<% modal_base_classes = "fixed inset-0 z-50 items-center justify-center px-4 py-8 sm:px-6" %>
+<% modal_visibility_class = registration_modal_visible ? "flex" : "hidden" %>
+<div data-modal
+     id="business-registration-modal"
+     class="<%= "#{modal_base_classes} #{modal_visibility_class}" %>"
+     aria-hidden="<%= registration_modal_visible ? "false" : "true" %>"
+     role="dialog"
+     aria-modal="true"
+     aria-labelledby="business-registration-title">
+  <div data-modal-overlay class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity"></div>
+  <div class="relative w-full max-w-md">
+    <div class="overflow-hidden rounded-3xl bg-white shadow-2xl ring-1 ring-black/5">
+      <div class="flex justify-end p-4">
+        <button type="button"
+                data-modal-close="business-registration-modal"
+                class="rounded-full bg-purple-50 p-2 text-gray-500 transition hover:bg-purple-100 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2"
+                aria-label="Zatvori modal">
+          <svg class="h-4 w-4" viewBox="0 0 20 20" fill="none" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 6l8 8M6 14L14 6"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="px-8 pb-10">
+        <div class="text-center">
+          <div class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-purple-500 to-pink-500 text-2xl text-white shadow-lg">
+            🚀
+          </div>
+          <h3 id="business-registration-title" class="text-2xl font-bold text-gray-900">Registruj se</h3>
+          <p class="mt-3 text-sm text-gray-600">
+            Kreiraj nalog i dodaj svoj biznis na najveću platformu za dečje rođendane u Srbiji.
+          </p>
+        </div>
+
+        <% if @user&.errors&.any? %>
+          <div class="mt-6 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+            <p class="font-semibold mb-1">Molimo, proveri sledeće:</p>
+            <ul class="list-disc list-inside space-y-1 text-xs sm:text-sm">
+              <% @user.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+
+        <div class="mt-6">
+          <%= button_to user_google_oauth2_omniauth_authorize_path,
+                         method: :post,
+                         class: "w-full rounded-2xl border border-gray-200 bg-white px-4 py-3 text-sm font-medium text-gray-700 shadow-sm transition hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 flex items-center justify-center gap-2" do %>
+            <svg class="h-4 w-4" viewBox="0 0 24 24">
+              <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+              <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+              <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+            </svg>
+            Registruj se sa Google
+          <% end %>
+        </div>
+
+        <div class="flex items-center py-6">
+          <div class="flex-1 border-t border-gray-200"></div>
+          <span class="mx-3 text-xs font-semibold uppercase tracking-wide text-gray-400">ili</span>
+          <div class="flex-1 border-t border-gray-200"></div>
+        </div>
+
+        <%= form_with model: @user, url: user_registration_path, class: "space-y-5" do |f| %>
+          <!-- Full name -->
+          <div>
+            <%= f.label :full_name, "Ime i prezime", class: "block mb-2 text-sm font-semibold text-gray-800" %>
+            <%= f.text_field :full_name,
+                             required: true,
+                             class: "w-full rounded-2xl border-2 border-gray-200 bg-white px-4 py-3 text-sm text-gray-900 transition-all duration-200 placeholder-gray-400 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-purple-500",
+                             placeholder: "Tvoje ime i prezime",
+                             data: { modal_focus: true } %>
+          </div>
+
+          <!-- Email -->
+          <div>
+            <%= f.label :email, "Email adresa", class: "block mb-2 text-sm font-semibold text-gray-800" %>
+            <%= f.email_field :email,
+                              required: true,
+                              autocomplete: "email",
+                              class: "w-full rounded-2xl border-2 border-gray-200 bg-white px-4 py-3 text-sm text-gray-900 transition-all duration-200 placeholder-gray-400 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-purple-500",
+                              placeholder: "tvoj@email.com" %>
+          </div>
+
+          <!-- Password -->
+          <div>
+            <%= f.label :password, "Lozinka", class: "block mb-2 text-sm font-semibold text-gray-800" %>
+            <%= f.password_field :password,
+                                  required: true,
+                                  autocomplete: "new-password",
+                                  class: "w-full rounded-2xl border-2 border-gray-200 bg-white px-4 py-3 text-sm text-gray-900 transition-all duration-200 placeholder-gray-400 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-purple-500",
+                                  placeholder: "Minimum 6 karaktera" %>
+          </div>
+
+          <!-- Confirm Password -->
+          <div>
+            <%= f.label :password_confirmation, "Potvrdi lozinku", class: "block mb-2 text-sm font-semibold text-gray-800" %>
+            <%= f.password_field :password_confirmation,
+                                  required: true,
+                                  autocomplete: "new-password",
+                                  class: "w-full rounded-2xl border-2 border-gray-200 bg-white px-4 py-3 text-sm text-gray-900 transition-all duration-200 placeholder-gray-400 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-purple-500",
+                                  placeholder: "Ponovi lozinku" %>
+          </div>
+
+          <!-- Terms checkbox -->
+          <div class="flex items-center gap-2 pt-2">
+            <%= f.check_box :terms_of_service,
+                            { required: true,
+                              class: "h-4 w-4 rounded border-2 border-gray-300 text-purple-600 focus:ring-2 focus:ring-purple-500" },
+                            "1", "0" %>
+            <%= label_tag :user_terms_of_service,
+                           raw('Slažem se sa <a href="#" class="text-purple-600 hover:text-purple-700 font-medium">uslovima korišćenja</a> i <a href="#" class="text-purple-600 hover:text-purple-700 font-medium">politikom privatnosti</a>'),
+                           class: "text-xs text-gray-600" %>
+          </div>
+
+          <!-- Submit button -->
+          <%= f.submit "🚀 Kreiraj Nalog",
+                       class: "w-full rounded-2xl bg-purple-600" %>
+        <% end %>
+
+        <!-- Switch to sign in -->
+        <div class="mt-6 text-center">
+          <p class="text-sm text-gray-600">
+            Već imate nalog?
+            <button type="button"
+                    data-modal-close="business-registration-modal"
+                    data-modal-target="sign-in-modal"
+                    data-modal-toggle="sign-in-modal"
+                    class="text-purple-600 hover:text-purple-700 font-medium">
+              Prijavite se ovde
+            </button>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

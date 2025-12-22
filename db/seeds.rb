@@ -27,7 +27,7 @@ categories = [
   {
     name: "Rođendanske Torte",
     slug: "torte",
-    description: "Slastičarnice i pekare specijalizovane za rođendanske torte",
+    description: "Poslastičarnice i pekare specijalizovane za rođendanske torte",
     icon: "🎂",
     color: "bg-blue-500",
     active: true

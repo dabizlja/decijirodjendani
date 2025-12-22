@@ -1,0 +1,408 @@
+<%= form_with(model: [:dashboard, business], local: true, multipart: true, class: "space-y-6") do |form| %>
+  <% if business.errors.any? %>
+    <div class="bg-red-50 border border-red-200 rounded-2xl p-4">
+      <div class="flex items-center gap-2 mb-2">
+        <span class="text-xl">❌</span>
+        <h4 class="font-semibold text-red-800">Greške u formularu:</h4>
+      </div>
+      <ul class="text-sm text-red-700 space-y-1">
+        <% business.errors.full_messages.each do |message| %>
+          <li>• <%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <!-- Business Name -->
+  <div>
+    <%= form.label :name, "Naziv biznisa *", class: "block text-sm font-semibold text-gray-700 mb-2" %>
+    <%= form.text_field :name,
+        class: "w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-purple-500 focus:outline-none transition-colors text-gray-800",
+        placeholder: "npr. Igraonica Sretno Detinjstvo" %>
+  </div>
+
+  <!-- Category -->
+  <div>
+    <%= form.label :category_id, "Kategorija *", class: "block text-sm font-semibold text-gray-700 mb-2" %>
+    <div class="relative">
+      <%= form.select :category_id,
+          options_from_collection_for_select(@categories, :id, :name, business.category_id),
+          { prompt: "Izaberite kategoriju" },
+          { class: "w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-purple-500 focus:outline-none transition-colors text-gray-800 appearance-none bg-white" } %>
+      <div class="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
+        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- City -->
+  <div>
+    <%= form.label :city_id, "Grad *", class: "block text-sm font-semibold text-gray-700 mb-2" %>
+    <div class="relative">
+      <%= form.select :city_id,
+          options_from_collection_for_select(@cities, :id, :name, business.city_id),
+          { prompt: "Izaberite grad" },
+          { class: "w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-purple-500 focus:outline-none transition-colors text-gray-800 appearance-none bg-white" } %>
+      <div class="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
+        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- Description -->
+  <div>
+    <%= form.label :description, "Opis", class: "block text-sm font-semibold text-gray-700 mb-2" %>
+    <%= form.text_area :description,
+        rows: 4,
+        class: "w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-purple-500 focus:outline-none transition-colors text-gray-800 resize-none",
+        placeholder: "Opišite svoj biznis, usluge koje pružate, uzrast dece, cene..." %>
+    <p class="text-xs text-gray-500 mt-1">Maksimalno 1000 karaktera</p>
+  </div>
+
+  <!-- Contact Information -->
+  <div class="bg-gray-50 rounded-2xl p-6 space-y-4">
+    <h3 class="font-semibold text-gray-800 flex items-center gap-2">
+      <span class="text-lg">📞</span>
+      Kontakt informacije
+    </h3>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <!-- Address -->
+      <div>
+        <%= form.label :address, "Adresa", class: "block text-sm font-semibold text-gray-700 mb-2" %>
+        <%= form.text_field :address,
+            class: "w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-purple-500 focus:outline-none transition-colors text-gray-800",
+            placeholder: "Bulevar Kralja Aleksandra 73" %>
+      </div>
+
+      <!-- Phone -->
+      <div>
+        <%= form.label :phone, "Telefon", class: "block text-sm font-semibold text-gray-700 mb-2" %>
+        <%= form.text_field :phone,
+            class: "w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-purple-500 focus:outline-none transition-colors text-gray-800",
+            placeholder: "+381 11 123 4567" %>
+      </div>
+
+      <!-- Email -->
+      <div>
+        <%= form.label :email, "Email", class: "block text-sm font-semibold text-gray-700 mb-2" %>
+        <%= form.email_field :email,
+            class: "w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-purple-500 focus:outline-none transition-colors text-gray-800",
+            placeholder: "kontakt@moj-biznis.rs" %>
+      </div>
+
+      <!-- Website -->
+      <div>
+        <%= form.label :website, "Website", class: "block text-sm font-semibold text-gray-700 mb-2" %>
+        <%= form.url_field :website,
+            class: "w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-purple-500 focus:outline-none transition-colors text-gray-800",
+            placeholder: "https://www.moj-biznis.rs" %>
+      </div>
+    </div>
+  </div>
+
+  <!-- Image Upload -->
+  <div class="bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl p-6 border border-purple-100">
+    <h3 class="font-semibold text-gray-800 flex items-center gap-2 mb-4">
+      <span class="text-lg">📸</span>
+      Slike biznisa
+    </h3>
+
+    <div class="space-y-4">
+      <!-- Current Images -->
+      <% if business.persisted? && business.images.attached? %>
+        <div class="space-y-2">
+          <p class="text-sm font-medium text-gray-700">Trenutne slike:</p>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+            <% business.images.each_with_index do |image, index| %>
+              <div class="relative group">
+                <%= image_tag image,
+                    alt: "Slika #{index + 1}",
+                    class: "w-full h-24 object-cover rounded-lg border border-gray-200",
+                    style: "max-width: 150px; max-height: 150px;" %>
+                <div class="absolute inset-0 bg-black bg-opacity-50 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                  <span class="text-white text-xs mb-2">Slika <%= index + 1 %></span>
+                </div>
+                <!-- Remove button -->
+                <div class="absolute top-1 right-1">
+                  <%= link_to "🗑️",
+                      remove_image_dashboard_business_path(business, image_id: image.id),
+                      data: {
+                        turbo_method: :delete,
+                        turbo_confirm: "Da li ste sigurni da želite da obrišete ovu sliku?"
+                      },
+                      class: "bg-red-500 hover:bg-red-600 text-white text-xs rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity border-0 no-underline text-center leading-6" %>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+
+      <!-- Primary Image Upload Field -->
+      <div>
+        <%= form.label :images, "Dodaj slike", class: "block text-sm font-semibold text-gray-700 mb-2" %>
+        <%= form.file_field :images,
+            multiple: true,
+            accept: "image/*",
+            class: "w-full px-4 py-3 rounded-xl border-2 border-purple-200 focus:border-purple-500 focus:outline-none transition-colors text-gray-800 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100" %>
+        <p class="text-xs text-gray-600 mt-1">
+          💡 <strong>Formati:</strong> PNG, JPG, JPEG, WebP • <strong>Maksimalno:</strong> 5MB po slici
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pricing Plans -->
+  <div class="bg-white rounded-2xl border border-gray-200 mt-6 p-6 shadow-sm space-y-6">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+      <div>
+        <h3 class="font-semibold text-gray-800 flex items-center gap-2">
+          <span class="text-lg">💰</span>
+          Cene i ponude
+        </h3>
+        <p class="text-sm text-gray-600 mt-1">Definišite termine, pakete ili usluge za ovaj biznis. Prikažećemo ih roditeljima na stranici vaše ponude.</p>
+      </div>
+      <div class="text-sm text-gray-600 bg-gray-50 border border-gray-200 rounded-full px-4 py-2 font-medium shadow-sm">
+        Dodajte onoliko paketa koliko vam treba
+      </div>
+    </div>
+
+    <div data-controller="pricing-plans">
+      <div class="space-y-4" data-pricing-plans-target="list">
+        <%= form.fields_for :pricing_plans do |plan_fields| %>
+        <% plan = plan_fields.object %>
+        <div class="rounded-2xl border border-gray-200 bg-gradient-to-br from-white to-gray-50 p-5 space-y-4" data-pricing-plans-target="plan">
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <div>
+              <p class="text-sm font-semibold text-gray-700"><%= plan.persisted? ? "Plan ##{plan.id}" : "Nova ponuda" %></p>
+              <p class="text-xs text-gray-500">Tip ponude: termin, paket, usluga ili dodatak.</p>
+            </div>
+            <% if plan.persisted? %>
+              <label class="inline-flex items-center gap-2 text-sm text-red-600 cursor-pointer">
+                <%= plan_fields.check_box :_destroy, class: "rounded border-gray-300" %>
+                Obriši ovu ponudu
+              </label>
+            <% else %>
+              <button type="button"
+                      class="inline-flex items-center gap-2 text-sm text-red-600"
+                      data-action="pricing-plans#remove">
+                🗑️ Ukloni
+              </button>
+            <% end %>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <%= plan_fields.label :name, "Naziv paketa", class: "block text-sm font-semibold text-gray-700 mb-1" %>
+              <%= plan_fields.text_field :name,
+                  class: "w-full rounded-xl border-2 border-gray-200 px-4 py-2.5 focus:border-purple-500 focus:outline-none",
+                  placeholder: "npr. Termin 2.5h + torta" %>
+            </div>
+
+            <div>
+              <%= plan_fields.label :plan_type, "Tip ponude", class: "block text-sm font-semibold text-gray-700 mb-1" %>
+              <%= plan_fields.select :plan_type,
+                    PricingPlan.plan_types.keys.map { |type| [pricing_plan_human_name(type), type] },
+                    {},
+                    class: "w-full rounded-xl border-2 border-gray-200 px-4 py-2.5 focus:border-purple-500 focus:outline-none bg-white" %>
+            </div>
+
+            <div>
+              <%= plan_fields.label :base_price, "Cena", class: "block text-sm font-semibold text-gray-700 mb-1" %>
+              <div class="flex gap-2">
+                <%= plan_fields.number_field :base_price,
+                    class: "flex-1 rounded-xl border-2 border-gray-200 px-4 py-2.5 focus:border-purple-500 focus:outline-none",
+                    min: 0,
+                    step: 1,
+                    placeholder: "npr. 150" %>
+                <%= plan_fields.select :currency,
+                    [["RSD", "RSD"], ["EUR", "EUR"]],
+                    {},
+                    class: "w-32 rounded-xl border-2 border-gray-200 px-3 py-2.5 focus:border-purple-500 focus:outline-none bg-white" %>
+              </div>
+              <p class="text-xs text-gray-500 mt-1">Unesite osnovnu cenu paketa.</p>
+            </div>
+
+            <div>
+              <%= plan_fields.label :duration_minutes, "Trajanje (min)", class: "block text-sm font-semibold text-gray-700 mb-1" %>
+              <%= plan_fields.number_field :duration_minutes,
+                  class: "w-full rounded-xl border-2 border-gray-200 px-4 py-2.5 focus:border-purple-500 focus:outline-none",
+                  min: 0,
+                  step: 15,
+                  placeholder: "npr. 150" %>
+            </div>
+
+            <div>
+              <%= plan_fields.label :capacity_kids, "Kapacitet dece", class: "block text-sm font-semibold text-gray-700 mb-1" %>
+              <%= plan_fields.number_field :capacity_kids,
+                  class: "w-full rounded-xl border-2 border-gray-200 px-4 py-2.5 focus:border-purple-500 focus:outline-none",
+                  min: 0,
+                  placeholder: "npr. 20" %>
+            </div>
+
+            <div>
+              <%= plan_fields.label :capacity_adults, "Kapacitet odraslih", class: "block text-sm font-semibold text-gray-700 mb-1" %>
+              <%= plan_fields.number_field :capacity_adults,
+                  class: "w-full rounded-xl border-2 border-gray-200 px-4 py-2.5 focus:border-purple-500 focus:outline-none",
+                  min: 0,
+                  placeholder: "npr. 40" %>
+            </div>
+          </div>
+
+          <div>
+            <%= plan_fields.label :description, "Opis paketa (opciono)", class: "block text-sm font-semibold text-gray-700 mb-1" %>
+            <%= plan_fields.text_area :description,
+                rows: 3,
+                class: "w-full rounded-xl border-2 border-gray-200 px-4 py-2.5 focus:border-purple-500 focus:outline-none",
+                placeholder: "Šta je uključeno? Da li postoji ketering, dekoracija, animacija..." %>
+          </div>
+
+          <!-- Discount Section -->
+          <div class="bg-purple-50 border border-purple-100 rounded-2xl p-4" data-controller="collapsible">
+            <div class="flex items-center justify-between">
+              <p class="text-sm font-semibold text-purple-800 flex items-center gap-2 mb-3">
+                <span>🏷️</span>
+                Popust (opciono)
+              </p>
+              <button type="button"
+                      class="text-sm font-semibold text-purple-700"
+                      data-action="collapsible#toggle"
+                      data-collapsible-target="toggle">
+                Prikaži
+              </button>
+            </div>
+            <div class="hidden space-y-4" data-collapsible-target="content">
+              <%= plan_fields.fields_for :discounts do |discount_fields| %>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <%= discount_fields.label :name, "Naziv popusta", class: "block text-sm font-semibold text-gray-700 mb-1" %>
+                  <%= discount_fields.text_field :name,
+                      class: "w-full rounded-xl border-2 border-gray-200 px-4 py-2.5 focus:border-purple-500 focus:outline-none",
+                      placeholder: "npr. Prolećna akcija" %>
+                </div>
+                <div>
+                  <%= discount_fields.label :label, "Natpis za korisnike", class: "block text-sm font-semibold text-gray-700 mb-1" %>
+                  <%= discount_fields.text_field :label,
+                      class: "w-full rounded-xl border-2 border-gray-200 px-4 py-2.5 focus:border-purple-500 focus:outline-none",
+                      placeholder: "npr. -15% do kraja maja" %>
+                </div>
+                <div>
+                  <%= discount_fields.label :percentage_off, "Popust (%)", class: "block text-sm font-semibold text-gray-700 mb-1" %>
+                  <%= discount_fields.number_field :percentage_off,
+                      class: "w-full rounded-xl border-2 border-gray-200 px-4 py-2.5 focus:border-purple-500 focus:outline-none",
+                      min: 0,
+                      max: 100,
+                      step: 1,
+                      placeholder: "npr. 15" %>
+                </div>
+                <div>
+                  <%= discount_fields.label :amount_off, "Popust (iznos)", class: "block text-sm font-semibold text-gray-700 mb-1" %>
+                  <%= discount_fields.number_field :amount_off,
+                      class: "w-full rounded-xl border-2 border-gray-200 px-4 py-2.5 focus:border-purple-500 focus:outline-none",
+                      min: 0,
+                      step: 1,
+                      placeholder: "npr. 30" %>
+                </div>
+                <div>
+                  <%= discount_fields.label :starts_at, "Početak popusta", class: "block text-sm font-semibold text-gray-700 mb-1" %>
+                  <%= discount_fields.datetime_field :starts_at,
+                      class: "w-full rounded-xl border-2 border-gray-200 px-4 py-2.5 focus:border-purple-500 focus:outline-none" %>
+                </div>
+                <div>
+                  <%= discount_fields.label :ends_at, "Kraj popusta", class: "block text-sm font-semibold text-gray-700 mb-1" %>
+                  <%= discount_fields.datetime_field :ends_at,
+                      class: "w-full rounded-xl border-2 border-gray-200 px-4 py-2.5 focus:border-purple-500 focus:outline-none" %>
+                </div>
+                <% if discount_fields.object.persisted? %>
+                  <div class="md:col-span-2">
+                    <label class="inline-flex items-center gap-2 text-sm text-red-600 cursor-pointer">
+                      <%= discount_fields.check_box :_destroy, class: "rounded border-gray-300" %>
+                      Ukloni ovaj popust
+                    </label>
+                  </div>
+                <% end %>
+              </div>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+      </div>
+      <div class="mt-4">
+        <button type="button"
+                class="inline-flex items-center gap-2 px-4 py-2 border border-dashed border-gray-300 rounded-xl text-sm font-semibold text-gray-700 hover:border-purple-400 hover:text-purple-700 transition"
+                data-action="pricing-plans#add">
+          ➕ Dodaj još jedan paket
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tags Selection -->
+  <div class="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-2xl p-6 border border-indigo-100 mt-6" data-controller="tags">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+      <div>
+        <h3 class="font-semibold text-gray-800 flex items-center gap-2">
+          <span class="text-lg">🏷️</span>
+          Tagovi (karakteristike)
+        </h3>
+        <p class="text-sm text-gray-600 mt-1">Najčešće korišćeno rešenje na tržištu: odaberite 3-5 tagova koji opisuju vašu ponudu.</p>
+      </div>
+      <div class="text-sm text-gray-600 bg-white/70 border border-white rounded-full px-4 py-2 font-medium shadow-sm">
+        Odabrano:
+        <span class="text-purple-700 font-semibold" data-tags-target="selectedCount"><%= business.tags.size %></span>
+      </div>
+    </div>
+
+    <div class="mt-4 space-y-4">
+      <div class="relative">
+        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">🔍</span>
+        <input type="search"
+               class="w-full pl-10 pr-4 py-2.5 rounded-2xl border border-purple-100 focus:border-purple-500 focus:outline-none text-gray-800 placeholder-gray-400 text-sm shadow-sm bg-white/90"
+               placeholder="Pretražite tagove (npr. 'animatori', 'parking', 'Princeza tema')"
+               data-action="input->tags#filter"
+               data-tags-target="search">
+      </div>
+
+      <div class="bg-white rounded-2xl border border-purple-100 p-4 shadow-sm">
+        <p class="text-sm font-medium text-gray-700 mb-3">Popularne kategorije</p>
+        <div class="flex flex-wrap gap-2">
+          <% @tags.each do |tag| %>
+            <% checkbox_id = "business_tag_#{tag.id}" %>
+            <% selected = business.tag_ids.include?(tag.id) %>
+            <div class="relative" data-tags-target="option" data-tag-id="<%= tag.id %>" data-tag-name="<%= tag.name.downcase %>">
+              <%= form.check_box :tag_ids,
+                  { multiple: true, class: "sr-only peer", id: checkbox_id, checked: selected, data: { action: "change->tags#toggle" } },
+                  tag.id,
+                  nil %>
+              <label for="<%= checkbox_id %>" class="inline-flex items-center gap-2 rounded-full border border-purple-100 px-4 py-2 text-sm font-medium text-gray-700 cursor-pointer transition-all bg-white/90 hover:border-purple-300 peer-checked:border-transparent peer-checked:bg-purple-600 peer-checked:text-white peer-checked:shadow-md">
+                <span class="text-base"><%= tag.icon.presence || "🏷️" %></span>
+                <span><%= tag.name %></span>
+                <span class="inline-flex items-center justify-center w-5 h-5 rounded-full border border-purple-200 text-[10px] font-semibold text-purple-500 bg-purple-50 peer-checked:bg-white peer-checked:text-purple-600 peer-checked:border-transparent">
+                  <span class="peer-checked:hidden">+</span>
+                  <span class="hidden peer-checked:inline">✓</span>
+                </span>
+              </label>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Submit Buttons -->
+  <div class="flex flex-col sm:flex-row gap-4 pt-6">
+    <%= form.submit business.persisted? ? "💾 Sačuvaj izmene" : "🚀 Kreiraj biznis",
+        class: "flex-1 bg-purple-600 text-white px-8 py-3 rounded-xl font-semibold hover:bg-purple-700 transition-colors" %>
+
+    <%= link_to dashboard_root_path,
+        class: "flex-1 border-2 border-gray-300 text-gray-700 px-8 py-3 rounded-xl font-semibold hover:bg-gray-50 transition-colors text-center" do %>
+      ❌ Otkaži
+    <% end %>
+  </div>
+<% end %>

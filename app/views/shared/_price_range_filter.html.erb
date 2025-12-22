@@ -1,0 +1,49 @@
+<% bounds ||= { min: 0, max: 0 } %>
+<% selected_min ||= bounds[:min] %>
+<% selected_max ||= bounds[:max] %>
+<% return if bounds[:max].to_i <= bounds[:min].to_i %>
+
+<% wrapper_classes = local_assigns.fetch(:wrapper_classes, "w-full") %>
+
+<div class="<%= wrapper_classes %>"
+     data-controller="price-range"
+     data-price-range-min-value="<%= bounds[:min] %>"
+     data-price-range-max-value="<%= bounds[:max] %>"
+     data-price-range-default-min-value="<%= selected_min %>"
+     data-price-range-default-max-value="<%= selected_max %>"
+     data-price-range-step-value="50"
+     data-price-range-currency-value="RSD">
+
+  <div class="minimal-price-range">
+    <div class="price-slider-wrapper">
+      <div class="price-progress" data-price-range-target="progress"></div>
+    </div>
+
+    <div class="range-inputs">
+      <%= form.range_field :price_min,
+          value: selected_min,
+          min: bounds[:min],
+          max: bounds[:max],
+          step: 50,
+          class: "range-min",
+          data: { price_range_target: "minSlider", action: "input->price-range#updateFromSlider" } %>
+
+      <%= form.range_field :price_max,
+          value: selected_max,
+          min: bounds[:min],
+          max: bounds[:max],
+          step: 50,
+          class: "range-max",
+          data: { price_range_target: "maxSlider", action: "input->price-range#updateFromSlider" } %>
+    </div>
+
+    <div class="price-labels">
+      <span class="price-label-min">
+        Min: <span data-price-range-target="minLabel"></span>
+      </span>
+      <span class="price-label-max">
+        Max: <span data-price-range-target="maxLabel"></span>
+      </span>
+    </div>
+  </div>
+</div>

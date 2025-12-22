@@ -1,0 +1,15 @@
+<% if @businesses.any? %>
+  <% @businesses.each do |business| %>
+    <%= turbo_stream.append "business-grid" do %>
+      <%= render "business_card", business: business %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<% unless @businesses.next_page %>
+  <%= turbo_stream.replace "loading-indicator" do %>
+    <div id="loading-indicator" class="hidden text-center py-8 text-gray-500">
+      <p class="text-lg">📋 To je sve! Nema više rezultata.</p>
+    </div>
+  <% end %>
+<% end %>

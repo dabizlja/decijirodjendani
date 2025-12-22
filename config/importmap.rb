@@ -1,4 +1,8 @@
 # Pin npm packages by running ./bin/importmap
 
 pin "application"
-pin "flowbite", to: "https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.turbo.js"
+pin "@hotwired/turbo-rails", to: "turbo.min.js", preload: true
+pin "@hotwired/stimulus", to: "stimulus.min.js", preload: true
+pin "@rails/actioncable", to: "actioncable.esm.js"
+pin_all_from "app/javascript/channels", under: "channels"
+pin_all_from "app/javascript/controllers", under: "controllers"

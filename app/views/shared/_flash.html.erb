@@ -1,0 +1,33 @@
+<% entries = flash.to_h.each_with_object([]) do |(type, message), memo|
+     Array(message).each do |msg|
+       next if msg.blank?
+       memo << { type: type.to_sym, message: msg }
+     end
+   end %>
+
+<div id="flash-messages" class="fixed inset-x-0 top-4 z-50 flex flex-col items-center gap-3 px-4 pointer-events-none">
+  <% entries.each do |entry| %>
+    <% styles = case entry[:type]
+       when :notice, :success
+         { icon: "✅", bg: "bg-green-50 border-green-200 text-green-800" }
+       when :alert, :error
+         { icon: "❌", bg: "bg-red-50 border-red-200 text-red-800" }
+       when :warning
+         { icon: "⚠️", bg: "bg-amber-50 border-amber-200 text-amber-800" }
+       else
+         { icon: "ℹ️", bg: "bg-blue-50 border-blue-200 text-blue-800" }
+       end %>
+    <div data-controller="flash"
+         data-flash-timeout-value="5000"
+         class="pointer-events-auto flex w-full max-w-2xl items-center gap-3 rounded-2xl border px-4 py-3 shadow-lg backdrop-blur bg-white/90 transition opacity-100 <%= styles[:bg] %>">
+      <span class="text-xl"><%= styles[:icon] %></span>
+      <p class="flex-1 text-sm font-medium leading-relaxed text-gray-900"><%= entry[:message] %></p>
+      <button type="button"
+              class="text-gray-400 hover:text-gray-600 transition"
+              aria-label="Zatvori obaveštenje"
+              data-action="flash#dismiss">
+        ×
+      </button>
+    </div>
+  <% end %>
+</div>
