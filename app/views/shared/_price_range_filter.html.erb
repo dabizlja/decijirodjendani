@@ -1,7 +1,6 @@
 <% bounds ||= { min: 0, max: 0 } %>
 <% selected_min ||= bounds[:min] %>
 <% selected_max ||= bounds[:max] %>
-<% return if bounds[:max].to_i <= bounds[:min].to_i %>
 
 <% wrapper_classes = local_assigns.fetch(:wrapper_classes, "w-full") %>
 
