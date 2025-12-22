@@ -2,7 +2,7 @@ class PricingPlan < ApplicationRecord
   belongs_to :business
   has_many :discounts, dependent: :destroy
 
-  enum plan_type: {
+  enum :plan_type, {
     time_slot: 0,
     package: 1,
     service: 2,

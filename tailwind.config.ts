@@ -1,5 +1,6 @@
-/** @type {import('tailwindcss').Config} */
-module.exports = {
+import type { Config } from 'tailwindcss'
+
+export default {
   content: [
     "./app/**/*.{html,html.erb,js,ts,jsx,tsx}",
     "./app/views/**/*.html.erb",
@@ -11,4 +12,4 @@ module.exports = {
   plugins: [
     require('flowbite/plugin')
   ],
-}
+} satisfies Config
