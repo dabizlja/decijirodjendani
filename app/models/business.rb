@@ -33,7 +33,7 @@ class Business < ApplicationRecord
 
     return { min: 0, max: 70000 } if prices.empty?
 
-    { min: prices.min, max: prices.max }
+    { min: 0, max: prices.max }
   end
 
   def main_image
