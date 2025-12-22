@@ -10,7 +10,7 @@ class Dashboard::BookingsController < ApplicationController
 
     respond_to do |format|
       if @booking.save
-        calendar_data = calendar_data_for(params)
+        calendar_data = calendar_data_for(params, booking: @booking)
         format.turbo_stream { render_successful_creation_stream(calendar_data) }
         format.html do
           redirect_to dashboard_root_path(calendar_month: @booking.start_time.month,
@@ -36,8 +36,20 @@ class Dashboard::BookingsController < ApplicationController
   end
 
   def edit
+    calendar_context = params.permit(:calendar_month, :calendar_year, :calendar_business_id)
+    calendar_month = calendar_context[:calendar_month].presence || @booking.start_time.month
+    calendar_year = calendar_context[:calendar_year].presence || @booking.start_time.year
     respond_to do |format|
-      format.html { render partial: 'edit_form', locals: { booking: @booking, businesses: @businesses } }
+      format.html do
+        render partial: "edit_form",
+               locals: {
+                 booking: @booking,
+                 businesses: @businesses,
+                 calendar_month: calendar_month,
+                 calendar_year: calendar_year,
+                 selected_calendar_business_id: calendar_context[:calendar_business_id]
+               }
+      end
       format.json { render json: @booking }
     end
   end
@@ -45,7 +57,7 @@ class Dashboard::BookingsController < ApplicationController
   def update
     respond_to do |format|
       if @booking.update(booking_params)
-        calendar_data = calendar_data_for(params)
+        calendar_data = calendar_data_for(params, booking: @booking)
         format.turbo_stream { render_successful_update_stream(calendar_data) }
         format.html do
           redirect_to dashboard_root_path(calendar_month: @booking.start_time.month,
@@ -63,7 +75,7 @@ class Dashboard::BookingsController < ApplicationController
   def destroy
     @booking.destroy
     respond_to do |format|
-      calendar_data = calendar_data_for(params)
+      calendar_data = calendar_data_for(params, booking: @booking)
       format.turbo_stream { render_successful_deletion_stream(calendar_data) }
       format.html do
         redirect_to dashboard_root_path(calendar_month: calendar_data.calendar_date.month,
@@ -104,7 +116,7 @@ class Dashboard::BookingsController < ApplicationController
     render turbo_stream: [
       turbo_stream.replace(
         "dashboard-calendar",
-        partial: "dashboard/dashboard/calendar_frame",
+        partial: "dashboard/dashboard/calendar_frame_wrapper",
         locals: calendar_data.locals
       ),
       # Show success message
@@ -148,7 +160,7 @@ class Dashboard::BookingsController < ApplicationController
     render turbo_stream: [
       turbo_stream.replace(
         "dashboard-calendar",
-        partial: "dashboard/dashboard/calendar_frame",
+        partial: "dashboard/dashboard/calendar_frame_wrapper",
         locals: calendar_data.locals
       ),
       # Show success message for update
@@ -192,7 +204,7 @@ class Dashboard::BookingsController < ApplicationController
     render turbo_stream: [
       turbo_stream.replace(
         "dashboard-calendar",
-        partial: "dashboard/dashboard/calendar_frame",
+        partial: "dashboard/dashboard/calendar_frame_wrapper",
         locals: calendar_data.locals
       ),
       # Show success message for deletion
@@ -219,7 +231,7 @@ class Dashboard::BookingsController < ApplicationController
     render turbo_stream: [
       turbo_stream.replace(
         "dashboard-calendar",
-        partial: "dashboard/dashboard/calendar_frame",
+        partial: "dashboard/dashboard/calendar_frame_wrapper",
         locals: calendar_data.locals
       ),
       turbo_stream.replace(

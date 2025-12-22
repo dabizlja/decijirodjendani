@@ -24,6 +24,14 @@
               id="calendar-booking-trigger">
         Novi termin
       </button>
+      <button type="button"
+              data-calendar-target="editModalTrigger"
+              data-modal-target="edit-booking-modal"
+              data-modal-toggle="edit-booking-modal"
+              class="hidden"
+              id="calendar-edit-booking-trigger">
+        Uredi termin
+      </button>
     </div>
 
     <div class="flex flex-col lg:flex-row lg:items-center lg:gap-4 gap-4">
@@ -104,9 +112,10 @@
                       <span><%= I18n.l(booking.start_time, format: :hour_minute) %> - <%= I18n.l(booking.end_time, format: :hour_minute) %></span>
                       <div class="flex items-center gap-1">
                         <button type="button"
-                                data-modal-target="edit-booking-modal"
-                                data-modal-toggle="edit-booking-modal"
                                 data-booking-id="<%= booking.id %>"
+                                data-calendar-month="<%= calendar_date.month %>"
+                                data-calendar-year="<%= calendar_date.year %>"
+                                data-calendar-business="<%= selected_calendar_business_id.presence || "" %>"
                                 data-action="click->calendar#openEditModal"
                                 class="text-blue-600 hover:text-blue-800 text-sm font-bold leading-none"
                                 title="Uredi termin">
