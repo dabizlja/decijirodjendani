@@ -10,6 +10,10 @@ class Dashboard::DashboardController < ApplicationController
                                          .limit(5)
     @business = @businesses.first || build_placeholder_business
 
+    booking_overview = Dashboard::BookingOverview.new(current_user).fetch
+    @owner_booking_requests = booking_overview.owner_bookings
+    @customer_bookings = booking_overview.customer_bookings
+
     # Load reviews based on user type
     if @businesses.any?
       # Business owner: show reviews received on their businesses

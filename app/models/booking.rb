@@ -1,9 +1,11 @@
 class Booking < ApplicationRecord
   belongs_to :business
+  belongs_to :pricing_plan, optional: true
+  belongs_to :customer, class_name: 'User', optional: true
 
   delegate :user, to: :business
 
-  STATUSES = %w[confirmed tentative cancelled].freeze
+  STATUSES = %w[requested confirmed pending_payment completed cancelled rejected tentative].freeze
 
   validates :title, presence: true, length: { maximum: 120 }
   validates :start_time, :end_time, presence: true

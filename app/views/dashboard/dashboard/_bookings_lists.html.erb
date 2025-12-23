@@ -1,0 +1,62 @@
+<% show_owner_section = business_owner? %>
+<% show_customer_section = !show_owner_section %>
+
+<div class="space-y-6">
+  <% if show_owner_section %>
+    <div class="space-y-4">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm font-semibold text-gray-800">Zahtevi za vaše biznise</p>
+          <p class="text-xs text-gray-500">Nove rezervacije od roditelja</p>
+        </div>
+        <% if owner_bookings.any? %>
+          <span class="text-xs px-2 py-1 rounded-full bg-purple-50 text-purple-700 font-semibold">
+            <%= owner_bookings.size %>
+          </span>
+        <% end %>
+      </div>
+
+      <% if owner_bookings.any? %>
+        <div class="space-y-3">
+          <%= render partial: "dashboard/dashboard/booking_card",
+                     collection: owner_bookings,
+                     as: :booking,
+                     locals: { context: :owner } %>
+        </div>
+      <% else %>
+        <div class="rounded-2xl border border-dashed border-gray-200 p-6 text-center text-sm text-gray-600 bg-gray-50/50">
+          Trenutno nema novih rezervacija. Kada roditelj pošalje zahtev za vaš biznis, videćete ga ovde.
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+
+  <% if show_customer_section %>
+    <div class="space-y-4">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm font-semibold text-gray-800">Moje rezervacije</p>
+          <p class="text-xs text-gray-500">Status zahteva koje ste poslali</p>
+        </div>
+        <% if customer_bookings.any? %>
+          <span class="text-xs px-2 py-1 rounded-full bg-blue-50 text-blue-700 font-semibold">
+            <%= customer_bookings.size %>
+          </span>
+        <% end %>
+      </div>
+
+      <% if customer_bookings.any? %>
+        <div class="space-y-3">
+          <%= render partial: "dashboard/dashboard/booking_card",
+                     collection: customer_bookings,
+                     as: :booking,
+                     locals: { context: :customer } %>
+        </div>
+      <% else %>
+        <div class="rounded-2xl border border-dashed border-gray-200 p-6 text-center text-sm text-gray-600 bg-gray-50/50">
+          Još uvek niste poslali zahtev za rezervaciju. Posetite stranicu nekog mesta i odaberite paket.
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+</div>

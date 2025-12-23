@@ -25,6 +25,16 @@ Rails.application.routes.draw do
     end
 
     resources :bookings, only: [:create, :edit, :update, :destroy]
+    resources :booking_requests, only: [] do
+      member do
+        patch :accept
+        patch :reject
+        patch :cancel
+        patch :mark_paid
+        patch :complete
+        patch :customer_cancel
+      end
+    end
   end
 
   # Public reviews on venue pages (stays outside namespace)
@@ -34,6 +44,11 @@ Rails.application.routes.draw do
 
   # Customer messaging to businesses from venue pages (stays outside namespace)
   post "businesses/:business_id/messages", to: "messages#create_for_business", as: :business_messages
+
+  # Customer bookings from venue pages (stays outside namespace)
+  resources :businesses, only: [] do
+    resources :bookings, only: [:create]
+  end
 
   resources :newsletter_subscriptions, only: [:create]
 

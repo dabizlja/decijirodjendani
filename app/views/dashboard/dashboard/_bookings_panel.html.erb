@@ -1,0 +1,42 @@
+<% owner_bookings = Array(owner_bookings) %>
+<% customer_bookings = Array(customer_bookings) %>
+<% default_open = false %>
+
+<div class="bg-white rounded-2xl p-6 shadow-lg border border-gray-100"
+     data-controller="collapsible"
+     data-collapsible-default-open-value="<%= default_open %>">
+  <div class="flex items-center justify-between mb-4">
+    <div>
+      <h2 class="text-xl font-bold text-gray-900 flex items-center gap-2">
+        📅 Rezervacije
+      </h2>
+      <p class="text-sm text-gray-500">
+        Pregled svih zahteva za vaše biznise i rezervacija koje ste poslali.
+      </p>
+    </div>
+    <div class="flex items-center gap-2">
+      <% badge_total = owner_bookings.count { |b| b.status == "requested" } %>
+      <% if badge_total.positive? %>
+        <span class="inline-flex items-center gap-1 rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-700 shadow-sm">
+          ⏳ <%= badge_total %> novih zahteva
+        </span>
+      <% end %>
+      <button type="button"
+              class="inline-flex items-center gap-2 px-3 py-2 text-gray-500 hover:text-gray-700 transition-colors"
+              data-action="collapsible#toggle"
+              data-collapsible-target="toggle">
+        <svg class="w-5 h-5 transition-transform" data-collapsible-target="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <div data-collapsible-target="content" class="hidden">
+    <turbo-frame id="dashboard-bookings">
+      <%= render "dashboard/dashboard/bookings_lists",
+                 owner_bookings: owner_bookings,
+                 customer_bookings: customer_bookings %>
+    </turbo-frame>
+  </div>
+</div>

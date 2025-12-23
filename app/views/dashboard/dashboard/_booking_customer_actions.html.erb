@@ -1,0 +1,22 @@
+<% status = booking.status.to_s %>
+<% cancelable_statuses = %w[requested confirmed pending_payment] %>
+
+<% if cancelable_statuses.include?(status) %>
+  <%= button_to "Otkaži zahtev",
+                customer_cancel_dashboard_booking_request_path(booking),
+                method: :patch,
+                form: { data: { turbo_stream: true, turbo_confirm: "Da li želite da otkažete ovu rezervaciju?" } },
+                class: booking_action_button_classes(:warning) %>
+<% elsif status == "completed" %>
+  <span class="inline-flex items-center gap-1 text-sm font-semibold text-green-700">
+    🎉 Završeno
+  </span>
+<% elsif status == "rejected" %>
+  <span class="inline-flex items-center gap-1 text-sm font-semibold text-gray-500">
+    ❌ Zahtev je odbijen
+  </span>
+<% else %>
+  <span class="inline-flex items-center gap-1 text-sm font-semibold text-gray-500">
+    ℹ️ <%= booking.status.humanize %>
+  </span>
+<% end %>

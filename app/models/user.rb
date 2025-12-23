@@ -18,6 +18,11 @@ class User < ApplicationRecord
            through: :businesses,
            source: :conversations
   has_many :bookings, through: :businesses
+  has_many :customer_bookings,
+           class_name: "Booking",
+           foreign_key: :customer_id,
+           inverse_of: :customer,
+           dependent: :nullify
 
   validates :full_name, presence: true, length: { maximum: 120 }
   validates :terms_of_service, acceptance: true, on: :create

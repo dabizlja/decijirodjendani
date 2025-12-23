@@ -1,0 +1,67 @@
+<% context ||= :owner %>
+<% dom_suffix = context == :owner ? "owner" : "customer" %>
+<div id="<%= dom_id(booking, dom_suffix) %>" class="rounded-2xl border border-gray-100 bg-gradient-to-br from-white to-purple-50/20 p-4 shadow-sm">
+  <div class="flex flex-col gap-4">
+    <div class="flex flex-wrap items-center gap-2 text-sm text-gray-500">
+      <span class="text-base font-semibold text-gray-900"><%= booking.business.display_name %></span>
+      <% if booking.business.city %>
+        <span>•</span>
+        <span><%= booking.business.city.name %></span>
+      <% end %>
+      <% if booking.start_time.present? %>
+        <span>•</span>
+        <span class="font-medium text-gray-800"><%= format_booking_time_range(booking) %></span>
+      <% end %>
+    </div>
+
+    <div class="space-y-2 text-sm text-gray-700">
+      <% if context == :owner %>
+        <p class="flex flex-wrap items-center gap-2">
+          👤
+          <span class="font-semibold text-gray-900"><%= booking.customer_name || booking.customer&.full_name || "Nepoznat klijent" %></span>
+          <% if booking.customer_email.present? %>
+            <span class="text-gray-500"><%= booking.customer_email %></span>
+          <% end %>
+        </p>
+        <% if booking.customer_phone.present? %>
+          <p>📞 <%= booking.customer_phone %></p>
+        <% end %>
+      <% else %>
+        <p class="flex items-center gap-2 text-gray-600">
+          🧒 Proslava za <span class="font-semibold text-gray-900"><%= booking.title.presence || "Rezervacija" %></span>
+        </p>
+      <% end %>
+
+      <% if booking.pricing_plan.present? %>
+        <p>
+          💼 <%= booking.pricing_plan.name.presence || "Paket" %>
+          <% if booking.total_price.present? %>
+            • <%= format_price_with_currency(booking.total_price, booking.currency) %>
+          <% end %>
+        </p>
+      <% elsif booking.total_price.present? %>
+        <p>💰 <%= format_price_with_currency(booking.total_price, booking.currency) %></p>
+      <% end %>
+
+      <% if booking.special_requests.present? %>
+        <p class="text-xs text-gray-500 bg-white border border-gray-100 rounded-2xl px-3 py-2">
+          <span class="font-semibold text-gray-700">Napomena:</span>
+          <%= truncate(booking.special_requests, length: 160) %>
+        </p>
+      <% end %>
+    </div>
+
+    <div class="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+      <div>
+        <%= booking_status_badge(booking) %>
+      </div>
+      <div class="flex flex-wrap gap-2 justify-start md:justify-end">
+        <% if context == :owner %>
+          <%= render "dashboard/dashboard/booking_owner_actions", booking: booking %>
+        <% else %>
+          <%= render "dashboard/dashboard/booking_customer_actions", booking: booking %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

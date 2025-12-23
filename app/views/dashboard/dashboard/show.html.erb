@@ -45,8 +45,12 @@
          <span class="text-xl">💬</span>
        </div>
      </div>
-   </div>
  </div>
+</div>
+
+ <%= render "dashboard/dashboard/bookings_panel",
+            owner_bookings: @owner_booking_requests,
+            customer_bookings: @customer_bookings %>
 
  <!-- Messages Overview -->
  <div class="bg-white rounded-2xl p-6 shadow-lg border border-gray-100" data-controller="collapsible">

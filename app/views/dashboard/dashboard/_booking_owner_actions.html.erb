@@ -1,0 +1,42 @@
+<% status = booking.status.to_s %>
+<% confirm_message = "Da li sigurno želite da potvrdite ovu rezervaciju?" %>
+<% reject_message = "Da li želite da odbijete zahtev? Ovo će obavestiti roditelja." %>
+<% cancel_message = "Da li želite da otkažete ovu rezervaciju?" %>
+<% complete_message = "Potvrdite da je događaj uspešno završen." %>
+
+<% if status == "requested" %>
+  <%= button_to "✅ Prihvati",
+                accept_dashboard_booking_request_path(booking),
+                method: :patch,
+                form: { data: { turbo_stream: true, turbo_confirm: confirm_message } },
+                class: booking_action_button_classes(:primary) %>
+  <%= button_to "❌ Odbij",
+                reject_dashboard_booking_request_path(booking),
+                method: :patch,
+                form: { data: { turbo_stream: true, turbo_confirm: reject_message } },
+                class: booking_action_button_classes(:ghost) %>
+<% elsif status == "pending_payment" %>
+  <%= button_to "💰 Označi kao plaćeno",
+                mark_paid_dashboard_booking_request_path(booking),
+                method: :patch,
+                form: { data: { turbo_stream: true, turbo_confirm: "Da li je uplata potvrđena?" } },
+                class: booking_action_button_classes(:primary) %>
+  <%= button_to "🚫 Otkaži",
+                cancel_dashboard_booking_request_path(booking),
+                method: :patch,
+                form: { data: { turbo_stream: true, turbo_confirm: cancel_message } },
+                class: booking_action_button_classes(:warning) %>
+<% elsif status == "confirmed" %>
+  <%= button_to "🏁 Završeno",
+                complete_dashboard_booking_request_path(booking),
+                method: :patch,
+                form: { data: { turbo_stream: true, turbo_confirm: complete_message } },
+                class: booking_action_button_classes(:primary) %>
+  <%= button_to "🚫 Otkaži",
+                cancel_dashboard_booking_request_path(booking),
+                method: :patch,
+                form: { data: { turbo_stream: true, turbo_confirm: cancel_message } },
+                class: booking_action_button_classes(:warning) %>
+<% else %>
+  <span class="text-xs font-medium text-gray-400">Nema dodatnih radnji</span>
+<% end %>
