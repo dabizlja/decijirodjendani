@@ -1,0 +1,15 @@
+Nova rezervacija u objektu <%= @business.display_name %>
+
+Ime gosta: <%= @customer_name %>
+Email: <%= @customer_email %>
+Telefon: <%= @customer_phone %>
+
+Termin: <%= format_datetime(@booking.start_time) %> - <%= format_datetime(@booking.end_time) %>
+Broj dece: <%= @booking.number_of_kids %>
+Broj odraslih: <%= @booking.number_of_adults %>
+Paket: <%= @pricing_plan&.title %>
+
+Posebne napomene:
+<%= @booking.special_requests.presence || "Nema dodatnih napomena." %>
+
+Detalji oglasa: <%= @business_url %>

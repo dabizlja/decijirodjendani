@@ -78,6 +78,24 @@ Rails.application.configure do
   # caching is enabled.
   config.action_mailer.perform_caching = false
 
+  app_host = ENV.fetch("APP_HOST", "rodjendani.rs")
+  app_protocol = ENV.fetch("APP_PROTOCOL", "https")
+  config.action_mailer.default_url_options = {
+    host: app_host,
+    protocol: app_protocol
+  }
+  config.action_mailer.asset_host = ENV.fetch("ASSET_HOST") { "#{app_protocol}://#{app_host}" }
+  config.action_mailer.perform_deliveries = true
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+    address: ENV.fetch("BREVO_SMTP_ADDRESS", "smtp-relay.brevo.com"),
+    port: ENV.fetch("BREVO_SMTP_PORT", 587),
+    user_name: ENV.fetch("BREVO_SMTP_USERNAME"),
+    password: ENV.fetch("BREVO_SMTP_PASSWORD"),
+    authentication: :login,
+    enable_starttls_auto: true
+  }
+
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
   # config.action_mailer.raise_delivery_errors = false

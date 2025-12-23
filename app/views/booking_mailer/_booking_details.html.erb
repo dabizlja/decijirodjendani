@@ -1,0 +1,50 @@
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:separate;border-spacing:0 10px;">
+  <tbody>
+    <tr>
+      <td style="width:45%;padding:14px 16px;border-radius:18px;background:#f4ecff;color:#6a4cc9;font-size:13px;font-weight:600;">🎯 Naziv događaja</td>
+      <td style="padding:14px 16px;border-radius:18px;background:#fbf9ff;color:#1f1642;font-size:14px;font-weight:600;"><%= @booking.title %></td>
+    </tr>
+    <tr>
+      <td style="padding:14px 16px;border-radius:18px;background:#f4ecff;color:#6a4cc9;font-size:13px;font-weight:600;">📍 Objekat</td>
+      <td style="padding:14px 16px;border-radius:18px;background:#fbf9ff;color:#1f1642;font-size:14px;font-weight:600;"><%= @business.display_name %>, <%= @business.city.name %></td>
+    </tr>
+    <tr>
+      <td style="padding:14px 16px;border-radius:18px;background:#f4ecff;color:#6a4cc9;font-size:13px;font-weight:600;">🗓️ Termin</td>
+      <td style="padding:14px 16px;border-radius:18px;background:#fbf9ff;color:#1f1642;font-size:14px;font-weight:600;">
+        <%= format_datetime(@booking.start_time) %> — <%= format_datetime(@booking.end_time) %>
+      </td>
+    </tr>
+    <% if @pricing_plan.present? %>
+      <tr>
+        <td style="padding:14px 16px;border-radius:18px;background:#f4ecff;color:#6a4cc9;font-size:13px;font-weight:600;">💡 Izabrani paket</td>
+        <td style="padding:14px 16px;border-radius:18px;background:#fbf9ff;color:#1f1642;font-size:14px;font-weight:600;">
+          <%= @pricing_plan.title %>
+          <% if @booking.total_price.present? %>
+            <span style="display:block;color:#7c7399;font-size:13px;font-weight:500;margin-top:4px;">
+              Cena: <%= number_to_currency(@booking.total_price, unit: @booking.currency.presence || "RSD", format: "%n %u") %>
+            </span>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+    <% if @booking.number_of_kids.present? || @booking.number_of_adults.present? %>
+      <tr>
+        <td style="padding:14px 16px;border-radius:18px;background:#f4ecff;color:#6a4cc9;font-size:13px;font-weight:600;">👨‍👩‍👧‍👦 Broj gostiju</td>
+        <td style="padding:14px 16px;border-radius:18px;background:#fbf9ff;color:#1f1642;font-size:14px;font-weight:600;">
+          <% if @booking.number_of_kids.present? %>
+            <span style="display:block;">Dece: <%= @booking.number_of_kids %></span>
+          <% end %>
+          <% if @booking.number_of_adults.present? %>
+            <span style="display:block;">Odraslih: <%= @booking.number_of_adults %></span>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+    <% if @booking.special_requests.present? %>
+      <tr>
+        <td style="padding:14px 16px;border-radius:18px;background:#f4ecff;color:#6a4cc9;font-size:13px;font-weight:600;">✨ Posebne napomene</td>
+        <td style="padding:14px 16px;border-radius:18px;background:#fbf9ff;color:#1f1642;font-size:14px;font-weight:600;white-space:pre-line;"><%= @booking.special_requests %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

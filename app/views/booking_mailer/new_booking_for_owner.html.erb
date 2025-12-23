@@ -1,0 +1,27 @@
+<div style="background:#f9f5ff;border-radius:24px;padding:22px;margin-bottom:24px;">
+  <p style="margin:0;font-size:15px;color:#5b4a8c;line-height:1.6;">
+    Zdravo <strong><%= @business.user.full_name.presence || @business.display_name %></strong>,<br />
+    stigao je novi zahtev za rezervaciju u objektu <strong><%= @business.display_name %></strong>.
+  </p>
+</div>
+
+<%= render "booking_mailer/booking_details" %>
+
+<div style="margin-top:26px;padding:20px;border-radius:20px;background:#fff3e8;">
+  <p style="margin:0 0 12px 0;font-size:14px;color:#b45309;font-weight:600;">📞 Kontact podaci gosta</p>
+  <ul style="list-style:none;padding:0;margin:0;color:#7a4a21;font-size:14px;line-height:1.6;">
+    <li><strong>Ime i prezime:</strong> <%= @customer_name %></li>
+    <% if @customer_email.present? %>
+      <li><strong>Email:</strong> <a href="mailto:<%= @customer_email %>" style="color:#b45309;text-decoration:none;"><%= @customer_email %></a></li>
+    <% end %>
+    <% if @customer_phone.present? %>
+      <li><strong>Telefon:</strong> <a href="tel:<%= @customer_phone %>" style="color:#b45309;text-decoration:none;"><%= @customer_phone %></a></li>
+    <% end %>
+  </ul>
+</div>
+
+<div style="text-align:center;margin-top:32px;">
+  <a href="<%= @business_url %>" style="display:inline-block;background:linear-gradient(135deg,#a855f7,#ec4899);color:#fff;font-weight:600;text-decoration:none;padding:14px 26px;border-radius:999px;box-shadow:0 12px 20px rgba(236,72,153,0.3);">
+    Otvori detalje oglasa
+  </a>
+</div>

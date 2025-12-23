@@ -1,0 +1,13 @@
+Zdravo <%= @customer_name %>,
+
+<%= @business.display_name %> je prihvatio vašu rezervaciju.
+
+Termin: <%= format_datetime(@booking.start_time) %> - <%= format_datetime(@booking.end_time) %>
+Paket: <%= @pricing_plan&.title || "Nije naveden" %>
+Broj dece: <%= @booking.number_of_kids.presence || "—" %>
+Broj odraslih: <%= @booking.number_of_adults.presence || "—" %>
+
+Detalji oglasa: <%= @business_url %>
+Kontrolna tabla: <%= @dashboard_url %>
+
+Hvala što koristite Rođendani!

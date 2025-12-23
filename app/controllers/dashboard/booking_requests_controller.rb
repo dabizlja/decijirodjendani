@@ -9,7 +9,9 @@ class Dashboard::BookingRequestsController < ApplicationController
     handle_action(%w[requested],
                   { status: "pending_payment" },
                   flash_type: :notice,
-                  message: "Rezervacija je prihvaćena. Čeka potvrdu uplate.")
+                  message: "Rezervacija je prihvaćena. Čeka potvrdu uplate.") do |booking|
+      BookingMailer.booking_accepted_for_customer(booking)&.deliver_later
+    end
   end
 
   def reject
@@ -100,6 +102,7 @@ class Dashboard::BookingRequestsController < ApplicationController
     end
 
     if @booking.update(attrs)
+      yield(@booking) if block_given?
       respond_with_overview(flash_type, message)
     else
       respond_with_overview(:alert,

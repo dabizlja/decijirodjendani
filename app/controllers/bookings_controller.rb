@@ -24,7 +24,7 @@ class BookingsController < ApplicationController
     end
 
     if @booking.save
-      # Send notification to business owner (we can implement this later)
+      BookingMailer.new_booking_for_owner(@booking)&.deliver_later
       redirect_to venue_path(@business), notice: '🎉 Vaš zahtev za rezervaciju je uspešno poslat! Vlasnik objekta će vas kontaktirati.'
     else
       render :new, status: :unprocessable_entity
