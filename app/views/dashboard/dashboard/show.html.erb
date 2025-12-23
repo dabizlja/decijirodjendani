@@ -51,12 +51,14 @@
  <!-- Messages Overview -->
  <div class="bg-white rounded-2xl p-6 shadow-lg border border-gray-100" data-controller="collapsible">
    <div class="flex items-center justify-between mb-4">
-     <div>
-       <h2 class="text-xl font-bold text-gray-900 flex items-center gap-2">
-         💬 Poruke
-       </h2>
-       <p class="text-sm text-gray-500">Komunikacija sa roditeljima za sve vaše biznise</p>
-     </div>
+      <div>
+        <h2 class="text-xl font-bold text-gray-900 flex items-center gap-2">
+          💬 Poruke
+        </h2>
+        <p class="text-sm text-gray-500">
+          <%= business_owner? ? "Komunikacija sa roditeljima za sve vaše biznise" : "Komunikacija sa biznisima koje pratite" %>
+        </p>
+      </div>
       <div class="flex items-center gap-2">
         <% unread_total = @unread_messages_count.to_i %>
         <span data-unread-badge

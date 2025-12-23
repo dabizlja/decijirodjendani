@@ -3,7 +3,10 @@ class ApplicationController < ActionController::Base
   allow_browser versions: :modern
 
   before_action :configure_permitted_parameters, if: :devise_controller?
+  before_action :set_user_role, if: :user_signed_in?
   before_action :set_header_notifications, if: :user_signed_in?
+
+  helper_method :business_owner?
 
   protected
 
@@ -32,6 +35,15 @@ class ApplicationController < ActionController::Base
                                     .where(read_at: nil)
                                     .where.not(user_id: current_user.id)
                                     .count
+  end
+
+  def set_user_role
+    business_owner?
+  end
+
+  def business_owner?
+    return false unless current_user
+    @business_owner ||= current_user.businesses.exists?
   end
 
   def conversation_access_scope

@@ -24,6 +24,14 @@ class ListingsController < ApplicationController
       end
     end
 
+    availability_time = parse_availability_time(params[:availability_at])
+
+    if availability_time
+      unavailable_business_ids = Booking.where("start_time <= ? AND end_time > ?", availability_time, availability_time)
+                                        .select(:business_id)
+      @businesses = @businesses.where.not(id: unavailable_business_ids)
+    end
+
     # Tag filtering
     if params[:tag_ids].present?
       tag_ids = params[:tag_ids].reject(&:blank?)
@@ -70,11 +78,19 @@ class ListingsController < ApplicationController
     @price_bounds = Business.price_bounds
     @selected_price_min = (params[:price_min].presence || @price_bounds[:min]).to_i
     @selected_price_max = (params[:price_max].presence || @price_bounds[:max]).to_i
+    @selected_availability_at = params[:availability_at].presence
   end
 
   def set_business
     @business = Business.active.includes(:category, :city, :tags, :user, pricing_plans: :discounts).find(params[:id])
   rescue ActiveRecord::RecordNotFound
     redirect_to venues_path, alert: "Biznis nije pronađen."
+  end
+
+  def parse_availability_time(value)
+    return nil if value.blank?
+    Time.zone.parse(value)
+  rescue ArgumentError, TypeError
+    nil
   end
 end
