@@ -93,7 +93,9 @@ Rails.application.configure do
     user_name: ENV.fetch("BREVO_SMTP_USERNAME"),
     password: ENV.fetch("BREVO_SMTP_PASSWORD"),
     authentication: :login,
-    enable_starttls_auto: true
+    enable_starttls_auto: true,
+    open_timeout: 30,
+    read_timeout: 30
   }
 
   # Ignore bad email addresses and do not raise email delivery errors.
