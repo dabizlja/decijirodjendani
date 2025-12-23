@@ -57,63 +57,67 @@
        </h2>
        <p class="text-sm text-gray-500">Komunikacija sa roditeljima za sve vaše biznise</p>
      </div>
-     <div class="flex items-center gap-2">
-       <%= link_to "Otvori chat", dashboard_conversations_path,
-           class: "inline-flex items-center gap-2 px-4 py-2 border border-purple-200 text-purple-700 rounded-xl text-sm font-medium hover:bg-purple-50 transition-colors" %>
-       <button type="button"
-               class="inline-flex items-center gap-2 px-3 py-2 text-gray-500 hover:text-gray-700 transition-colors"
-               data-action="collapsible#toggle"
-               data-collapsible-target="toggle">
-         <svg class="w-5 h-5 transition-transform" data-collapsible-target="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>
-         </svg>
-       </button>
-     </div>
+      <div class="flex items-center gap-2">
+        <% unread_total = @unread_messages_count.to_i %>
+        <span data-unread-badge
+              class="inline-flex items-center gap-1 rounded-full bg-red-500/90 px-3 py-1 text-xs font-semibold text-white shadow-sm transition <%= 'hidden' if unread_total.zero? %>">
+          🔔 <span data-unread-count><%= unread_total %></span> novih
+        </span>
+        <%= link_to "Otvori chat", dashboard_conversations_path,
+            class: "inline-flex items-center gap-2 px-4 py-2 border border-purple-200 text-purple-700 rounded-xl text-sm font-medium hover:bg-purple-50 transition-colors" %>
+        <button type="button"
+                class: "inline-flex items-center gap-2 px-3 py-2 text-gray-500 hover:text-gray-700 transition-colors"
+                data-action="collapsible#toggle"
+                data-collapsible-target="toggle">
+          <svg class="w-5 h-5 transition-transform" data-collapsible-target="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>
+          </svg>
+        </button>
+      </div>
    </div>
 
-   <div data-collapsible-target="content" class="hidden">
-     <% if @recent_conversations.any? %>
-       <div class="space-y-4">
-       <% @recent_conversations.each do |conversation| %>
-         <% last_message = conversation.messages.max_by(&:created_at) %>
-         <div class="border border-gray-100 rounded-2xl p-4 flex flex-col md:flex-row md:items-center md:jus
-         tify-between gap-4">
-           <div class="flex-1">
-             <p class="text-sm text-gray-500 mb-1 flex items-center gap-2">
-               <span class="font-semibold text-gray-900"><%= conversation.business.display_name %></span>
-               <span>•</span>
-               <span class="text-gray-600"><%= conversation.customer.full_name %></span>
-             </p>
-             <% if last_message %>
-               <p class="text-sm text-gray-700 line-clamp-2"><%= truncate(last_message.body, length: 120) %>
-         </p>
-               <p class="text-xs text-gray-500 mt-1">pre <%= time_ago_in_words(last_message.created_at) %></
-         p>
-             <% else %>
-               <p class="text-sm text-gray-500">Nema poruka u ovoj konverzaciji.</p>
-             <% end %>
-           </div>
-           <div class="flex flex-col items-start md:items-end gap-2">
-             <% unread_count = conversation.unread_messages_for(current_user).count %>
-             <% if unread_count.positive? %>
-               <span class="px-3 py-1 bg-red-50 text-red-700 rounded-full text-xs font-semibold">
-                 <%= unread_count %> novih poruka
-               </span>
-             <% end %>
-             <%= link_to "📨 Odgovori",
-                 dashboard_conversations_path(conversation_id: conversation.id),
-                 class: "inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-6
-         00 text-white rounded-xl text-sm font-medium hover:from-blue-700 hover:to-purple-700 transition-colors" %>
-           </div>
-         </div>
-       <% end %>
-     </div>
-   <% else %>
-       <div class="text-center py-6 text-gray-600">
-         Još uvek nemate poruke. Kada roditelji pošalju poruku, videćete je ovde.
-       </div>
-     <% end %>
-   </div>
+    <div data-collapsible-target="content" class="hidden">
+      <% if @recent_conversations.any? %>
+        <div class="space-y-4">
+          <% @recent_conversations.each do |conversation| %>
+            <% customer = conversation.customer %>
+            <% initials = customer.full_name.to_s.strip.first&.upcase || "U" %>
+            <% avatar_url = customer.avatar_url.presence %>
+            <% unread_count = conversation.unread_messages_for(current_user).count %>
+            <% highlight_classes = unread_count.positive? ? "border-purple-200 bg-purple-50/70 shadow-md ring-1 ring-purple-100" : "border-gray-100" %>
+            <div class="rounded-2xl p-4 flex flex-col gap-4 border transition hover:border-purple-200 md:flex-row md:items-center md:justify-between <%= highlight_classes %>">
+              <div class="flex items-center gap-3 flex-1">
+                <% if avatar_url %>
+                  <img src="<%= avatar_url %>" alt="<%= customer.full_name %>" class="h-10 w-10 rounded-full object-cover" />
+                <% else %>
+                  <div class="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-purple-500 to-pink-500 text-sm font-semibold text-white">
+                    <%= initials %>
+                  </div>
+                <% end %>
+                <div>
+                  <p class="text-sm font-semibold text-gray-900"><%= customer.full_name %></p>
+                  <p class="text-xs text-gray-600">Biznis: <%= conversation.business.display_name %></p>
+                </div>
+              </div>
+              <div class="flex flex-col items-start md:items-end gap-2">
+                <% if unread_count.positive? %>
+                  <span class="px-3 py-1 bg-red-500/10 text-red-700 rounded-full text-xs font-semibold">
+                    <%= unread_count %> novih poruka
+                  </span>
+                <% end %>
+                <%= link_to "📨 Odgovori",
+                    dashboard_conversations_path(conversation_id: conversation.id),
+                    class: "inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl text-sm font-medium hover:from-blue-700 hover:to-purple-700 transition-colors" %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <div class="text-center py-6 text-gray-600">
+          Još uvek nemate poruke. Kada roditelji pošalju poruku, videćete je ovde.
+        </div>
+      <% end %>
+    </div>
  </div>
 
  <!-- Reviews Section -->

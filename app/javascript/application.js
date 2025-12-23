@@ -259,6 +259,7 @@ const onReady = () => {
   initializeInteractiveHandlers()
   initializeStarRatings()
   initializeConversationRealtime()
+  initializeConversationComposer()
   initializeNotificationsSubscription()
 }
 
@@ -379,16 +380,50 @@ const initializeNotificationsSubscription = () => {
 }
 
 const updateUnreadBadge = (count) => {
-  const badge = document.querySelector("[data-unread-badge]")
-  if (!badge) return
-
   const normalized = Number(count) || 0
-  if (normalized > 0) {
-    badge.textContent = normalized
-    badge.classList.remove("hidden")
-  } else {
-    badge.classList.add("hidden")
-  }
+  const badges = document.querySelectorAll("[data-unread-badge]")
+  if (badges.length === 0) return
+
+  badges.forEach((badge) => {
+    const target = badge.querySelector("[data-unread-count]")
+    if (normalized > 0) {
+      if (target) {
+        target.textContent = normalized
+      } else {
+        badge.textContent = normalized
+      }
+      badge.classList.remove("hidden")
+      badge.setAttribute("aria-hidden", "false")
+    } else {
+      if (target) {
+        target.textContent = ""
+      } else {
+        badge.textContent = ""
+      }
+      badge.classList.add("hidden")
+      badge.setAttribute("aria-hidden", "true")
+    }
+  })
+}
+
+const initializeConversationComposer = () => {
+  const form = document.querySelector("[data-conversation-form]")
+  if (!form || form.dataset.enterSubmitInitialized === "true") return
+
+  const textarea = form.querySelector("textarea")
+  if (!textarea) return
+
+  textarea.addEventListener("keydown", (event) => {
+    if (event.key !== "Enter" || event.shiftKey || event.isComposing) return
+
+    event.preventDefault()
+    const value = textarea.value.trim()
+    if (value.length === 0) return
+
+    form.requestSubmit()
+  })
+
+  form.dataset.enterSubmitInitialized = "true"
 }
 
 const getCsrfToken = () => document.querySelector("meta[name='csrf-token']")?.content || ""
