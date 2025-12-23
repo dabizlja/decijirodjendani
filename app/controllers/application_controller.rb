@@ -3,6 +3,7 @@ class ApplicationController < ActionController::Base
   allow_browser versions: :modern
 
   before_action :configure_permitted_parameters, if: :devise_controller?
+  before_action :store_user_location!, if: :storable_location?
   before_action :set_user_role, if: :user_signed_in?
   before_action :set_header_notifications, if: :user_signed_in?
 
@@ -49,5 +50,16 @@ class ApplicationController < ActionController::Base
   def conversation_access_scope
     return Conversation.none unless current_user
     current_user.all_conversations
+  end
+
+  def storable_location?
+    request.get? &&
+      is_navigational_format? &&
+      !devise_controller? &&
+      !request.xhr?
+  end
+
+  def store_user_location!
+    store_location_for(:user, request.fullpath)
   end
 end
