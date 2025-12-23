@@ -164,3 +164,29 @@
   opacity: 0.4;
   cursor: not-allowed;
 }
+
+/* Ensure the datetime picker looks like other inputs, especially on iOS Safari */
+.custom-datetime-field {
+  appearance: none;
+  -webkit-appearance: none;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 3.25rem;
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+  border-radius: 0.75rem;
+  background-color: #fff;
+  line-height: 1.5;
+}
+
+.custom-datetime-field::-webkit-datetime-edit,
+.custom-datetime-field::-webkit-date-and-time-value {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  text-align: left;
+}
+
+.custom-datetime-field::-webkit-calendar-picker-indicator {
+  opacity: 0;
+}
