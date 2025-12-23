@@ -18,7 +18,7 @@
       <tr>
         <td style="padding:14px 16px;border-radius:18px;background:#f4ecff;color:#6a4cc9;font-size:13px;font-weight:600;">💡 Izabrani paket</td>
         <td style="padding:14px 16px;border-radius:18px;background:#fbf9ff;color:#1f1642;font-size:14px;font-weight:600;">
-          <%= @pricing_plan.title %>
+          <%= @pricing_plan.name %>
           <% if @booking.total_price.present? %>
             <span style="display:block;color:#7c7399;font-size:13px;font-weight:500;margin-top:4px;">
               Cena: <%= number_to_currency(@booking.total_price, unit: @booking.currency.presence || "RSD", format: "%n %u") %>

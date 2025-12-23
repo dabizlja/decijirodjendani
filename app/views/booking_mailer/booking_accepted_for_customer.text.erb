@@ -3,7 +3,7 @@ Zdravo <%= @customer_name %>,
 <%= @business.display_name %> je prihvatio vašu rezervaciju.
 
 Termin: <%= format_datetime(@booking.start_time) %> - <%= format_datetime(@booking.end_time) %>
-Paket: <%= @pricing_plan&.title || "Nije naveden" %>
+Paket: <%= @pricing_plan&.name || "Nije naveden" %>
 Broj dece: <%= @booking.number_of_kids.presence || "—" %>
 Broj odraslih: <%= @booking.number_of_adults.presence || "—" %>
 

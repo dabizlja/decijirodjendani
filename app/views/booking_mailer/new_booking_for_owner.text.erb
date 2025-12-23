@@ -7,7 +7,7 @@ Telefon: <%= @customer_phone %>
 Termin: <%= format_datetime(@booking.start_time) %> - <%= format_datetime(@booking.end_time) %>
 Broj dece: <%= @booking.number_of_kids %>
 Broj odraslih: <%= @booking.number_of_adults %>
-Paket: <%= @pricing_plan&.title %>
+Paket: <%= @pricing_plan&.name %>
 
 Posebne napomene:
 <%= @booking.special_requests.presence || "Nema dodatnih napomena." %>
