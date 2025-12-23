@@ -9,7 +9,7 @@ class BookingMailer < ApplicationMailer
     @customer_email = booking.customer_email.presence || booking.customer&.email
     @customer_phone = booking.customer_phone
     @pricing_plan = booking.pricing_plan
-    @business_url = Rails.application.routes.url_helpers.venue_url(@business)
+    @business_url = Rails.application.routes.url_helpers.venue_url(@business, host: mailer_host, protocol: mailer_protocol)
 
     recipient = @business.user&.email
     return if recipient.blank?
@@ -26,8 +26,8 @@ class BookingMailer < ApplicationMailer
     @customer_name = booking.customer_name.presence || booking.customer&.full_name || "dragi roditelji"
     @customer_email = booking.customer_email.presence || booking.customer&.email
     @pricing_plan = booking.pricing_plan
-    @business_url = Rails.application.routes.url_helpers.venue_url(@business)
-    @dashboard_url = Rails.application.routes.url_helpers.dashboard_root_url
+    @business_url = Rails.application.routes.url_helpers.venue_url(@business, host: mailer_host, protocol: mailer_protocol)
+    @dashboard_url = Rails.application.routes.url_helpers.dashboard_root_url(host: mailer_host, protocol: mailer_protocol)
 
     return if @customer_email.blank?
 
@@ -43,5 +43,15 @@ class BookingMailer < ApplicationMailer
     return "-" unless value
 
     I18n.l(value, format: "%d.%m.%Y. %H:%M")
+  end
+
+  def mailer_host
+    Rails.application.config.action_mailer.default_url_options[:host] ||
+      ENV.fetch("APP_HOST", "localhost")
+  end
+
+  def mailer_protocol
+    Rails.application.config.action_mailer.default_url_options[:protocol] ||
+      (Rails.env.production? ? "https" : "http")
   end
 end
