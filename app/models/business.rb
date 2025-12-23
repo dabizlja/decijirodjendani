@@ -22,6 +22,7 @@ class Business < ApplicationRecord
   validates :website, format: { with: URI::DEFAULT_PARSER.make_regexp(%w[http https]) }, allow_blank: true
 
   validate :validate_images
+  validate :validate_pricing_plans
 
   scope :active, -> { where(active: true) }
   scope :by_category, ->(category) { where(category: category) }
@@ -139,6 +140,15 @@ class Business < ApplicationRecord
       if image.byte_size > 5.megabytes
         errors.add(:images, "mora biti manja od 5MB")
       end
+    end
+  end
+
+  def validate_pricing_plans
+    # Check if there's at least one pricing plan that won't be destroyed
+    valid_plans = pricing_plans.reject(&:marked_for_destruction?)
+
+    if valid_plans.empty?
+      errors.add(:base, "Morate dodati bar jedan paket/ponudu za vaš biznis")
     end
   end
 end

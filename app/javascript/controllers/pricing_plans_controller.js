@@ -56,11 +56,24 @@ export default class extends Controller {
                 <option value="EUR">EUR</option>
               </select>
             </div>
+            <p class="text-xs text-gray-500 mt-1">Unesite osnovnu cenu paketa.</p>
           </div>
           <div>
             <label class="block text-sm font-semibold text-gray-700 mb-1">Trajanje (min)</label>
             <input type="number" min="0" step="15" name="business[pricing_plans_attributes][${planIndex}][duration_minutes]" class="w-full rounded-xl border-2 border-gray-200 px-4 py-2.5 focus:border-purple-500 focus:outline-none" placeholder="npr. 150">
           </div>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1">Kapacitet dece</label>
+            <input type="number" min="0" name="business[pricing_plans_attributes][${planIndex}][capacity_kids]" class="w-full rounded-xl border-2 border-gray-200 px-4 py-2.5 focus:border-purple-500 focus:outline-none" placeholder="npr. 20">
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1">Kapacitet odraslih</label>
+            <input type="number" min="0" name="business[pricing_plans_attributes][${planIndex}][capacity_adults]" class="w-full rounded-xl border-2 border-gray-200 px-4 py-2.5 focus:border-purple-500 focus:outline-none" placeholder="npr. 40">
+          </div>
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1">Opis paketa (opciono)</label>
+          <textarea rows="3" name="business[pricing_plans_attributes][${planIndex}][description]" class="w-full rounded-xl border-2 border-gray-200 px-4 py-2.5 focus:border-purple-500 focus:outline-none" placeholder="Šta je uključeno? Da li postoji ketering, dekoracija, animacija..."></textarea>
         </div>
         <div class="bg-purple-50 border border-purple-100 rounded-2xl p-4" data-controller="collapsible">
           <div class="flex items-center justify-between">
@@ -76,11 +89,27 @@ export default class extends Controller {
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label class="block text-sm font-semibold text-gray-700 mb-1">Naziv popusta</label>
-                <input type="text" name="business[pricing_plans_attributes][${planIndex}][discounts_attributes][0][name]" class="w-full rounded-xl border-2 border-gray-200 px-4 py-2.5 focus:border-purple-500 focus:outline-none">
+                <input type="text" name="business[pricing_plans_attributes][${planIndex}][discounts_attributes][0][name]" class="w-full rounded-xl border-2 border-gray-200 px-4 py-2.5 focus:border-purple-500 focus:outline-none" placeholder="npr. Prolećna akcija">
               </div>
               <div>
                 <label class="block text-sm font-semibold text-gray-700 mb-1">Natpis za korisnike</label>
-                <input type="text" name="business[pricing_plans_attributes][${planIndex}][discounts_attributes][0][label]" class="w-full rounded-xl border-2 border-gray-200 px-4 py-2.5 focus:border-purple-500 focus:outline-none">
+                <input type="text" name="business[pricing_plans_attributes][${planIndex}][discounts_attributes][0][label]" class="w-full rounded-xl border-2 border-gray-200 px-4 py-2.5 focus:border-purple-500 focus:outline-none" placeholder="npr. -15% do kraja maja">
+              </div>
+              <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-1">Popust (%)</label>
+                <input type="number" min="0" max="100" step="1" name="business[pricing_plans_attributes][${planIndex}][discounts_attributes][0][percentage_off]" class="w-full rounded-xl border-2 border-gray-200 px-4 py-2.5 focus:border-purple-500 focus:outline-none" placeholder="npr. 15">
+              </div>
+              <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-1">Popust (iznos)</label>
+                <input type="number" min="0" step="1" name="business[pricing_plans_attributes][${planIndex}][discounts_attributes][0][amount_off]" class="w-full rounded-xl border-2 border-gray-200 px-4 py-2.5 focus:border-purple-500 focus:outline-none" placeholder="npr. 30">
+              </div>
+              <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-1">Početak popusta</label>
+                <input type="datetime-local" name="business[pricing_plans_attributes][${planIndex}][discounts_attributes][0][starts_at]" class="w-full rounded-xl border-2 border-gray-200 px-4 py-2.5 focus:border-purple-500 focus:outline-none">
+              </div>
+              <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-1">Kraj popusta</label>
+                <input type="datetime-local" name="business[pricing_plans_attributes][${planIndex}][discounts_attributes][0][ends_at]" class="w-full rounded-xl border-2 border-gray-200 px-4 py-2.5 focus:border-purple-500 focus:outline-none">
               </div>
             </div>
           </div>
