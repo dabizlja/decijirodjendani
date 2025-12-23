@@ -88,8 +88,8 @@ Rails.application.configure do
   config.action_mailer.perform_deliveries = true
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-    address: ENV.fetch("BREVO_SMTP_ADDRESS", "smtp-relay.brevo.com"),
-    port: ENV.fetch("BREVO_SMTP_PORT", 587),
+    address: ENV.fetch("BREVO_SMTP_ADDRESS", "mailcluster.loopia.se"),
+    port: ENV.fetch("BREVO_SMTP_PORT", 465),
     user_name: ENV.fetch("BREVO_SMTP_USERNAME"),
     password: ENV.fetch("BREVO_SMTP_PASSWORD"),
     authentication: :login,
