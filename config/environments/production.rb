@@ -78,7 +78,7 @@ Rails.application.configure do
   # caching is enabled.
   config.action_mailer.perform_caching = false
 
-  app_host = ENV.fetch("APP_HOST", "rodjendani.rs")
+  app_host = ENV.fetch("APP_HOST", "www.kidsport.rs")
   app_protocol = ENV.fetch("APP_PROTOCOL", "https")
   config.action_mailer.default_url_options = {
     host: app_host,
