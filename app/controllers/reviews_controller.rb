@@ -20,7 +20,7 @@ class ReviewsController < ApplicationController
   private
 
   def set_business
-    @business = Business.active.find(params[:business_id])
+    @business = Business.active.find_by!(slug: params[:business_slug])
   rescue ActiveRecord::RecordNotFound
     redirect_to venues_path, alert: "Biznis nije pronađen."
   end

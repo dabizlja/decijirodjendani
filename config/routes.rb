@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   # Public listings for customers
   get "venues", to: "listings#index", as: :venues
-  get "venues/:id", to: "listings#show", as: :venue
+  get "venues/:slug", to: "listings#show", as: :venue, constraints: { slug: /[^\/]+/ }
   devise_for :users, controllers: {
     registrations: "users/registrations",
     sessions: "users/sessions",
@@ -39,15 +39,15 @@ Rails.application.routes.draw do
   end
 
   # Public reviews on venue pages (stays outside namespace)
-  resources :businesses, only: [] do
+  resources :businesses, only: [], param: :slug, constraints: { slug: /[^\/]+/ } do
     resources :reviews, only: [:create]
   end
 
   # Customer messaging to businesses from venue pages (stays outside namespace)
-  post "businesses/:business_id/messages", to: "messages#create_for_business", as: :business_messages
+  post "businesses/:business_slug/messages", to: "messages#create_for_business", as: :business_messages, constraints: { business_slug: /[^\/]+/ }
 
   # Customer bookings from venue pages (stays outside namespace)
-  resources :businesses, only: [] do
+  resources :businesses, only: [], param: :slug, constraints: { slug: /[^\/]+/ } do
     resources :bookings, only: [:create]
   end
 

@@ -34,7 +34,7 @@ class BookingsController < ApplicationController
   private
 
   def set_business
-    @business = Business.find(params[:business_id])
+    @business = Business.find_by!(slug: params[:business_slug])
   end
 
   def set_pricing_plan

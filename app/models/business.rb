@@ -20,9 +20,12 @@ class Business < ApplicationRecord
   validates :phone, format: { with: /\A[\+\d\s\-\(\)]+\z/, message: "nije valjan format" }, allow_blank: true
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }, allow_blank: true
   validates :website, format: { with: URI::DEFAULT_PARSER.make_regexp(%w[http https]) }, allow_blank: true
+  validates :slug, presence: true, uniqueness: true
 
   validate :validate_images
   validate :validate_pricing_plans
+
+  before_validation :generate_slug, if: :should_generate_new_slug?
 
   scope :active, -> { where(active: true) }
   scope :by_category, ->(category) { where(category: category) }
@@ -125,7 +128,41 @@ class Business < ApplicationRecord
     )
   end
 
+  def to_param
+    slug
+  end
+
   private
+
+  def should_generate_new_slug?
+    slug.blank? || name_changed?
+  end
+
+  def generate_slug
+    return unless name.present?
+
+    base_slug = name.to_s
+                   .strip
+                   .downcase
+                   .gsub(/[^\p{L}\p{N}\s\-_]/, '') # Remove special chars except letters, numbers, spaces, hyphens, underscores
+                   .gsub(/\s+/, '-')                # Replace spaces with hyphens
+                   .gsub(/-+/, '-')                 # Replace multiple hyphens with single
+                   .gsub(/^-+|-+$/, '')             # Remove leading/trailing hyphens
+
+    # Handle empty slug
+    base_slug = 'venue' if base_slug.blank?
+
+    # Ensure uniqueness
+    candidate_slug = base_slug
+    counter = 1
+
+    while Business.where(slug: candidate_slug).where.not(id: id).exists?
+      candidate_slug = "#{base_slug}-#{counter}"
+      counter += 1
+    end
+
+    self.slug = candidate_slug
+  end
 
   def validate_images
     return unless images.attached?

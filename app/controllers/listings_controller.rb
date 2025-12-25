@@ -82,7 +82,7 @@ class ListingsController < ApplicationController
   end
 
   def set_business
-    @business = Business.active.includes(:category, :city, :tags, :user, pricing_plans: :discounts).find(params[:id])
+    @business = Business.active.includes(:category, :city, :tags, :user, pricing_plans: :discounts).find_by!(slug: params[:slug])
   rescue ActiveRecord::RecordNotFound
     redirect_to venues_path, alert: "Biznis nije pronađen."
   end

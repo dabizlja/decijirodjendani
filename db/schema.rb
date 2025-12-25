@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_12_25_091135) do
+ActiveRecord::Schema[8.1].define(version: 2025_12_25_095412) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -116,6 +116,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_25_091135) do
     t.string "name", null: false
     t.string "phone"
     t.string "price_currency", default: "RSD", null: false
+    t.string "slug"
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
     t.string "website"
@@ -123,6 +124,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_25_091135) do
     t.index ["category_id"], name: "index_businesses_on_category_id"
     t.index ["city_id"], name: "index_businesses_on_city_id"
     t.index ["name"], name: "index_businesses_on_name"
+    t.index ["slug"], name: "index_businesses_on_slug", unique: true
     t.index ["user_id"], name: "index_businesses_on_user_id"
   end
 
