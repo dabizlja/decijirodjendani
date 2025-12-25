@@ -19,9 +19,6 @@
       <p style="margin:0 0 4px 0;font-size:13px;color:#4b5563;"><strong>Broj računa:</strong> <%= @payment_detail.bank_account_number %></p>
       <p style="margin:0 0 4px 0;font-size:13px;color:#4b5563;"><strong>Primalac:</strong> <%= @payment_detail.account_owner_name %></p>
       <p style="margin:0 0 8px 0;font-size:13px;color:#4b5563;"><strong>Adresa:</strong> <%= @payment_detail.account_owner_address %></p>
-
-      <p style="margin:0 0 8px 0;font-size:13px;color:#374151;font-weight:600;">Poziv na broj:</p>
-      <p style="margin:0;font-size:13px;color:#4b5563;background:#f9fafb;padding:8px;border-radius:6px;"><%= @booking.id %>-<%= Date.current.strftime("%m%y") %></p>
     </div>
   </div>
   <p style="margin:0;font-size:12px;color:#92400e;line-height:1.5;">

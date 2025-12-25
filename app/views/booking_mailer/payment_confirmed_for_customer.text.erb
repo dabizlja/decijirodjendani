@@ -10,7 +10,7 @@ Broj odraslih: <%= @booking.number_of_adults.presence || "—" %>
 💰 DETALJI PLAĆANJA:
 ================================
 Ukupna cena paketa: <%= number_with_delimiter(@total_price) %> RSD
-✅ Plaćeno (kaparo 30%): <%= number_with_delimiter(@paid_amount) %> RSD
+✅ Plaćeno (30%): <%= number_with_delimiter(@paid_amount) %> RSD
 Ostalo za platiti na dan događaja: <%= number_with_delimiter(@remaining_amount) %> RSD
 
 🎉 VAŠA REZERVACIJA JE POTVRĐENA!
