@@ -72,13 +72,13 @@ Rails.application.configure do
 
   # Use a real queuing backend for Active Job (and separate queues per environment).
   # config.active_job.queue_adapter = :resque
-  # config.active_job.queue_name_prefix = "rodjendani_production"
+  # config.active_job.queue_name_prefix = "kidspot_production"
 
   # Disable caching for Action Mailer templates even if Action Controller
   # caching is enabled.
   config.action_mailer.perform_caching = false
 
-  app_host = ENV.fetch("APP_HOST", "www.kidsport.rs")
+  app_host = ENV.fetch("APP_HOST", "www.kidspot.rs")
   app_protocol = ENV.fetch("APP_PROTOCOL", "https")
   config.action_mailer.default_url_options = {
     host: app_host,

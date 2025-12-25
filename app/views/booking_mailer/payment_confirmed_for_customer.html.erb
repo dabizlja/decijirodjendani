@@ -1,0 +1,45 @@
+<div style="background:#ecfdf3;border-radius:24px;padding:22px;margin-bottom:24px;">
+  <p style="margin:0;font-size:15px;color:#14532d;line-height:1.7;">
+    Zdravo <strong><%= @customer_name %></strong>,<br />
+    ✅ <strong>Primili smo vašu uplatu!</strong> Vaša rezervacija u <strong><%= @business.display_name %></strong> je potvrđena.
+  </p>
+</div>
+
+<%= render "booking_mailer/booking_details" %>
+
+<div style="margin-top:28px;padding:20px;border-radius:20px;background:#f0f9ff;border:2px solid #0ea5e9;">
+  <p style="margin:0 0 16px 0;font-weight:600;font-size:16px;color:#0c4a6e;">💰 Detalji plaćanja</p>
+
+  <div style="background:#fff;padding:16px;border-radius:12px;margin-bottom:16px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid #e5e7eb;">
+      <span style="font-size:14px;color:#374151;">Ukupna cena paketa:</span>
+      <span style="font-size:16px;font-weight:600;color:#1f2937;"><%= number_with_delimiter(@total_price) %> RSD</span>
+    </div>
+
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid #e5e7eb;">
+      <span style="font-size:14px;color:#374151;">✅ Plaćeno (kaparo 30%):</span>
+      <span style="font-size:16px;font-weight:600;color:#059669;"><%= number_with_delimiter(@paid_amount) %> RSD</span>
+    </div>
+
+    <div style="display:flex;justify-content:space-between;align-items:center;background:#fef3c7;padding:12px;border-radius:8px;">
+      <span style="font-size:14px;color:#92400e;font-weight:600;">Ostalo za platiti na dan događaja:</span>
+      <span style="font-size:18px;font-weight:700;color:#b45309;"><%= number_with_delimiter(@remaining_amount) %> RSD</span>
+    </div>
+  </div>
+</div>
+
+<div style="margin-top:28px;padding:20px;border-radius:20px;background:#f1f0ff;">
+  <p style="margin:0 0 16px 0;font-weight:600;font-size:14px;color:#4c1d95;">🎉 Vaša rezervacija je potvrđena!</p>
+  <ol style="margin:0;padding-left:20px;color:#5b21b6;font-size:14px;line-height:1.7;">
+    <li>Rezervacija je oficijalno potvrđena - možete se opustiti! 😊</li>
+    <li>Kontaktirajte vlasnika za finalne dogovore i dodatne detalje.</li>
+    <li>Ostali iznos platite direktno na dan održavanja događaja.</li>
+    <li>Sačuvajte ovaj email kao potvrdu vaše rezervacije.</li>
+  </ol>
+</div>
+
+<div style="text-align:center;margin-top:32px;">
+  <a href="<%= @dashboard_url %>" style="display:inline-block;background:linear-gradient(135deg,#a855f7,#ec4899);color:#fff;font-weight:600;text-decoration:none;padding:14px 26px;border-radius:999px;box-shadow:0 12px 20px rgba(236,72,153,0.3);">
+    Otvori kontrolnu tablu
+  </a>
+</div>

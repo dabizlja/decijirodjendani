@@ -10,6 +10,7 @@ class User < ApplicationRecord
   has_many :businesses, dependent: :destroy
   has_many :reviews, dependent: :destroy
   has_many :messages, dependent: :destroy
+  has_one :payment_detail, dependent: :destroy
   has_many :customer_conversations,
            class_name: "Conversation",
            foreign_key: :customer_id,

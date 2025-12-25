@@ -25,6 +25,7 @@ Rails.application.routes.draw do
     end
 
     resources :bookings, only: [:create, :edit, :update, :destroy]
+    patch 'update_payment_details', to: 'dashboard#update_payment_details'
     resources :booking_requests, only: [] do
       member do
         patch :accept

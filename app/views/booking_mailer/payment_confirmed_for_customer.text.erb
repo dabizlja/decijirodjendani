@@ -1,0 +1,27 @@
+Zdravo <%= @customer_name %>,
+
+✅ Primili smo vašu uplatu! Vaša rezervacija u <%= @business.display_name %> je potvrđena.
+
+Termin: <%= format_datetime(@booking.start_time) %> - <%= format_datetime(@booking.end_time) %>
+Paket: <%= @pricing_plan&.name || "Nije naveden" %>
+Broj dece: <%= @booking.number_of_kids.presence || "—" %>
+Broj odraslih: <%= @booking.number_of_adults.presence || "—" %>
+
+💰 DETALJI PLAĆANJA:
+================================
+Ukupna cena paketa: <%= number_with_delimiter(@total_price) %> RSD
+✅ Plaćeno (kaparo 30%): <%= number_with_delimiter(@paid_amount) %> RSD
+Ostalo za platiti na dan događaja: <%= number_with_delimiter(@remaining_amount) %> RSD
+
+🎉 VAŠA REZERVACIJA JE POTVRĐENA!
+
+Sledeći koraci:
+1. Rezervacija je oficijalno potvrđena - možete se opustiti! 😊
+2. Kontaktirajte vlasnika za finalne dogovore i dodatne detalje.
+3. Ostali iznos platite direktno na dan održavanja događaja.
+4. Sačuvajte ovaj email kao potvrdu vaše rezervacije.
+
+Detalji oglasa: <%= @business_url %>
+Kontrolna tabla: <%= @dashboard_url %>
+
+Hvala što koristite KidSpot!

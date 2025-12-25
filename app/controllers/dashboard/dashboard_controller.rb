@@ -33,9 +33,22 @@ class Dashboard::DashboardController < ApplicationController
 
     apply_calendar_data
 
+    # Load payment details
+    @payment_detail = current_user.payment_detail || current_user.build_payment_detail
+
     # Future: Load analytics, etc.
     # @recent_inquiries = current_user.businesses.joins(:inquiries).limit(5)
     # @analytics = DashboardAnalytics.new(current_user)
+  end
+
+  def update_payment_details
+    @payment_detail = current_user.payment_detail || current_user.build_payment_detail
+
+    if @payment_detail.update(payment_detail_params)
+      redirect_to dashboard_root_path, notice: "Podaci za plaćanje su uspešno sačuvani."
+    else
+      redirect_to dashboard_root_path, alert: "Greška pri čuvanju podataka: #{@payment_detail.errors.full_messages.join(', ')}"
+    end
   end
 
   private
@@ -58,5 +71,9 @@ class Dashboard::DashboardController < ApplicationController
       category: Category.new(name: "Kategorija", icon: "🏷️"),
       city: City.new(name: "Vaš grad")
     )
+  end
+
+  def payment_detail_params
+    params.require(:payment_detail).permit(:bank_account_number, :account_owner_name, :account_owner_address)
   end
 end

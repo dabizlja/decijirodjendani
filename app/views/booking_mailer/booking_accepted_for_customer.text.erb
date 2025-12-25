@@ -7,6 +7,21 @@ Paket: <%= @pricing_plan&.name || "Nije naveden" %>
 Broj dece: <%= @booking.number_of_kids.presence || "—" %>
 Broj odraslih: <%= @booking.number_of_adults.presence || "—" %>
 
+<% if @payment_detail.present? && @advance_payment_amount.present? %>
+💳 INFORMACIJE O UPLATI:
+================================
+Iznos za uplatu (30%): <%= number_with_delimiter(@advance_payment_amount) %> RSD
+
+Podaci za uplatu:
+- Broj računa: <%= @payment_detail.bank_account_number %>
+- Primalac: <%= @payment_detail.account_owner_name %>
+- Adresa: <%= @payment_detail.account_owner_address %>
+- Poziv na broj: <%= @booking.id %>-<%= Date.current.strftime("%m%y") %>
+
+Napomena: Molimo izvršite uplatu kapara u iznosu od 30% ukupne cene
+da biste potvrdili rezervaciju. Ostatak ćete platiti na dan održavanja događaja.
+
+<% end %>
 Detalji oglasa: <%= @business_url %>
 Kontrolna tabla: <%= @dashboard_url %>
 

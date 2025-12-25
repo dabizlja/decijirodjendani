@@ -41,7 +41,9 @@ class Dashboard::BookingRequestsController < ApplicationController
     handle_action(%w[pending_payment],
                   { status: "confirmed", confirmed_at: Time.current },
                   flash_type: :notice,
-                  message: "Uplata je evidentirana. Rezervacija je potvrđena.")
+                  message: "Uplata je evidentirana. Rezervacija je potvrđena.") do |booking|
+      BookingMailer.payment_confirmed_for_customer(booking)&.deliver_later
+    end
   end
 
   def complete
