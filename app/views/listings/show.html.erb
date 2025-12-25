@@ -279,31 +279,26 @@
                       data: { gallery_target: "lightboxImage" } %>
                 <% end %>
 
-                <!-- Navigation Buttons -->
+                <!-- Navigation Buttons - Desktop Only -->
                 <% if @business.images.count > 1 %>
                   <button data-gallery-target="prevBtn"
                           data-action="click->gallery#previousImage"
-                          class="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black/60 hover:bg-black/80 text-white rounded-full w-14 h-14 flex items-center justify-center text-3xl transition-all transform hover:scale-110 backdrop-blur-sm">
+                          class="hidden lg:flex absolute left-4 top-1/2 transform -translate-y-1/2 bg-black/60 hover:bg-black/80 text-white rounded-full w-14 h-14 items-center justify-center text-3xl transition-all transform hover:scale-110 backdrop-blur-sm">
                     ‹
                   </button>
 
                   <button data-gallery-target="nextBtn"
                           data-action="click->gallery#nextImage"
-                          class="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black/60 hover:bg-black/80 text-white rounded-full w-14 h-14 flex items-center justify-center text-3xl transition-all transform hover:scale-110 backdrop-blur-sm">
+                          class="hidden lg:flex absolute right-4 top-1/2 transform -translate-y-1/2 bg-black/60 hover:bg-black/80 text-white rounded-full w-14 h-14 items-center justify-center text-3xl transition-all transform hover:scale-110 backdrop-blur-sm">
                     ›
                   </button>
                 <% end %>
 
-                <!-- Image Counter -->
-                <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-black/60 backdrop-blur-sm px-4 py-2 rounded-full">
+                <!-- Image Counter - Desktop Only -->
+                <div class="hidden lg:block absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-black/60 backdrop-blur-sm px-4 py-2 rounded-full">
                   <span data-gallery-target="counter" class="text-sm font-semibold text-white">
                     1 / <%= @business.images.count %>
                   </span>
-                </div>
-
-                <!-- Swipe Instruction for Mobile -->
-                <div class="absolute top-4 left-4 bg-black/60 backdrop-blur-sm px-3 py-2 rounded-full lg:hidden">
-                  <span class="text-xs text-white">👆 Swipe to navigate</span>
                 </div>
               </div>
             </div>

@@ -42,7 +42,7 @@ export default class extends Controller {
 
   scrollBy(direction) {
     const container = this.containerTarget
-    const step = container.clientWidth || 0
+    const step = this.getScrollStep()
     if (step === 0) return
 
     container.scrollBy({
@@ -51,6 +51,23 @@ export default class extends Controller {
     })
 
     window.setTimeout(this.boundUpdateButtons, 400)
+  }
+
+  // Calculate scroll step based on screen size
+  getScrollStep() {
+    const container = this.containerTarget
+    const containerWidth = container.clientWidth || 0
+
+    // On mobile (< 640px), scroll by item width to center items
+    if (window.innerWidth < 640) {
+      const firstSlide = container.querySelector('.featured-carousel-slide')
+      if (firstSlide) {
+        return firstSlide.offsetWidth + 24 // item width + gap
+      }
+    }
+
+    // On larger screens, scroll by container width
+    return containerWidth
   }
 
   // Auto-scroll methods
@@ -90,8 +107,12 @@ export default class extends Controller {
         behavior: "smooth"
       })
     } else {
-      // Otherwise scroll to next
-      this.scrollNext()
+      // Otherwise scroll to next using improved step calculation
+      const step = this.getScrollStep()
+      container.scrollBy({
+        left: step,
+        behavior: "smooth"
+      })
     }
 
     window.setTimeout(this.boundUpdateButtons, 400)

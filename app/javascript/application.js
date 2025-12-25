@@ -263,6 +263,12 @@ const onReady = () => {
   initializeConversationRealtime()
   initializeConversationComposer()
   initializeNotificationsSubscription()
+
+  // Auto-scroll to bottom on page load for conversations
+  const messagesContainer = document.querySelector("[data-conversation-messages]")
+  if (messagesContainer) {
+    scrollMessagesToBottom(messagesContainer.parentElement)
+  }
 }
 
 document.addEventListener("turbo:load", onReady)
@@ -337,7 +343,9 @@ const appendConversationMessage = (container, data, currentUserId) => {
 
 const scrollMessagesToBottom = (container) => {
   if (!container) return
-  container.scrollTop = container.scrollHeight
+  setTimeout(() => {
+    container.scrollTop = container.scrollHeight
+  }, 100) // Small delay to ensure DOM is updated
 }
 
 const markConversationAsRead = (conversationId) => {
@@ -423,6 +431,14 @@ const initializeConversationComposer = () => {
     if (value.length === 0) return
 
     form.requestSubmit()
+  })
+
+  // Scroll to bottom after form submission
+  form.addEventListener("turbo:submit-end", () => {
+    const messagesContainer = document.querySelector("[data-conversation-messages]")
+    if (messagesContainer) {
+      scrollMessagesToBottom(messagesContainer.parentElement)
+    }
   })
 
   form.dataset.enterSubmitInitialized = "true"
