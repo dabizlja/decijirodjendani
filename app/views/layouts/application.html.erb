@@ -11,9 +11,11 @@
     <%= yield :head %>
 
     <link rel="manifest" href="/manifest.json">
-    <link rel="icon" href="/icon.png" type="image/png">
-    <link rel="icon" href="/icon.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="/icon.png">
+    <link rel="icon" href="<%= asset_path('logo.png') %>" type="image/png" sizes="32x32">
+    <link rel="icon" href="<%= asset_path('logo.png') %>" type="image/png" sizes="16x16">
+    <link rel="apple-touch-icon" href="<%= asset_path('logo.png') %>" sizes="180x180">
+    <link rel="apple-touch-icon" href="<%= asset_path('logo.png') %>" sizes="192x192">
+    <meta name="theme-color" content="#a855f7">
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
