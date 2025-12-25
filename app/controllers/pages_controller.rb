@@ -11,6 +11,15 @@ class PagesController < ApplicationController
     @featured_businesses = Business.includes(:category, :city, :tags, images_attachments: :blob).last(9)
   end
 
+  def terms
+  end
+
+  def privacy
+  end
+
+  def faq
+  end
+
   private
 
 end

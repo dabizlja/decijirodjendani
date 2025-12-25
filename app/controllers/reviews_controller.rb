@@ -20,7 +20,11 @@ class ReviewsController < ApplicationController
   private
 
   def set_business
-    @business = Business.active.find_by!(slug: params[:business_slug])
+    @business = if params[:business_slug] =~ /\A\d+\z/
+                  Business.active.find(params[:business_slug])
+                else
+                  Business.active.find_by!(slug: params[:business_slug])
+                end
   rescue ActiveRecord::RecordNotFound
     redirect_to venues_path, alert: "Biznis nije pronađen."
   end

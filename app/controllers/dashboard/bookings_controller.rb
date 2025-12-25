@@ -15,7 +15,7 @@ class Dashboard::BookingsController < ApplicationController
         format.html do
           redirect_to dashboard_root_path(calendar_month: @booking.start_time.month,
                                           calendar_year: @booking.start_time.year,
-                                          calendar_business_id: business.id),
+                                          calendar_business_id: business.slug),
                       notice: "Termin je uspešno dodat."
         end
       else
@@ -62,7 +62,7 @@ class Dashboard::BookingsController < ApplicationController
         format.html do
           redirect_to dashboard_root_path(calendar_month: @booking.start_time.month,
                                           calendar_year: @booking.start_time.year,
-                                          calendar_business_id: @booking.business_id),
+                                          calendar_business_id: @booking.business.slug),
                       notice: "Termin je uspešno ažuriran."
         end
       else
@@ -251,7 +251,7 @@ class Dashboard::BookingsController < ApplicationController
   end
 
   def ensure_owner!
-    unless current_user.businesses.exists?(@booking.business_id)
+    unless current_user.businesses.exists?(id: @booking.business_id)
       respond_to do |format|
         format.html { redirect_to dashboard_root_path, alert: "Nemate dozvolu za ovu akciju." }
         format.json { render json: { error: "Nemate dozvolu za ovu akciju." }, status: :forbidden }

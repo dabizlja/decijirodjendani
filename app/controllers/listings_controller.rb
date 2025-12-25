@@ -82,7 +82,13 @@ class ListingsController < ApplicationController
   end
 
   def set_business
-    @business = Business.active.includes(:category, :city, :tags, :user, pricing_plans: :discounts).find_by!(slug: params[:slug])
+    # Try to find by slug first, fallback to ID
+    @business = if params[:slug] =~ /\A\d+\z/
+                  # If it's numeric, it might be an old ID link
+                  Business.active.includes(:category, :city, :tags, :user, pricing_plans: :discounts).find(params[:slug])
+                else
+                  Business.active.includes(:category, :city, :tags, :user, pricing_plans: :discounts).find_by!(slug: params[:slug])
+                end
   rescue ActiveRecord::RecordNotFound
     redirect_to venues_path, alert: "Biznis nije pronađen."
   end

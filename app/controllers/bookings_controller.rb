@@ -34,7 +34,11 @@ class BookingsController < ApplicationController
   private
 
   def set_business
-    @business = Business.find_by!(slug: params[:business_slug])
+    @business = if params[:business_slug] =~ /\A\d+\z/
+                  Business.find(params[:business_slug])
+                else
+                  Business.find_by!(slug: params[:business_slug])
+                end
   end
 
   def set_pricing_plan

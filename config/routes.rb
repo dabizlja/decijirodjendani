@@ -12,7 +12,7 @@ Rails.application.routes.draw do
   namespace :dashboard do
     root "dashboard#show"
 
-    resources :businesses, except: [:show, :index] do
+    resources :businesses, except: [:show, :index], param: :slug, constraints: { slug: /[^\/]+/ } do
       member do
         get :analytics
         delete :remove_image
@@ -54,6 +54,9 @@ Rails.application.routes.draw do
   resources :newsletter_subscriptions, only: [:create]
 
   get "pages/home"
+  get "uslovi-koriscenja", to: "pages#terms", as: :terms
+  get "politika-privatnosti", to: "pages#privacy", as: :privacy
+  get "faq", to: "pages#faq", as: :faq
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.

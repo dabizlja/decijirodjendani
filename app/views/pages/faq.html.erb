@@ -1,0 +1,203 @@
+<!-- Header -->
+<div class="bg-gradient-to-br from-purple-300 via-pink-300 to-red-300 text-white relative overflow-hidden" style="background: linear-gradient(135deg, rgba(147, 51, 234, 0.8) 0%, rgba(236, 72, 153, 0.8) 50%, rgba(239, 68, 68, 0.8) 100%);">
+  <!-- Logo on the left -->
+  <div class="pointer-events-none absolute left-0 top-0 z-40 pl-4 pt-4 sm:pl-8 sm:pt-6 md:pl-12 md:pt-8">
+    <div class="pointer-events-auto">
+      <%= link_to root_path, class: "flex items-center transition hover:opacity-90" do %>
+        <%= image_tag "logo.png", alt: "KidSpot Logo", class: "h-16 w-auto sm:h-24" %>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="relative w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-16 md:pt-32 md:pb-20 text-center">
+    <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4">
+      Često postavljana pitanja
+    </h1>
+    <p class="text-white/90 text-lg">
+      Sve što trebate da znate o korišćenju KidSpot platforme
+    </p>
+  </div>
+</div>
+
+<!-- Content -->
+<div class="max-w-4xl mx-auto px-6 py-12">
+  <div class="bg-white rounded-2xl shadow-lg border border-gray-100">
+
+    <!-- For Parents Section -->
+    <div class="p-8 border-b border-gray-200">
+      <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
+        👨‍👩‍👧‍👦 Za roditelje
+      </h2>
+
+      <div class="space-y-6">
+        <!-- Question 1 -->
+        <div class="border-l-4 border-purple-500 pl-4">
+          <h3 class="text-lg font-semibold text-gray-800 mb-2">Kako da se registrujem?</h3>
+          <p class="text-gray-700">
+            Registracija je jednostavna - možete se registrovati putem Google naloga klikom na "Registruj se" dugme
+            na početnoj strani. Automatski ćete biti usmereni na Google stranicu gde potvrđujete pristup,
+            a zatim se vraćate na KidSpot sa kreiranim nalogom.
+          </p>
+        </div>
+
+        <!-- Question 2 -->
+        <div class="border-l-4 border-purple-500 pl-4">
+          <h3 class="text-lg font-semibold text-gray-800 mb-2">Kako da pronađem mesto za rođendan?</h3>
+          <p class="text-gray-700">
+            Idite na "Sva mesta" stranicu gde možete pretraživati po kategorijama (igraonice, restorani, itd.),
+            gradovima, cenovnom opsegu i dostupnim uslugama. Koristite filtere za lakše pronalaženje
+            idealnog mesta za vaš događaj.
+          </p>
+        </div>
+
+        <!-- Question 3 -->
+        <div class="border-l-4 border-purple-500 pl-4">
+          <h3 class="text-lg font-semibold text-gray-800 mb-2">Kako funkcioniše rezervacija?</h3>
+          <p class="text-gray-700">
+            Na stranici mesta odaberite paket koji vam odgovara i kliknite "Rezervišite ovaj paket".
+            Popunite podatke o događaju (datum, broj dece/odraslih, posebne zahteve).
+            Vaš zahtev se šalje vlasniku mesta koji će vas kontaktirati za potvrdu.
+          </p>
+        </div>
+
+        <!-- Question 4 -->
+        <div class="border-l-4 border-purple-500 pl-4">
+          <h3 class="text-lg font-semibold text-gray-800 mb-2">Kako da komuniciram sa vlasnikom mesta?</h3>
+          <p class="text-gray-700">
+            Na stranici svakog mesta možete poslati direktnu poruku vlasniku.
+            Sve poruke se čuvaju u vašem nalogu na "Kontrolnoj tabli" u sekciji "Poruke"
+            gde možete pratiti konverzaciju.
+          </p>
+        </div>
+
+        <!-- Question 5 -->
+        <div class="border-l-4 border-purple-500 pl-4">
+          <h3 class="text-lg font-semibold text-gray-800 mb-2">Kako da ostavim recenziju?</h3>
+          <p class="text-gray-700">
+            Nakon korišćenja usluge, idite na stranicu mesta i u sekciji "Recenzije"
+            možete ostaviti ocenu (1-5 zvezdi) i napisati komentar o vašem iskustvu.
+            Ovo pomaže drugim roditeljima da donose bolje odluke.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- For Business Owners Section -->
+    <div class="p-8">
+      <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
+        🏢 Za vlasnike biznisa
+      </h2>
+
+      <div class="space-y-6">
+        <!-- Question 1 -->
+        <div class="border-l-4 border-pink-500 pl-4">
+          <h3 class="text-lg font-semibold text-gray-800 mb-2">Kako da registrujem svoj biznis?</h3>
+          <p class="text-gray-700">
+            Registrujte se putem Google naloga, zatim idite na vašu "Kontrolnu tablu" i kliknite
+            "Dodaj novi biznis". Popunite osnovne informacije o vašem mestu - naziv, kategoriju,
+            grad, opis i kontakt podatke.
+          </p>
+        </div>
+
+        <!-- Question 2 -->
+        <div class="border-l-4 border-pink-500 pl-4">
+          <h3 class="text-lg font-semibold text-gray-800 mb-2">Kako da dodam slike?</h3>
+          <p class="text-gray-700">
+            U sekciji za uređivanje biznisa, kliknite na "Dodaj slike" i otpremite do 10 slika
+            (PNG, JPG, JPEG, WebP format, maksimalno 5MB po slici). Prva slika će biti glavna
+            slika koja se prikazuje na listi mesta. Slike se automatski optimizuju.
+          </p>
+        </div>
+
+        <!-- Question 3 -->
+        <div class="border-l-4 border-pink-500 pl-4">
+          <h3 class="text-lg font-semibold text-gray-800 mb-2">Kako da kreiram pakete i cene?</h3>
+          <p class="text-gray-700">
+            U sekciji "Paketi i cene" možete dodati različite ponude - rođendanski paketi,
+            dnevne cene, vikend paketi itd. Za svaki paket definirate naziv, cenu, trajanje,
+            broj dece/odraslih i opis usluga. Možete imati više aktivnih paketa istovremeno.
+          </p>
+        </div>
+
+        <!-- Question 4 -->
+        <div class="border-l-4 border-pink-500 pl-4">
+          <h3 class="text-lg font-semibold text-gray-800 mb-2">Kako funkcioniše kalendar rezervacija?</h3>
+          <p class="text-gray-700">
+            U "Kontrolnoj tabli" imate pregled svih rezervacija u kalendaru. Možete kreirati
+            custom rezervacije direktno iz kalendara, upravljati zahtevima roditelja
+            (prihvatiti/odbaciti), i dodavati interne termine kada niste dostupni.
+          </p>
+        </div>
+
+        <!-- Question 5 -->
+        <div class="border-l-4 border-pink-500 pl-4">
+          <h3 class="text-lg font-semibold text-gray-800 mb-2">Kako da dodam podatke o računu za plaćanje?</h3>
+          <p class="text-gray-700">
+            U "Kontrolnoj tabli" u sekciji "Podešavanja profila" možete dodati informacije o
+            bankovnom računu i načinima plaćanja koje prihvatate. Ovi podaci se prikazuju
+            klijentima kada potvrde rezervaciju.
+          </p>
+        </div>
+
+        <!-- Question 6 -->
+        <div class="border-l-4 border-pink-500 pl-4">
+          <h3 class="text-lg font-semibold text-gray-800 mb-2">Kako da upravljam rezervacijama?</h3>
+          <p class="text-gray-700 mb-3">
+            U sekciji "Rezervacije" možete:
+          </p>
+          <ul class="list-disc list-inside text-gray-700 space-y-1 ml-4">
+            <li><strong>Prihvatiti</strong> ili <strong>odbaciti</strong> zahteve za rezervaciju</li>
+            <li><strong>Označiti kao plaćeno</strong> kada klijent plati</li>
+            <li><strong>Završiti</strong> rezervaciju nakon održavanja događaja</li>
+            <li><strong>Otkazati</strong> rezervaciju u dogovoru sa klijentom</li>
+            <li>Komunicirati sa klijentima putem poruka</li>
+          </ul>
+        </div>
+
+        <!-- Question 7 -->
+        <div class="border-l-4 border-pink-500 pl-4">
+          <h3 class="text-lg font-semibold text-gray-800 mb-2">Kako da dodam popuste i promocije?</h3>
+          <p class="text-gray-700">
+            U sekciji za uređivanje paketa možete dodati popuste sa datumom početka i kraja.
+            Popusti se automatski prikazuju na javnoj stranici vašeg mesta i cena se
+            automatski kalkuliše sa snižanjem.
+          </p>
+        </div>
+
+        <!-- Question 8 -->
+        <div class="border-l-4 border-pink-500 pl-4">
+          <h3 class="text-lg font-semibold text-gray-800 mb-2">Da li KidSpot naplaćuje komisiju?</h3>
+          <p class="text-gray-700">
+            Trenutno KidSpot ne naplaćuje komisiju za korišćenje platforme. Sva plaćanja
+            se vrše direktno između vas i klijenata. Zadržavamo pravo da u budućnosti
+            uvedemo naknade o čemu ćete biti obavešteni unapred.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contact Section -->
+  <div class="mt-8 bg-gradient-to-r from-purple-50 to-pink-50 rounded-2xl p-8 border border-purple-200">
+    <h3 class="text-xl font-bold text-gray-900 mb-4 text-center">
+      Nemate odgovor na vaše pitanje?
+    </h3>
+    <p class="text-gray-700 text-center mb-4">
+      Kontaktirajte nas i rado ćemo vam pomoći!
+    </p>
+    <div class="text-center">
+      <p class="text-gray-700">
+        <strong>Email:</strong> kontakt@kidspot.rs<br>
+        <strong>Adresa:</strong> Beograd, Srbija
+      </p>
+    </div>
+  </div>
+
+  <!-- Back to home button -->
+  <div class="mt-8 text-center">
+    <%= link_to root_path,
+        class: "inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl font-semibold shadow-lg hover:brightness-110 transition" do %>
+      🏠 Nazad na početnu stranu
+    <% end %>
+  </div>
+</div>

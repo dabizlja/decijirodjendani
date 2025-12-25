@@ -129,7 +129,7 @@ class Business < ApplicationRecord
   end
 
   def to_param
-    slug
+    slug.presence || id.to_s
   end
 
   private

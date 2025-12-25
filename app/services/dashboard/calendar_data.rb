@@ -42,7 +42,7 @@ module Dashboard
 
       @selected_calendar_business_id = @params[:calendar_business_id].presence
       calendar_businesses = if @selected_calendar_business_id.present?
-                              @businesses.where(id: @selected_calendar_business_id)
+                              @businesses.where(slug: @selected_calendar_business_id)
                             else
                               @businesses
                             end

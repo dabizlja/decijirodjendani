@@ -85,7 +85,12 @@ class Dashboard::BusinessesController < ApplicationController
   private
 
   def set_business
-    @business = Business.find(params[:id])
+    # Try to find by slug first, fallback to ID for backward compatibility
+    @business = if params[:slug] =~ /\A\d+\z/
+                  Business.find(params[:slug])
+                else
+                  Business.find_by!(slug: params[:slug])
+                end
   end
 
   def ensure_owner
