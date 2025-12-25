@@ -9,12 +9,27 @@ export default class extends Controller {
       passive: true
     })
     window.addEventListener("resize", this.boundUpdateButtons)
+
+    // Auto-scroll functionality
+    this.autoScrollInterval = null
+    this.isPaused = false
+
+    // Start auto-scroll
+    this.startAutoScroll()
+
+    // Pause on hover/touch
+    this.element.addEventListener("mouseenter", () => this.pauseAutoScroll())
+    this.element.addEventListener("mouseleave", () => this.resumeAutoScroll())
+    this.element.addEventListener("touchstart", () => this.pauseAutoScroll())
+    this.element.addEventListener("touchend", () => this.resumeAutoScroll())
+
     this.updateButtons()
   }
 
   disconnect() {
     this.containerTarget.removeEventListener("scroll", this.boundUpdateButtons)
     window.removeEventListener("resize", this.boundUpdateButtons)
+    this.stopAutoScroll()
   }
 
   scrollNext() {
@@ -34,6 +49,50 @@ export default class extends Controller {
       left: step * direction,
       behavior: "smooth"
     })
+
+    window.setTimeout(this.boundUpdateButtons, 400)
+  }
+
+  // Auto-scroll methods
+  startAutoScroll() {
+    this.stopAutoScroll() // Clear any existing interval
+    this.autoScrollInterval = setInterval(() => {
+      if (!this.isPaused) {
+        this.autoScrollNext()
+      }
+    }, 2000) // 2 seconds
+  }
+
+  stopAutoScroll() {
+    if (this.autoScrollInterval) {
+      clearInterval(this.autoScrollInterval)
+      this.autoScrollInterval = null
+    }
+  }
+
+  pauseAutoScroll() {
+    this.isPaused = true
+  }
+
+  resumeAutoScroll() {
+    this.isPaused = false
+  }
+
+  autoScrollNext() {
+    const container = this.containerTarget
+    const scrollLeft = container.scrollLeft
+    const maxScrollLeft = container.scrollWidth - container.clientWidth - 4
+
+    // If we're at the end, scroll back to beginning
+    if (scrollLeft >= maxScrollLeft) {
+      container.scrollTo({
+        left: 0,
+        behavior: "smooth"
+      })
+    } else {
+      // Otherwise scroll to next
+      this.scrollNext()
+    }
 
     window.setTimeout(this.boundUpdateButtons, 400)
   }

@@ -230,113 +230,85 @@
 
       <!-- Image Gallery -->
       <% if @business.images.any? %>
-        <div class="bg-white rounded-2xl shadow-lg p-8 border border-gray-100">
+        <div class="bg-white rounded-2xl shadow-lg p-8 border border-gray-100" data-controller="gallery">
           <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
             📸 Galerija slika
           </h2>
-          <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+
+          <!-- Thumbnail Grid -->
+          <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             <% @business.images.each_with_index do |image, index| %>
-              <div class="aspect-square rounded-xl overflow-hidden bg-gray-100 hover:shadow-lg transition-shadow cursor-pointer"
-                   onclick="openLightbox(<%= index %>)">
+              <div class="group relative aspect-square rounded-xl overflow-hidden bg-gray-100 cursor-pointer transform transition-all duration-300 hover:scale-105 hover:shadow-xl"
+                   data-gallery-target="thumbnail"
+                   data-action="click->gallery#openLightbox"
+                   data-index="<%= index %>">
                 <%= image_tag image,
                     alt: @business.display_name,
-                    class: "w-full h-full object-cover hover:scale-105 transition-transform duration-300" %>
+                    class: "w-full h-full object-cover group-hover:brightness-110 transition-all duration-300" %>
+
+                <!-- Overlay with index -->
+                <div class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-300 flex items-center justify-center">
+                  <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-white/90 backdrop-blur-sm rounded-full px-3 py-1">
+                    <span class="text-sm font-semibold text-gray-800"><%= index + 1 %>/<%= @business.images.count %></span>
+                  </div>
+                </div>
               </div>
             <% end %>
           </div>
-        </div>
 
-        <!-- Image Popup Modal -->
-        <div id="lightbox" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden items-center justify-center p-4" onclick="closeLightbox()">
-          <div class="relative bg-white rounded-3xl shadow-2xl max-w-5xl max-h-[90vh] mx-4 overflow-hidden" onclick="event.stopPropagation()">
-            <!-- Close Button -->
-            <button onclick="closeLightbox()" class="absolute top-4 right-4 z-10 bg-black/50 hover:bg-black/70 text-white rounded-full w-10 h-10 flex items-center justify-center text-xl transition-colors">
-              ×
-            </button>
+          <!-- Lightbox Modal -->
+          <div data-gallery-target="lightbox"
+               data-action="click->gallery#closeLightbox"
+               class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
 
-            <!-- Image Container -->
-            <div class="relative">
-              <% @business.images.each_with_index do |image, index| %>
-                <%= image_tag image,
-                    alt: @business.display_name,
-                    class: "lightbox-image w-full h-auto max-h-[90vh] object-contain rounded-3xl #{'hidden' unless index == 0}",
-                    id: "lightbox-image-#{index}" %>
-              <% end %>
+            <div class="relative bg-white rounded-2xl shadow-2xl max-w-6xl max-h-[95vh] mx-4 overflow-hidden"
+                 data-action="click->gallery#closeLightbox:stop">
 
-              <!-- Navigation Buttons -->
-              <% if @business.images.count > 1 %>
-                <button onclick="previousImage(event)" class="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white rounded-full w-12 h-12 flex items-center justify-center text-2xl transition-colors">
-                  ‹
-                </button>
-                <button onclick="nextImage(event)" class="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white rounded-full w-12 h-12 flex items-center justify-center text-2xl transition-colors">
-                  ›
-                </button>
+              <!-- Close Button -->
+              <button data-action="click->gallery#closeLightbox"
+                      class="absolute top-4 right-4 z-20 bg-black/60 hover:bg-black/80 text-white rounded-full w-12 h-12 flex items-center justify-center text-2xl transition-all transform hover:scale-110 backdrop-blur-sm">
+                ×
+              </button>
+
+              <!-- Image Container -->
+              <div class="relative bg-gray-50">
+                <% @business.images.each_with_index do |image, index| %>
+                  <%= image_tag image,
+                      alt: @business.display_name,
+                      class: "w-full h-auto max-h-[95vh] object-contain #{index == 0 ? 'block' : 'hidden'}",
+                      data: { gallery_target: "lightboxImage" } %>
+                <% end %>
+
+                <!-- Navigation Buttons -->
+                <% if @business.images.count > 1 %>
+                  <button data-gallery-target="prevBtn"
+                          data-action="click->gallery#previousImage"
+                          class="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black/60 hover:bg-black/80 text-white rounded-full w-14 h-14 flex items-center justify-center text-3xl transition-all transform hover:scale-110 backdrop-blur-sm">
+                    ‹
+                  </button>
+
+                  <button data-gallery-target="nextBtn"
+                          data-action="click->gallery#nextImage"
+                          class="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black/60 hover:bg-black/80 text-white rounded-full w-14 h-14 flex items-center justify-center text-3xl transition-all transform hover:scale-110 backdrop-blur-sm">
+                    ›
+                  </button>
+                <% end %>
 
                 <!-- Image Counter -->
-                <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-black/50 backdrop-blur px-4 py-2 rounded-full">
-                  <span class="text-sm font-medium text-white">
-                    <span id="current-image">1</span> / <%= @business.images.count %>
+                <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-black/60 backdrop-blur-sm px-4 py-2 rounded-full">
+                  <span data-gallery-target="counter" class="text-sm font-semibold text-white">
+                    1 / <%= @business.images.count %>
                   </span>
                 </div>
-              <% end %>
+
+                <!-- Swipe Instruction for Mobile -->
+                <div class="absolute top-4 left-4 bg-black/60 backdrop-blur-sm px-3 py-2 rounded-full lg:hidden">
+                  <span class="text-xs text-white">👆 Swipe to navigate</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-
-        <script>
-          let currentImageIndex = 0;
-          const totalImages = <%= @business.images.count %>;
-
-          function openLightbox(index) {
-            currentImageIndex = index;
-            document.getElementById('lightbox').classList.remove('hidden');
-            document.getElementById('lightbox').classList.add('flex');
-            showImage(currentImageIndex);
-          }
-
-          function closeLightbox() {
-            document.getElementById('lightbox').classList.add('hidden');
-            document.getElementById('lightbox').classList.remove('flex');
-          }
-
-          function showImage(index) {
-            // Hide all images
-            document.querySelectorAll('.lightbox-image').forEach(img => {
-              img.classList.add('hidden');
-            });
-
-            // Show current image
-            document.getElementById(`lightbox-image-${index}`).classList.remove('hidden');
-
-            // Update counter
-            document.getElementById('current-image').textContent = index + 1;
-          }
-
-          function nextImage(event) {
-            event.stopPropagation();
-            currentImageIndex = (currentImageIndex + 1) % totalImages;
-            showImage(currentImageIndex);
-          }
-
-          function previousImage(event) {
-            event.stopPropagation();
-            currentImageIndex = (currentImageIndex - 1 + totalImages) % totalImages;
-            showImage(currentImageIndex);
-          }
-
-          // Keyboard navigation
-          document.addEventListener('keydown', function(event) {
-            if (!document.getElementById('lightbox').classList.contains('hidden')) {
-              if (event.key === 'Escape') {
-                closeLightbox();
-              } else if (event.key === 'ArrowRight') {
-                nextImage(event);
-              } else if (event.key === 'ArrowLeft') {
-                previousImage(event);
-              }
-            }
-          });
-        </script>
       <% end %>
 
       <!-- Mobile Contact Section - Shows after gallery on mobile only -->

@@ -15,6 +15,7 @@ import FeaturedSliderController from "controllers/featured_slider_controller"
 import CalendarFilterController from "controllers/calendar_filter_controller"
 import CalendarController from "controllers/calendar_controller"
 import BookingTooltipController from "controllers/booking_tooltip_controller"
+import GalleryController from "controllers/gallery_controller"
 
 // Start Stimulus application
 const application = Application.start()
@@ -29,6 +30,7 @@ application.register("featured-slider", FeaturedSliderController)
 application.register("calendar-filter", CalendarFilterController)
 application.register("calendar", CalendarController)
 application.register("booking-tooltip", BookingTooltipController)
+application.register("gallery", GalleryController)
 
 const MODAL_ATTRIBUTE = "data-modal"
 const MODAL_VISIBLE_CLASS = "flex"

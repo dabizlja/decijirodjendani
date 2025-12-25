@@ -103,7 +103,7 @@
       <!-- Search Bar -->
       <div class="max-w-4xl mx-auto mb-8 px-4">
         <div class="bg-white bg-opacity-95 backdrop-blur-sm rounded-2xl p-4 sm:p-6 shadow-2xl">
-          <%= form_with url: venues_path, method: :get, class: "flex flex-col gap-4" do |form| %>
+          <%= form_with url: venues_path, method: :get, class: "flex flex-col gap-3" do |form| %>
             <div class="flex flex-col lg:flex-row gap-3 sm:gap-4">
               <div class="flex-1 relative">
               <div class="absolute left-3 top-1/2 transform -translate-y-1/2 text-lg">📍</div>
@@ -138,9 +138,9 @@
                     class: "w-full pl-12 pr-4 py-3 rounded-xl text-gray-800 text-sm font-normal border-2 border-purple-400 focus:border-purple-500 focus:outline-none transition-colors bg-white appearance-none custom-datetime-field",
                     placeholder: "Odaberi datum i vreme" %>
               </div>
-              <div class="flex items-end">
+              <div class="w-full lg:w-auto lg:flex">
                 <%= form.submit "🎯 Pretraži",
-                    class: "bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-3 rounded-xl font-medium text-sm shadow-lg hover:brightness-110 transition whitespace-nowrap" %>
+                    class: "w-full lg:w-auto bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-3 rounded-xl font-medium text-sm shadow-lg hover:brightness-110 transition lg:whitespace-nowrap" %>
               </div>
             </div>
             <%= render "shared/price_range_filter",

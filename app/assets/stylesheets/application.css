@@ -14,7 +14,7 @@
 *= require_self
 */
 .minimal-price-range {
-  padding: 16px 0;
+  padding: 0;
 }
 
 .price-labels {
