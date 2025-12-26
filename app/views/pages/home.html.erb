@@ -376,7 +376,9 @@
           🚀 Registruj Svoj Biznis
         </button>
       <% end %>
-      <button class="w-full border-2 sm:border-3 border-white text-white px-6 sm:px-8 lg:px-10 py-3 sm:py-4 rounded-xl sm:rounded-2xl font-semibold text-base sm:text-lg lg:text-xl hover:bg-white hover:text-purple-900 transition-all duration-200" style="font-family: 'Poppins', sans-serif;">
+      <button class="w-full border-2 sm:border-3 border-white text-white px-6 sm:px-8 lg:px-10 py-3 sm:py-4 rounded-xl sm:rounded-2xl font-semibold text-base sm:text-lg lg:text-xl hover:bg-white hover:text-purple-900 transition-all duration-200"
+              onclick="this.innerHTML = this.innerHTML.includes('@') ? '📞 Kontaktiraj Nas' : '📧 kontakt@kidspot.rs'"
+              style="font-family: 'Poppins', sans-serif;">
         📞 Kontaktiraj Nas
       </button>
     </div>

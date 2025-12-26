@@ -167,7 +167,7 @@
                     <p class="text-xs uppercase tracking-wide text-gray-500 mb-1"><%= pricing_plan_human_name(plan.plan_type) %></p>
                     <h3 class="text-xl font-semibold text-gray-900"><%= plan.name.presence || "Ponuda" %></h3>
                   </div>
-                  <div class="text-right">
+                  <div class="text-left md:text-right">
                     <% if plan.discounted? %>
                       <p class="text-sm text-gray-500 line-through"><%= format_price_with_currency(plan.base_price, plan.currency) %></p>
                       <p class="text-2xl font-bold text-purple-700">
@@ -264,9 +264,9 @@
             <div class="relative bg-white rounded-2xl shadow-2xl max-w-6xl max-h-[95vh] mx-4 overflow-hidden"
                  data-action="click->gallery#closeLightbox:stop">
 
-              <!-- Close Button -->
+              <!-- Close Button - Desktop Only -->
               <button data-action="click->gallery#closeLightbox"
-                      class="absolute top-4 right-4 z-20 bg-black/60 hover:bg-black/80 text-white rounded-full w-12 h-12 flex items-center justify-center text-2xl transition-all transform hover:scale-110 backdrop-blur-sm">
+                      class="hidden lg:flex absolute top-4 right-4 z-20 bg-black/60 hover:bg-black/80 text-white rounded-full w-12 h-12 items-center justify-center text-2xl transition-all transform hover:scale-110 backdrop-blur-sm">
                 ×
               </button>
 
@@ -279,17 +279,17 @@
                       data: { gallery_target: "lightboxImage" } %>
                 <% end %>
 
-                <!-- Navigation Buttons - Desktop Only -->
+                <!-- Navigation Buttons -->
                 <% if @business.images.count > 1 %>
                   <button data-gallery-target="prevBtn"
                           data-action="click->gallery#previousImage"
-                          class="hidden lg:flex absolute left-4 top-1/2 transform -translate-y-1/2 bg-black/60 hover:bg-black/80 text-white rounded-full w-14 h-14 items-center justify-center text-3xl transition-all transform hover:scale-110 backdrop-blur-sm">
+                          class="flex absolute left-4 top-1/2 transform -translate-y-1/2 bg-black/60 hover:bg-black/80 text-white rounded-full w-12 h-12 lg:w-14 lg:h-14 items-center justify-center text-2xl lg:text-3xl transition-all transform hover:scale-110 backdrop-blur-sm">
                     ‹
                   </button>
 
                   <button data-gallery-target="nextBtn"
                           data-action="click->gallery#nextImage"
-                          class="hidden lg:flex absolute right-4 top-1/2 transform -translate-y-1/2 bg-black/60 hover:bg-black/80 text-white rounded-full w-14 h-14 items-center justify-center text-3xl transition-all transform hover:scale-110 backdrop-blur-sm">
+                          class="flex absolute right-4 top-1/2 transform -translate-y-1/2 bg-black/60 hover:bg-black/80 text-white rounded-full w-12 h-12 lg:w-14 lg:h-14 items-center justify-center text-2xl lg:text-3xl transition-all transform hover:scale-110 backdrop-blur-sm">
                     ›
                   </button>
                 <% end %>
@@ -436,11 +436,11 @@
               <%= @business.reviews_count %> recenzija
             </p>
           </div>
-          <div class="text-right">
+          <div class="text-left md:text-right">
             <div class="text-4xl font-bold text-yellow-500">
               <%= number_with_precision(@business.average_rating, precision: 1) %>
             </div>
-            <div class="flex items-center justify-end gap-1 text-yellow-400">
+            <div class="flex items-center justify-start md:justify-end gap-1 text-yellow-400">
               <% rounded_rating = @business.average_rating.round %>
               <% 5.times do |i| %>
                 <span><%= i < rounded_rating ? "★" : "☆" %></span>
@@ -812,12 +812,12 @@
                     <p class="text-xs sm:text-sm text-purple-700">Trajanje: <%= format_duration(plan.duration_minutes) %></p>
                   <% end %>
                 </div>
-                <div class="text-left sm:text-right">
-                  <p class="text-2xl sm:text-3xl font-bold text-purple-900">
+                <div class="text-left md:text-right">
+                  <p class="text-2xl md:text-3xl font-bold text-purple-900">
                     <%= format_price_with_currency(plan.effective_price, plan.currency) %>
                   </p>
                   <% if plan.discounted? && plan.active_discount&.label.present? %>
-                    <p class="text-xs sm:text-sm text-green-700 font-semibold">
+                    <p class="text-xs md:text-sm text-green-700 font-semibold">
                       <%= plan.active_discount.label %>
                     </p>
                   <% end %>
