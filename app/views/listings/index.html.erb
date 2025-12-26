@@ -100,58 +100,15 @@
         <span class="block text-yellow-200">Rođendan!</span>
       </h1>
 
-      <!-- Search Bar -->
-      <div class="max-w-4xl mx-auto mb-8 px-4">
-        <div class="bg-white bg-opacity-95 backdrop-blur-sm rounded-2xl p-4 sm:p-6 shadow-2xl">
-          <%= form_with url: venues_path, method: :get, class: "flex flex-col gap-3" do |form| %>
-            <div class="flex flex-col lg:flex-row gap-3 sm:gap-4">
-              <div class="flex-1 relative">
-              <div class="absolute left-3 top-1/2 transform -translate-y-1/2 text-lg">📍</div>
-              <%= form.select :city_id,
-                  options_from_collection_for_select(@cities, :id, :name, params[:city_id]),
-                  { prompt: "Svi gradovi" },
-                  { class: "w-full pl-12 pr-4 py-3 rounded-xl text-gray-800 text-sm font-normal border-2 border-purple-400 focus:border-purple-500 focus:outline-none transition-colors appearance-none bg-white" } %>
-              <!-- Custom dropdown arrow -->
-              <div class="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
-                <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                </svg>
-              </div>
-              </div>
-              <div class="flex-1 relative">
-              <div class="absolute left-3 top-1/2 transform -translate-y-1/2 text-lg">🔍</div>
-              <%= form.select :category_id,
-                  options_from_collection_for_select(@categories, :id, :name, params[:category_id]),
-                  { prompt: "Sve kategorije" },
-                  { class: "w-full pl-12 pr-4 py-3 rounded-xl text-gray-800 text-sm font-normal border-2 border-purple-400 focus:border-purple-500 focus:outline-none transition-colors appearance-none bg-white" } %>
-              <!-- Custom dropdown arrow -->
-              <div class="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
-                <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                </svg>
-              </div>
-              </div>
-              <div class="flex-1 relative">
-                <div class="absolute left-3 top-1/2 transform -translate-y-1/2 text-lg">📅</div>
-                <%= form.datetime_local_field :availability_at,
-                    value: @selected_availability_at,
-                    class: "w-full pl-12 pr-4 py-3 rounded-xl text-gray-800 text-sm font-normal border-2 border-purple-400 focus:border-purple-500 focus:outline-none transition-colors bg-white appearance-none custom-datetime-field",
-                    placeholder: "Odaberi datum i vreme" %>
-              </div>
-              <div class="w-full lg:w-auto lg:flex">
-                <%= form.submit "🎯 Pretraži",
-                    class: "w-full lg:w-auto bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-3 rounded-xl font-medium text-sm shadow-lg hover:brightness-110 transition lg:whitespace-nowrap" %>
-              </div>
-            </div>
-            <%= render "shared/price_range_filter",
-                form: form,
-                bounds: @price_bounds,
-                selected_min: @selected_price_min,
-                selected_max: @selected_price_max,
-                wrapper_classes: "w-full price-range-slider" %>
-          <% end %>
-        </div>
-      </div>
+      <%= render "shared/search_form",
+          cities: @cities,
+          categories: @categories,
+          selected_city_id: params[:city_id],
+          selected_category_id: params[:category_id],
+          selected_availability_at: @selected_availability_at,
+          price_bounds: @price_bounds,
+          selected_price_min: @selected_price_min,
+          selected_price_max: @selected_price_max %>
     </div>
   </div>
 </div>
