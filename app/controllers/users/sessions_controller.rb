@@ -70,6 +70,8 @@ class Users::SessionsController < Devise::SessionsController
     preload_home_context
     @sign_in_user = resource
     @show_sign_in_modal = true
+    @user = nil
+    @show_registration_modal = nil
 
     respond_to do |format|
       format.html { render "pages/home", status: :unprocessable_entity }
