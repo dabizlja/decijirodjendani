@@ -2,76 +2,119 @@
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <style>
       body {
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         line-height: 1.6;
         color: #333;
-        max-width: 600px;
-        margin: 0 auto;
-        padding: 20px;
+        margin: 0;
+        padding: 0;
         background-color: #f8fafc;
+        width: 100% !important;
+        -webkit-text-size-adjust: 100%;
+        -ms-text-size-adjust: 100%;
+      }
+      .email-wrapper {
+        width: 100%;
+        background-color: #f8fafc;
+        padding: 20px 0;
       }
       .container {
         background: white;
         border-radius: 12px;
-        padding: 40px;
+        padding: 20px;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        max-width: 600px;
+        margin: 0 auto;
+        width: 100%;
+        box-sizing: border-box;
       }
       .header {
         text-align: center;
-        margin-bottom: 30px;
+        margin-bottom: 24px;
       }
       .logo {
-        font-size: 32px;
+        font-size: 28px;
         font-weight: bold;
-        background: linear-gradient(135deg, #a855f7, #ec4899);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        margin-bottom: 10px;
+        color: #a855f7;
+        margin-bottom: 8px;
       }
       .subtitle {
         color: #6b7280;
-        font-size: 16px;
+        font-size: 14px;
+        margin: 0;
       }
       .content p {
         margin-bottom: 16px;
-        text-align: justify;
+        font-size: 16px;
+        line-height: 1.5;
       }
       .highlight {
         background-color: #f3f4f6;
-        padding: 20px;
+        padding: 16px;
         border-radius: 8px;
         border-left: 4px solid #a855f7;
-        margin: 20px 0;
+        margin: 16px 0;
+      }
+      .highlight p {
+        margin: 0;
       }
       .cta-button {
         display: inline-block;
         background: linear-gradient(135deg, #a855f7, #ec4899);
-        color: white;
+        color: white !important;
         padding: 12px 24px;
         border-radius: 8px;
         text-decoration: none;
         font-weight: 600;
-        margin: 20px 0;
+        margin: 16px 0;
       }
       .footer {
-        margin-top: 30px;
-        padding-top: 20px;
+        margin-top: 24px;
+        padding-top: 16px;
         border-top: 1px solid #e5e7eb;
         text-align: center;
         color: #6b7280;
-        font-size: 14px;
+        font-size: 12px;
+      }
+      a {
+        color: #a855f7;
+        text-decoration: none;
+      }
+
+      @media only screen and (max-width: 600px) {
+        .container {
+          padding: 16px;
+          border-radius: 0;
+          margin: 0;
+        }
+        .logo {
+          font-size: 24px;
+        }
+        .content p {
+          font-size: 15px;
+        }
+        .highlight {
+          padding: 12px;
+          margin: 12px 0;
+        }
+        .cta-button {
+          width: 100%;
+          text-align: center;
+          box-sizing: border-box;
+        }
       }
     </style>
   </head>
 
   <body>
-    <div class="container">
-      <div class="header">
-        <div class="logo">🎉 KidSpot</div>
-        <div class="subtitle">Platforma za dečje rođendane u Srbiji</div>
-      </div>
+    <div class="email-wrapper">
+      <div class="container">
+        <div class="header">
+          <div class="logo">🎉 KidSpot</div>
+          <p class="subtitle">Platforma za dečje rođendane u Srbiji</p>
+        </div>
 
       <div class="content">
         <p><strong>Zdravo,</strong></p>
@@ -101,11 +144,12 @@
 
         <p><strong>Veliki pozdrav,<br>
         Stefan</strong></p>
-      </div>
+        </div>
 
-      <div class="footer">
-        <p>🎉 KidSpot - Najveća platforma za dečje rođendane u Srbiji</p>
-        <p><a href="https://www.kidspot.rs" style="color: #a855f7;">www.kidspot.rs</a> | <a href="mailto:kontakt@kidspot.rs" style="color: #a855f7;">kontakt@kidspot.rs</a></p>
+        <div class="footer">
+          <p>🎉 KidSpot - Najveća platforma za dečje rođendane u Srbiji</p>
+          <p><a href="https://www.kidspot.rs">www.kidspot.rs</a> | <a href="mailto:kontakt@kidspot.rs">kontakt@kidspot.rs</a></p>
+        </div>
       </div>
     </div>
   </body>
