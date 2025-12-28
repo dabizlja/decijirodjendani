@@ -5,17 +5,34 @@ sr:
         name: "Naziv biznisa"
         category: "Kategorija"
         city: "Grad"
+      user:
+        email: "Email adresa"
+        password: "Lozinka"
+        password_confirmation: "Potvrda lozinke"
+        full_name: "Ime i prezime"
+        terms_of_service: "Uslovi korišćenja"
     errors:
       models:
         business:
           attributes:
             name:
               too_short: "mora imati najmanje %{count} karaktera"
+        user:
+          attributes:
+            password_confirmation:
+              confirmation: "se ne slaže sa lozinkom"
+            terms_of_service:
+              accepted: "moraju biti prihvaćeni"
+            full_name:
+              blank: "ne može biti prazno"
+              too_long: "je predugačko (maksimum je %{count} karaktera)"
   errors:
     format: "%{attribute} %{message}"
     messages:
       blank: "ne može biti prazno"
       required: "mora postojati"
+      confirmation: "se ne slaže sa potvrdom"
+      accepted: "mora biti prihvaćeno"
       too_short:
         one: "je prekratak (minimum je %{count} karakter)"
         few: "je prekratak (minimum su %{count} karaktera)"
