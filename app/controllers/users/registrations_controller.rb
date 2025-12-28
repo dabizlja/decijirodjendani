@@ -36,7 +36,7 @@ module Users
         @user = resource
         preload_home_context
         @show_registration_modal = true
-        flash.now[:alert] = resource.errors.full_messages.to_sentence if resource.errors.any?
+        flash.now[:alert] = resource.errors.full_messages.to_sentence if resource.errors&.any?
 
         render "pages/home", status: :unprocessable_entity
       end
