@@ -3,7 +3,7 @@ categories = [
   {
     name: "Restorani",
     slug: "restorani",
-    description: "Restorani pogodni za dečje rođendane sa posebnim menijima i prostorima",
+    description: "Restorani pogodni za dečije rođendane sa posebnim menijima i prostorima",
     icon: "🍽️",
     color: "bg-purple-500",
     active: true
@@ -43,7 +43,7 @@ categories = [
   {
     name: "Ketering",
     slug: "ketering",
-    description: "Ketering servisi specijalizovani za dečje rođendane sa zdravom hranom",
+    description: "Ketering servisi specijalizovani za dečije rođendane sa zdravom hranom",
     icon: "🍱",
     color: "bg-indigo-500",
     active: true
